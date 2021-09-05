@@ -1,0 +1,44 @@
+.actions button:hover {
+  background-color: #ebf4fa;
+  border-color: #ebf4fa;
+}
+.actions button {
+  cursor: pointer;
+  font: inherit;
+  color: black;
+  background-color: #e3e4fa;
+  border: 1px solid #e3e4fa;
+  border-radius: 4px;
+  padding: 0.5rem 2.5rem;
+}
+
+.container {
+  margin: 3rem auto;
+  width: 95%;
+  border-radius: 25px;
+  background-color: #737ca1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  animation: login-appear 0.8s ease-out forwards;
+}
+
+ul {
+  list-style-type: none;
+}
+table {
+  margin: 0 auto;
+  padding: 10px;
+  width: 1000px;
+  border-collapse: collapse;
+}
+td {
+  padding: 20px;
+}
+
+.trow:hover {
+  background-color: white;
+  color:black;
+  cursor: pointer;
+}
