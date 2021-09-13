@@ -1,8 +1,6 @@
 import React from "react";
 import classes from "./NavigationBar.module.css";
 import image from "../image/face.jpg";
-import linkedin from "../image/linkedin.png";
-import email from "../image/email.png";
 import { Link } from "react-router-dom";
 import { FaGithubSquare } from "@react-icons/all-files/fa/FaGithubSquare";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
@@ -86,18 +84,30 @@ function NavigationBar() {
 
         <br></br>
         <div className={classes.social}>
-          <a href="mailto:chan_weijie@outlook.com" target="_blank">
+          <a
+            href="mailto:chan_weijie@outlook.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <FaMailBulk size="30" color="#a4b3c4" className={classes.test} />
           </a>
 
-          <a href="https://github.com/weijiepris" target="_blank">
+          <a
+            href="https://github.com/weijiepris"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <FaGithubSquare
               size="30"
               color="#a4b3c4"
               className={classes.test}
             />
           </a>
-          <a href="https://www.linkedin.com/in/cweijie/" target="_blank">
+          <a
+            href="https://www.linkedin.com/in/cweijie/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <FaLinkedin size="30" color="#a4b3c4" className={classes.test} />
           </a>
         </div>
