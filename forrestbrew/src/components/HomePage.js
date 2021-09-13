@@ -21,7 +21,7 @@ const HomePage = () => {
           setUser(snapshot.data());
           setIsLoaded(true);
         } else {
-          console.log("does not exist");
+          console.log("user does not exist");
         }
       });
 
@@ -99,7 +99,7 @@ const HomePage = () => {
     // return () => {
     //   console.log("cleanup");
     // };
-  }, [userid]);
+  }, [userid, ctx.currentUser.companyName]);
 
   if (!isLoaded) {
     return (

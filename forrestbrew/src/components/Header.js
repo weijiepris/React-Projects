@@ -13,7 +13,7 @@ const Header = (props) => {
     <React.Fragment>
       <header className={classes.header}>
         <Link to="/" style={{ textDecoration: "none" }}>
-          <h1>{ctx.companyName}</h1>
+          <h1>Inventory System</h1>
         </Link>
         {props.isLoggedIn && (
           <div className={classes.nav}>
