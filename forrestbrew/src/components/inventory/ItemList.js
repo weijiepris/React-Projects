@@ -5,14 +5,19 @@ const ItemList = (props) => {
     props.open(props);
   };
 
+  const getDate = (date) => {
+    return new Date(date * 1000).toString().substring(0, 25);
+  };
   return (
     <React.Fragment>
-      <td onClick={openHandler}>{props.serialno}</td>
-      <td onClick={openHandler}>{props.id}</td>
-      <td onClick={openHandler}>{props.name}</td>
-      <td onClick={openHandler}>{props.description}</td>
-      <td onClick={openHandler}>{props.quantity}</td>
-      <td onClick={openHandler}>{props.datecreated}</td>
+      <td onClick={openHandler}>{props.data.serialno}</td>
+      <td onClick={openHandler}>{props.data.id}</td>
+      <td onClick={openHandler}>{props.data.name}</td>
+      <td onClick={openHandler}>{props.data.description}</td>
+      <td onClick={openHandler}>{props.data.quantity}</td>
+      <td onClick={openHandler}>
+        {getDate(props.data.datecreated["seconds"])}
+      </td>
     </React.Fragment>
   );
 };

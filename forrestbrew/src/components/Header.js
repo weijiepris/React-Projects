@@ -1,51 +1,27 @@
-import React, { useState, useEffect } from "react";
-import firebase from "firebase";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import classes from "./Header.module.css";
+import AuthContext from "../store/auth-context";
 const Header = (props) => {
-  const [companyName, setCompanyName] = useState("");
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(user.uid)
-          .get()
-          .then((snapshot) => {
-            if (snapshot.exists) {
-              setCompanyName(snapshot.data().companyName);
-            }
-          });
-      } else {
-        setCompanyName("");
-      }
-    });
-  });
+  const ctx = useContext(AuthContext);
 
   const onLogout = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(function () {
-        setCompanyName("");
-      });
+    ctx.onLogout();
   };
 
   return (
     <React.Fragment>
       <header className={classes.header}>
-        <Link to="/">
-          <h1>{companyName}</h1>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <h1>{ctx.companyName}</h1>
         </Link>
         {props.isLoggedIn && (
           <div className={classes.nav}>
-            <Link to="/">
-              <div onClick={onLogout}>Logout</div>
-            </Link>
-            <Link to="/profile">
+            <Link to="/profile" style={{ textDecoration: "none" }}>
               <div>Profile</div>
+            </Link>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <div onClick={onLogout}>Logout</div>
             </Link>
           </div>
         )}

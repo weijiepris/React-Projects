@@ -1,48 +1,22 @@
-import { useRef, useState } from "react";
+import { useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 
-import firebase from "firebase";
 import classes from "./Login.module.css";
 
+import AuthContext from "../../store/auth-context";
+
 const Login = () => {
+  const ctx = useContext(AuthContext);
+
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const onSignin = (event) => {
     event.preventDefault();
-    setLoading(true);
-    setErrorMessage("");
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(enteredEmail, enteredPassword)
-      .then((result) => {
-        setLoading(false);
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-        switch (error.code) {
-          case "auth/user-not-found":
-            setErrorMessage("Invalid Username/Password");
-            break;
-          case "auth/wrong-password":
-            setErrorMessage("Invalid Username/Password");
-            break;
-          case "auth/invalid-email":
-            setErrorMessage("Invalid Username/Password");
-            break;
-          default:
-            break;
-        }
-      })
-      .then(function () {
-        setLoading(false);
-      });
+    ctx.onLogin(enteredEmail, enteredPassword);
   };
 
   return (
@@ -61,12 +35,13 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
+            required
             ref={passwordInputRef}
           ></input>
         </div>
-        <div className={classes.control}>{errorMessage}</div>
+        <div className={classes.control}>{ctx.errorMessage}</div>
         <div className={classes.actions}>
-          {!loading ? <button>Login</button> : <p>Loading...</p>}
+          {!ctx.loading ? <button>Login</button> : <p>Loading...</p>}
         </div>
         <div className={classes.register}>
           Don't have an account?{" "}

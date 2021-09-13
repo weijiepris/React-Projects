@@ -25,6 +25,7 @@
   margin: 20px -160px;
   text-align: center;
   width: 90%;
+  height: 700px;
   min-width: 1000px;
   background-color: white;
   padding: 1rem;
@@ -32,6 +33,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   z-index: 30;
   animation: slide-down 300ms ease-out forwards;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @media (min-width: 768px) {

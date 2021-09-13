@@ -1,27 +1,32 @@
-.actions button:hover {
-  background-color: #ebf4fa;
-  border-color: #ebf4fa;
-}
 .actions button {
   cursor: pointer;
   font: inherit;
   color: black;
-  background-color: #e3e4fa;
-  border: 1px solid #e3e4fa;
+  background-color: #fdfdfd;
   border-radius: 4px;
   padding: 0.5rem 2.5rem;
 }
+.actions {
+  margin: 0 auto;
+  text-align: center;
+}
 
+.actions button:hover {
+  background-color: #ebf4fa;
+  border-color: black;
+}
 .container {
   margin: 3rem auto;
   width: 95%;
-  border-radius: 25px;
-  background-color: #737ca1;
+  background-color: #e3e3e3;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   text-align: center;
-  color: white;
+  color: black;
+  height: 500px;
   animation: login-appear 0.8s ease-out forwards;
+  overflow-y: auto;
+  overflow-x: none;
 }
 
 ul {
@@ -38,7 +43,35 @@ td {
 }
 
 .trow:hover {
-  background-color: white;
-  color:black;
+  background-color: #fdfdfd;
+  color: black;
   cursor: pointer;
+  transition: 0.1s ease;
+}
+
+li {
+  list-style-type: none;
+  text-align: left;
+}
+
+.input {
+  height: 40px;
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.button {
+  cursor: pointer;
+  font: inherit;
+  color: black;
+  background-color: #fdfdfd;
+  background-color: #fdfdfd;
+  border-radius: 4px;
+  padding: 0.5rem 2.5rem;
+}
+
+.button:hover {
+  background-color: #ebf4fa;
+  border-color: #ebf4fa;
 }

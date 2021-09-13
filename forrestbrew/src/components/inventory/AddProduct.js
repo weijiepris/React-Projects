@@ -1,13 +1,14 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useContext } from "react";
 import firebase from "firebase";
 import classes from "./inventory.module.css";
 import { Redirect, Link } from "react-router-dom";
 
-const AddProduct = (props) => {
-  const userid = firebase.auth().currentUser.uid;
+import AuthContext from "../../store/auth-context";
+
+const AddProduct = () => {
+  const ctx = useContext(AuthContext);
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [docID, setDocID] = useState("");
 
   const prodNameRef = useRef();
   const prodIDRef = useRef();
@@ -20,12 +21,12 @@ const AddProduct = (props) => {
     const prodID = prodIDRef.current.value;
     const prodDesc = prodDescRef.current.value;
     let count = 0;
-    console.log("company name: " + props.location.state.companyName);
+    console.log("company name: " + ctx.currentUser.companyName);
     count = await firebase
       .firestore()
-      .collection("companies")
-      .doc(props.location.state.companyName)
-      .collection("product")
+      .collection("products")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
       .get()
       .then((snapshot) => {
         console.log("snapshot: ");
@@ -33,23 +34,29 @@ const AddProduct = (props) => {
       })
       .then(function () {
         console.log(count);
-        if (count == 0) {
+        if (count === 0) {
           count = 1;
         } else {
           count++;
         }
-        console.log("doc id:" + docID);
         firebase
           .firestore()
-          .collection("companies")
-          .doc(props.location.state.companyName)
-          .collection("product")
-          .add({
+          .collection("products")
+          .doc(ctx.currentUser.companyName)
+          .collection("products")
+          .doc(prodID)
+          .set({
             serialno: count,
             id: prodID,
             name: prodName,
             description: prodDesc,
             quantity: 0,
+            remarks: "",
+            companyName: ctx.currentUser.companyName,
+            companyID: ctx.currentUser.companyID,
+            createdBy: ctx.currentUser.name,
+            category: "drinks",
+            status: "available",
             datecreated: firebase.firestore.FieldValue.serverTimestamp(),
           })
           .then(function () {
@@ -59,25 +66,37 @@ const AddProduct = (props) => {
   };
 
   if (redirect) {
-    return <Redirect push to="/" exact />;
+    return <Redirect push to="/viewInventory" exact />;
   }
 
   return (
     <div className={classes.container}>
       <form onSubmit={add}>
-        <input type="text" placeholder="Product Name" ref={prodNameRef} />
+        <input
+          type="text"
+          placeholder="Product Name"
+          ref={prodNameRef}
+          className={classes.input}
+        />
         <br></br>
-        <input type="text" placeholder="Product ID" ref={prodIDRef} />
+        <input
+          type="text"
+          placeholder="Product ID"
+          ref={prodIDRef}
+          className={classes.input}
+        />
         <br></br>
         <input
           type="text"
           placeholder="Product Description"
           ref={prodDescRef}
+          className={classes.input}
         />
         <br></br>
-        <button>Add Product</button>
+        <br></br>
+        <button className={classes.button}>Add Product</button>
         <Link to="/viewInventory" exact="true">
-          <button>Go Back</button>
+          <button className={classes.button}>Go Back</button>
         </Link>
         {loading ? <div>Adding new product, Please wait . . .</div> : ""}
       </form>

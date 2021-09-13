@@ -1,20 +1,50 @@
-import { useState, useEffect } from "react";
-import classes from "./inventory.module.css";
+import { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
+import classes from "./inventory.module.css";
 import { Link } from "react-router-dom";
 import ItemList from "./ItemList";
 import ViewProduct from "./ViewProduct";
 
+import AuthContext from "../../store/auth-context";
+
 const ViewInventory = (props) => {
-  const [inventory, setInventory] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const ctx = useContext(AuthContext);
+
   const [overlay, setOverlay] = useState(false);
   const [list, setList] = useState([]);
-  const userid = firebase.auth().currentUser.uid;
+  const [inventory, setInventory] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [dataExists, setDataExists] = useState(true);
 
-  console.log(props);
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("products")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .orderBy("serialno", "desc")
+      .get()
+      .then((snapshot) => {
+        // console.log("testing => ", snapshot.docs);
+        if (snapshot.docs.length) {
+          snapshot.forEach((doc) => {
+            addInventory(doc.data());
+            // console.log(doc.data());
+          });
+        } else {
+          console.log("no data found");
+          setDataExists(false);
+        }
+        setIsLoaded(true);
+      });
+  }, [ctx.currentUser.companyName]);
+
+  const addInventory = (list) => {
+    setInventory((prevList) => {
+      return [list, ...prevList];
+    });
+  };
   const showOverlay = () => {
-    console.log("showing overlay");
     setOverlay(true);
   };
 
@@ -22,88 +52,60 @@ const ViewInventory = (props) => {
     setOverlay(false);
   };
 
-  const openList = (product) => {
-    console.log(product["name"]);
-    setList(product);
+  const openList = (data) => {
+    setList(data);
     showOverlay();
   };
 
-  const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(0, 25);
-  };
-  useEffect(() => {
-    console.log(props.location.state.companyName);
-    firebase
-      .firestore()
-      .collection("companies")
-      .doc(props.location.state.companyName)
-      .collection("product")
-      .orderBy("serialno", "desc")
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          addInventory(doc.data());
-        });
-        setIsLoaded(true);
-      });
-
-    return () => {
-      console.log("cleanup");
-    };
-  }, [userid]);
-
-  const addInventory = (list) => {
-    setInventory((prevList) => {
-      return [list, ...prevList];
-    });
-  };
   return (
-    <div className={classes.container}>
-      {overlay && <ViewProduct data={list} onClose={hideOverlay} />}
-      <form>
-        <table>
-          <tbody>
-            {!isLoaded ? (
-              <div>Getting inventory list . . .</div>
-            ) : (
-              <tr>
-                <th>S/N</th>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Product Description</th>
-                <th>Product Quantity</th>
-                <th>Date Created</th>
-              </tr>
-            )}
-            {!isLoaded ? (
-              <tr></tr>
-            ) : (
-              inventory.map((entry) => (
-                <tr key={entry.serialno} className={classes.trow}>
-                  <ItemList
-                    serialno={entry.serialno}
-                    id={entry.id}
-                    name={entry.name}
-                    description={entry.description}
-                    quantity={entry.quantity}
-                    datecreated={getDate(entry.datecreated["seconds"])}
-                    open={openList}
-                  />
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-        <br></br>
-      </form>
+    <div>
       <div className={classes.actions}>
-        <Link to={{ pathname: "/AddProduct", state: props.location.state }}>
+        <Link to="/AddProduct">
           <button>Add New Product</button>
         </Link>
-      </div>
-      <br></br>
-      <div className={classes.actions}>
         <button>Remove a Product</button>
+      </div>
+      <div className={classes.container}>
+        {overlay && (
+          <ViewProduct
+            data={list}
+            user={ctx.currentUseruser}
+            onClose={hideOverlay}
+          />
+        )}
+        <form>
+          <table>
+            <tbody>
+              {!isLoaded ? (
+                <tr>
+                  <th>Getting inventory list . . .</th>
+                </tr>
+              ) : (
+                <tr>
+                  <th>S/N</th>
+                  <th>Product ID</th>
+                  <th>Product Name</th>
+                  <th>Product Description</th>
+                  <th>Product Quantity</th>
+                  <th>Date Created</th>
+                </tr>
+              )}
+
+              {!isLoaded ? (
+                <tr></tr>
+              ) : (
+                inventory.map((entry) => (
+                  <tr key={entry.serialno} className={classes.trow}>
+                    <ItemList data={entry} open={openList} />
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+          <br></br>
+          {!dataExists ? <div>No data found</div> : <div></div>}
+          <br></br>
+        </form>
       </div>
     </div>
   );

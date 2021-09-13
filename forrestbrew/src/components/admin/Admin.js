@@ -1,7 +1,7 @@
 import classes from "./Admin.module.css";
 import { useState, useEffect } from "react";
 import firebase from "firebase";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import ViewAllUsers from "./ViewAllUsers";
 
 const Admin = (props) => {
