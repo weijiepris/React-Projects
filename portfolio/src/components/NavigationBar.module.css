@@ -1,0 +1,77 @@
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+.sidenav {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #465f7a;
+  overflow-x: hidden;
+}
+
+.sidenav .a,
+.last {
+  margin: 0 auto;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  display: block;
+  padding: 7px;
+  border-top: 1px solid #a4b3c4;
+  width: 230px;
+}
+.last {
+  border-bottom: 1px solid #a4b3c4;
+}
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 200px; /* Same as the width of the sidenav */
+}
+
+.hr {
+  width: 250px;
+}
+
+.head h1 {
+  text-align: center;
+  color: white;
+}
+
+.head p {
+  text-align: center;
+  color: white;
+}
+
+.photo {
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  top: 20px;
+}
+.photo img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid #a4b3c4;
+  box-shadow: 2px;
+}
+
+.social {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.test {
+  margin: 7px;
+}
