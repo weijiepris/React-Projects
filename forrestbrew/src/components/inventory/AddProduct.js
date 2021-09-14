@@ -13,6 +13,7 @@ const AddProduct = () => {
   const prodNameRef = useRef();
   const prodIDRef = useRef();
   const prodDescRef = useRef();
+  const prodColorRef = useRef();
 
   const add = async (event) => {
     setLoading(true);
@@ -20,6 +21,7 @@ const AddProduct = () => {
     const prodName = prodNameRef.current.value;
     const prodID = prodIDRef.current.value;
     const prodDesc = prodDescRef.current.value;
+    const prodColor = prodColorRef.current.value;
     let count = 0;
     console.log("company name: " + ctx.currentUser.companyName);
     count = await firebase
@@ -57,6 +59,7 @@ const AddProduct = () => {
             createdBy: ctx.currentUser.name,
             category: "drinks",
             status: "available",
+            color: prodColor,
             datecreated: firebase.firestore.FieldValue.serverTimestamp(),
           })
           .then(function () {
@@ -90,6 +93,13 @@ const AddProduct = () => {
           type="text"
           placeholder="Product Description"
           ref={prodDescRef}
+          className={classes.input}
+        />
+        <br></br>
+        <input
+          type="text"
+          placeholder="Product Color"
+          ref={prodColorRef}
           className={classes.input}
         />
         <br></br>

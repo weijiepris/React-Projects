@@ -39,6 +39,30 @@ const ViewInventory = (props) => {
       });
   }, [ctx.currentUser.companyName]);
 
+  const retrieveList = () => {
+    setIsLoaded(false);
+    setInventory([]);
+    firebase
+      .firestore()
+      .collection("products")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .orderBy("serialno", "desc")
+      .get()
+      .then((snapshot) => {
+        // console.log("testing => ", snapshot.docs);
+        if (snapshot.docs.length) {
+          snapshot.forEach((doc) => {
+            addInventory(doc.data());
+            // console.log(doc.data());
+          });
+        } else {
+          console.log("no data found");
+          setDataExists(false);
+        }
+        setIsLoaded(true);
+      });
+  };
   const addInventory = (list) => {
     setInventory((prevList) => {
       return [list, ...prevList];
@@ -49,6 +73,7 @@ const ViewInventory = (props) => {
   };
 
   const hideOverlay = () => {
+    retrieveList();
     setOverlay(false);
   };
 
