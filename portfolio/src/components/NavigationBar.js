@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./NavigationBar.module.css";
+import classes from "./css/NavigationBar.module.css";
 import image from "../image/face.jpg";
 import { Link } from "react-router-dom";
 import { FaGithubSquare } from "@react-icons/all-files/fa/FaGithubSquare";

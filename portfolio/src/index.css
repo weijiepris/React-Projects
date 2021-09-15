@@ -5,9 +5,11 @@
 }
 
 html {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", "century gothic";
 }
 
 body {
+  background-color: #ebebeb;
   margin: 0;
+  overflow-x: hidden;
 }
