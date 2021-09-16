@@ -1,12 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
-import classes from "../components/auth/Login.module.css";
+import classes from "./HomePage.module.css";
 import { Link } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 
-import CanvasJSReact from "../assets/canvasjs.react";
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+import Bargraph from "./charts/Bargraph";
 
 const HomePage = () => {
   const ctx = useContext(AuthContext);
@@ -16,7 +14,9 @@ const HomePage = () => {
   const [inventory, setInventory] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [stockQuantity, setStockQuantity] = useState(0);
   const [options, setOptions] = useState({});
+  const [category, setCategory] = useState("");
 
   const drawChart = (dataPoints) => {
     const options = {
@@ -41,7 +41,7 @@ const HomePage = () => {
     });
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     firebase
       .firestore()
       .collection("users")
@@ -83,162 +83,89 @@ const HomePage = () => {
             ];
           });
           console.log(tempQuantity);
-          setQuantity(tempQuantity);
+          setQuantity(snapshot.docs.length);
+          setStockQuantity(tempQuantity);
           drawChart(temp);
         }
       });
-
-    // firebase
-    //   .firestore()
-    //   .collection("batch")
-    //   .doc(ctx.currentUser.companyName)
-    //   .collection("products")
-    //   .get()
-    //   .then((snapshot) => {
-    //     console.log(snapshot);
-    //     // console.log("testing => ", snapshot.docs);
-    //     if (snapshot.docs.length) {
-    //       snapshot.forEach((doc) => {
-    //         // addInventory(doc.data());
-    //         console.log(doc.data());
-    //         // console.log(doc.data());
-    //       });
-    //     } else {
-    //       console.log("no data found");
-    //       // setDataExists(false);
-    //     }
-    //     // setIsLoaded(true);
-    //   });
-
-    // firebase
-    //   .firestore()
-    //   .collection("companies")
-    //   .doc(ctx.currentUser.companyName)
-    //   .collection("product")
-    //   .get()
-    //   .then((snapshot) => {
-    //     console.log(snapshot.docs);
-    //     snapshot.docs.forEach((doc) => {
-    //       console.log("data => ", doc);
-    //     });
-    //   });
-    // firebase
-    //   .firestore()
-    //   .collection("companies")
-    //   .doc(ctx.currentUser.companyName)
-    //   .collection("product")
-    //   .doc("000")
-    //   .collection("data")
-    //   .get()
-    //   .then((snapshot) => {
-    //     let temp = [];
-    //     console.log("Total stocks for product ID 000 => ", snapshot.size);
-    //     snapshot.docs.forEach((doc) => {
-    //       temp.push(doc.data());
-    //     });
-    //     updateBatch(findOcc(temp, "batchNo"));
-    //   })
-    //   .then(function () {
-    //     setIsLoaded(true);
-    //   });
-
-    // firebase
-    //   .firestore()
-    //   .collection("companies")
-    //   .doc(ctx.currentUser.companyName)
-    //   .collection("product")
-    //   .doc("000")
-    //   .collection("data")
-    //   .where("batchNo", "==", "000")
-    //   .get()
-    //   .then((snapshot) => {
-    //     // snapshot.docs.forEach((doc) => {
-    //       console.log("data => ", snapshot.size);
-    //     // });
-    //   });
-
-    // return () => {
-    //   console.log("cleanup");
-    // };
   }, [userid, ctx.currentUser.companyName]);
 
+  const getCategory = () => {
+    const data = inventory;
+    const unique = [...new Set(data.map((item) => item.category))];
+    return unique;
+  };
   if (!isLoaded) {
     return (
-      <section className={classes.auth}>
+      <section className={classes.container}>
         <h1>Loading . . . </h1>
       </section>
     );
   }
 
   return (
-    <section className={classes.auth}>
-      <h1>Welcome, {ctx.currentUser.name}</h1>
+    <section className={classes.container}>
+      <span className={classes.overview}>Overview Dashboard</span>
+      <br />
+
+      <div className={classes.wrapper}>
+        <br />
+        <div className={classes.individual}>
+          Total products
+          <span className={classes.quantity}>{quantity}</span>
+        </div>
+        <div className={classes.individual}>
+          Total stock count
+          <span className={classes.quantity}>{stockQuantity}</span>
+        </div>
+        {/* <Bargraph options={options} /> */}
+      </div>
+      <br />
+
+      <div className={classes.wrapper}>
+        <h1>Product Category</h1>
+        {getCategory().map((data) => (
+          <h4>{data}</h4>
+        ))}
+
+        {/* {user.companyID === "" ? (
+          <div>Company details not found</div>
+        ) : (
+          <div>
+            <table>
+              <tbody>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Quantity</th>
+                </tr>
+                {inventory.map((entry) => (
+                  <tr key={entry.id}>
+                    <td>{entry.name}</td>
+                    <td>{entry.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )} */}
+      </div>
       <br></br>
 
-      <div>
-        <CanvasJSChart
-          options={options}
-          /* onRef={ref => this.chart = ref} */
-        />
-        {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-      </div>
-
-      {/* {batch[0].map((entry) => (
-        <ul key={entry.batchNo}>
-          <li>
-            batch {entry.batchNo} count = {entry.occurrence}
-          </li>
-        </ul>
-      ))} */}
-
-      {/* {user.companyID === "" ? (
-        <div></div>
-      ) : (
-        <li>Total stock count {quantity}</li>
-        // inventory.map((entry) => <li>Total stock count {quantity}</li>)
-      )} */}
-
-      {user.companyID === "" ? (
-        <div>Company details not found</div>
-      ) : (
-        <div className={classes.container}>
-          <table>
-            <tbody>
-              <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-              </tr>
-              {inventory.map((entry) => (
-                <tr key={entry.id}>
-                  <td>{entry.name}</td>
-                  <td>{entry.quantity}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {/* <div className={classes.actions}>
-            <Link to="/viewInventory">
-              <button>View Inventory</button>
-            </Link>
-          </div> */}
-        </div>
-      )}
-
-      {user.userRole === "admin" ? (
-        <div className={classes.actions}>
-          <br></br>
-          <Link
-            to={{
-              pathname: "/admin",
-              state: user,
-            }}
-          >
-            <button>Welcome admin</button>
-          </Link>
-        </div>
-      ) : (
-        <div></div>
-      )}
+      {/* {user.userRole === "admin" ? (
+  <div className={classes.actions}>
+    <br></br>
+    <Link
+      to={{
+        pathname: "/admin",
+        state: user,
+      }}
+    >
+      <button>Welcome admin</button>
+    </Link>
+  </div>
+) : (
+  <div></div>
+)} */}
     </section>
   );
 };

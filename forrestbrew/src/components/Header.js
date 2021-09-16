@@ -29,7 +29,6 @@ const Header = (props) => {
           </div>
         )}
       </header>
-      <div className={classes["main-image"]}></div>
     </React.Fragment>
   );
 };
