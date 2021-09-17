@@ -33,6 +33,14 @@ const AboutMe = () => {
           lives through technology.
         </p>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 };

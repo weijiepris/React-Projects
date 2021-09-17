@@ -34,6 +34,17 @@ const Education = () => {
                 </li>
               </ul>
             </li>
+            <li>
+              Projects
+              <ul>
+                <li>IT For Finance &amp; Case Study (SAP)</li>
+                <li>Enterprise Solutions &amp; Project</li>
+                <li>Enterprise Web &amp; Project (Java)</li>
+                <li>Interactive Web Design &amp; Project (HTML5)</li>
+                <li>Programming Essentials &amp; Project (Java)</li>
+                <li>Headhunter Web Application (Final Year Project)</li>
+              </ul>
+            </li>
           </ul>
         </p>
         <br />

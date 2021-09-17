@@ -38,20 +38,20 @@ function NavigationBar() {
         </div>
         <div className={classes.a}>
           <Link
-            to="/Projects"
-            exact="true"
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            Projects
-          </Link>
-        </div>
-        <div className={classes.a}>
-          <Link
             to="/"
             exact="true"
             style={{ textDecoration: "none", color: "white" }}
           >
             About Me
+          </Link>
+        </div>
+        <div className={classes.a}>
+          <Link
+            to="/Projects"
+            exact="true"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            Projects
           </Link>
         </div>
         <div className={classes.a}>
