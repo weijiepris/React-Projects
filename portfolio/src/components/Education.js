@@ -57,7 +57,7 @@ const Education = () => {
         </div>
         <br />
         <p>
-          2012 - 2014 <br />
+          2012 - 2013 <br />
           Cumulative GPA - 3.94
           <ul>
             <li>
