@@ -6,7 +6,6 @@ import { FaGithubSquare } from "@react-icons/all-files/fa/FaGithubSquare";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { FaMailBulk } from "@react-icons/all-files/fa/FaMailBulk";
 
-
 function NavigationBar() {
   return (
     <React.Fragment>
@@ -39,6 +38,15 @@ function NavigationBar() {
         </div>
         <div className={classes.a}>
           <Link
+            to="/Projects"
+            exact="true"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            Projects
+          </Link>
+        </div>
+        <div className={classes.a}>
+          <Link
             to="/"
             exact="true"
             style={{ textDecoration: "none", color: "white" }}
@@ -64,22 +72,13 @@ function NavigationBar() {
             Skills
           </Link>
         </div>
-        <div className={classes.a}>
+        <div className={classes.last}>
           <Link
             to="/Education"
             exact="true"
             style={{ textDecoration: "none", color: "white" }}
           >
             Education
-          </Link>
-        </div>
-        <div className={classes.last}>
-          <Link
-            to="/Projects"
-            exact="true"
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            Projects
           </Link>
         </div>
 

@@ -1,12 +1,105 @@
 import React from "react";
 import classes from "./css/AboutMe.module.css";
+
 const Education = () => {
   return (
     <div className={classes.container}>
       <div className={classes.content}>
-        <div className={classes.header}>I'm Chan Wei Jie</div>
+        <div className={classes.header}>
+          Bachelor of Computer Science (Big Data)
+        </div>
+        <br />
+        <p>2019 - Current</p>
+        <ul></ul>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <br />
+        <div className={classes.header}>Diploma in Business Enterprise IT</div>
+        <br />
+        <p>
+          2014 - 2017
+          <br />
+          Cumulative GPA - 3.20
+          <ul>
+            <li>
+              Academic Achievements
+              <ul>
+                <li>
+                  Awarded Distinction for Programming Essentials &amp; Project
+                </li>
+                <li>
+                  Awarded Distinction for Interactive Web Design &amp; Project
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </p>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <br />
+        <div className={classes.header}>
+          NITEC in Information-Communications Technology
+        </div>
+        <br />
+        <p>
+          2012 - 2014 <br />
+          Cumulative GPA - 3.94
+          <ul>
+            <li>
+              Academic Achievements
+              <ul>
+                <li>Director's List for Academic Year 2012</li>
+                <li>Director's List for Academic Year 2013</li>
+              </ul>
+            </li>
+            <li>
+              Activities
+              <ul>
+                <li>Computer Club</li>
+              </ul>
+            </li>
+          </ul>
+        </p>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <br />
+        <div className={classes.header}>GCE 'N' Levels</div>
+        <br />
+        <p>
+          2007 - 2011
+          <ul>
+            <li>
+              Academic Achievements
+              <ul>
+                <li>Junior Chef with Dining Etiquette</li>
+                <li>Prize Winners Award for Secondary Three Normal Academic</li>
+                <li>Computer Applications Model Student Award</li>
+              </ul>
+            </li>
+          </ul>
+        </p>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <br />
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 };
+
 export default Education;
