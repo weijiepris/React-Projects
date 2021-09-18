@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
 import classes from "./HomePage.module.css";
-import { Link } from "react-router-dom";
 import AuthContext from "../store/auth-context";
 
 import Bargraph from "./charts/Bargraph";
@@ -9,17 +8,20 @@ import Bargraph from "./charts/Bargraph";
 const HomePage = () => {
   const ctx = useContext(AuthContext);
 
-  const [user, setUser] = useState([]);
+  // const [user, setUser] = useState([]);
   const userid = firebase.auth().currentUser.uid;
   const [inventory, setInventory] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [stockQuantity, setStockQuantity] = useState(0);
   const [options, setOptions] = useState({});
-  const [category, setCategory] = useState("");
+  const [line, setLine] = useState({});
+  // const [category, setCategory] = useState("");
+  const [graph, setGraph] = useState("Bargraph");
 
   const drawChart = (dataPoints) => {
     const options = {
+      animationEnabled: true,
       title: {
         text: "Stock Count",
       },
@@ -35,13 +37,46 @@ const HomePage = () => {
     setOptions(options);
   };
 
+  const lineChart = (dataPoints) => {
+    const options = {
+      animationEnabled: true,
+      title: {
+        text: "Input dates",
+      },
+      axisX: {
+        valueFormatString: "DD MMM YYYY",
+      },
+      axisY: {
+        title: "Inputs",
+      },
+      legend: {
+        cursor: "pointer",
+        fontSize: 18,
+      },
+      toolTip: {
+        shared: true,
+      },
+      data: [
+        {
+          name: "Date",
+          type: "line",
+          showInLegend: true,
+          dataPoints: dataPoints,
+        },
+      ],
+    };
+    setLine(options);
+  };
+
   const addInventory = (list) => {
     setInventory((prevList) => {
       return [list, ...prevList];
     });
   };
-
-  useEffect(async () => {
+  const test = (event) => {
+    setGraph(event.target.value);
+  };
+  useEffect(() => {
     firebase
       .firestore()
       .collection("users")
@@ -49,7 +84,7 @@ const HomePage = () => {
       .get()
       .then((snapshot) => {
         if (snapshot.exists) {
-          setUser(snapshot.data());
+          // setUser(snapshot.data());
           setIsLoaded(true);
         } else {
           console.log("user does not exist");
@@ -88,7 +123,44 @@ const HomePage = () => {
           drawChart(temp);
         }
       });
+
+    firebase
+      .firestore()
+      .collection("batch")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .get()
+      .then((snapshot) => {
+        let testing = [];
+        let i = 0;
+        snapshot.forEach((doc) => {
+          const dt = getDate(doc.data().dateAdded["seconds"]);
+          if (!testing[dt]) {
+            testing[dt] = 1;
+          } else {
+            testing[dt] += 1;
+            i++;
+          }
+        });
+        console.log(testing);
+        let op = [];
+        for (const value in testing) {
+          console.log(new Date(value));
+          op = [
+            ...op,
+            {
+              x: new Date(value),
+              y: testing[value],
+            },
+          ];
+        }
+        lineChart(op);
+      });
   }, [userid, ctx.currentUser.companyName]);
+
+  const getDate = (date) => {
+    return new Date(date * 1000).toString().substring(4, 15);
+  };
 
   const getCategory = () => {
     const data = inventory;
@@ -123,11 +195,29 @@ const HomePage = () => {
       <br />
 
       <div className={classes.wrapper}>
-        <h1>Product Category</h1>
-        {getCategory().map((data) => (
-          <h4>{data}</h4>
-        ))}
-
+        <div className={classes.flex}>
+          <div className={classes.flexContent}>
+            <h1>Product Category</h1>
+            {getCategory().map((productCategory) => (
+              <h4>{productCategory}</h4>
+            ))}
+          </div>
+          <div className={classes.flexContent}>
+            <select id="charts" name="charts" onChange={test}>
+              <option value="Bargraph">Stock count</option>
+              <option value="Linegraph">Timeline</option>
+              <option value="fiat">Fiat</option>
+              <option value="audi">Audi</option>
+            </select>
+            {graph === "Bargraph" ? (
+              <Bargraph options={options} />
+            ) : graph === "Linegraph" ? (
+              <Bargraph options={line} />
+            ) : (
+              <div>test</div>
+            )}
+          </div>
+        </div>
         {/* {user.companyID === "" ? (
           <div>Company details not found</div>
         ) : (

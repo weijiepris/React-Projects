@@ -33,11 +33,11 @@
   background-color: #ebebeb;
 }
 .individual {
-  padding: 15px;
+  padding: 10px;
   width: 300px;
   height: 70px;
   border-radius: 10px;
-  background-color: #E1EAEC;
+  background-color: #e1eaec;
   margin-left: 30px;
   display: inline-block;
   text-align: center;
@@ -49,6 +49,16 @@
   display: flex;
   left: 130px;
   margin: 0 auto;
+}
+.flex {
+  display: grid;
+  grid-template-columns: 40% 59%;
+  grid-gap: 1em;
+  padding: 10px;
+}
+.flex div {
+  background-color: #ebebeb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes appear {

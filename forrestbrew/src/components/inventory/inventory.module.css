@@ -41,6 +41,9 @@ table {
 td {
   padding: 20px;
 }
+.trow:nth-child(odd) {
+  background-color: #d7d7d7;
+}
 
 .trow:hover {
   background-color: #fdfdfd;

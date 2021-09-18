@@ -21,12 +21,14 @@ const ViewProduct = (props) => {
       .firestore()
       .collection("batch")
       .doc(ctx.currentUser.companyName)
-      .collection(props.data.data.id)
+      .collection("products")
       .get()
       .then((snapshot) => {
         if (snapshot.size) {
           snapshot.forEach((doc) => {
-            addData(doc.data());
+            if (props.data.data.id == doc.data().prodID) {
+              addData(doc.data());
+            }
           });
         } else {
           setDataExists(false);
@@ -53,7 +55,7 @@ const ViewProduct = (props) => {
     //   });
     //   setLoadingData(true);
     // });
-  }, [ctx.currentUser.companyName, props.data.data.id]);
+  }, [ctx.currentUser.companyName]);
 
   function toTimestamp(strDate) {
     var datum = Date.parse(strDate);
@@ -67,6 +69,7 @@ const ViewProduct = (props) => {
   };
 
   const insertData = (event) => {
+    const key = generateKey();
     event.preventDefault();
     const enteredData = dataInputRef.current.value;
     var date = new Date();
@@ -75,13 +78,16 @@ const ViewProduct = (props) => {
       .firestore()
       .collection("batch")
       .doc(ctx.currentUser.companyName)
-      .collection(props.data.data.id)
-      .add({
+      .collection("products")
+      .doc(key)
+      .set({
         id: data.length + 1,
         prodID: props.data.data.id,
         batchNo: enteredData,
         addedBy: ctx.currentUser.name,
         dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+        companyName: ctx.currentUser.companyName,
+        companyID: ctx.currentUser.companyID,
       })
       .then(function () {
         addData({
@@ -102,6 +108,15 @@ const ViewProduct = (props) => {
       });
   };
 
+  const generateKey = () => {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let autoId = "";
+    for (let i = 0; i < 30; i++) {
+      autoId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return autoId;
+  };
   return (
     <Modal onClose={props.onClose}>
       <div>

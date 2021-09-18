@@ -4,7 +4,7 @@ import CanvasJSReact from "../../assets/canvasjs.react";
 // var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-const Bargraph = (props) => {
+const Linegraph = (props) => {
   return (
     <div>
       <CanvasJSChart
@@ -16,4 +16,4 @@ const Bargraph = (props) => {
   );
 };
 
-export default Bargraph;
+export default Linegraph;
