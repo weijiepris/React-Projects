@@ -8,7 +8,7 @@
   padding: 10px;
 }
 .content h1 {
-  font-size: 360%;
+  font-size: 290%;
 }
 .content {
   text-align: left;
@@ -22,7 +22,7 @@
 }
 
 .header {
-  font-size: 250%;
+  font-size: 200%;
   font-weight: bold;
 }
 
@@ -40,11 +40,31 @@ hr {
   max-width: 900px;
   float: left;
 }
+
+.headerphoto {
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+
+  display: none;
+}
+.headerphoto img {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 2px solid #a4b3c4;
+
+  margin-bottom: -80px;
+}
+
 @media only screen and (max-width: 767px) {
   .container {
     width: 80%;
     text-align: justify;
-    left: 3%;
+    left: 0.1%;
     transition: 1s ease;
+  }
+  .headerphoto {
+    display: block;
   }
 }

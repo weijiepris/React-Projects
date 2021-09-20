@@ -9,13 +9,15 @@ import Projects from "./components/Projects";
 import AboutMe from "./components/AboutMe";
 
 import NavigationBar from "./components/NavigationBar";
-// import Header from "./components/Header";
+import Header from "./components/Header";
+
+import Footer from "./components/Footer";
 function App() {
   return (
     <Switch>
       <React.Fragment>
         <div className={classes.container}>
-          {/* <Header /> */}
+          <Header />
           <NavigationBar />
         </div>
 
@@ -26,6 +28,7 @@ function App() {
           <Route path="/Education" exact component={Education} />
           <Route path="/Projects" exact component={Projects} />
         </Switch>
+        <Footer />
       </React.Fragment>
     </Switch>
   );
