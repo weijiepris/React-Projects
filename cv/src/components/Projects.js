@@ -34,6 +34,14 @@ const Projects = () => {
             <li>Used HTML, CSS, Javascript</li>
             <li>Used Firebase to store the data</li>
           </ul>
+          Problems faced
+          <ul>
+            <li>Gathering information about the school's food stalls</li>
+          </ul>
+          Solution to problem
+          <ul>
+            <li>Conducted interviews with the students</li>
+          </ul>
         </p>
         <br />
         <br />
@@ -54,6 +62,17 @@ const Projects = () => {
             <li>Exposed to PHP </li>
             <li>Used HTML, CSS, PHP</li>
           </ul>
+          Problems faced
+          <ul>
+            <li>Researching on how to use Google's geolocation api</li>
+          </ul>
+          Solution to problem
+          <ul>
+            <li>
+              Practicing numerous hours everyday &amp; also asking questions
+              online, e.g Stackoverflow
+            </li>
+          </ul>
         </p>
         <br />
         <br />
@@ -73,6 +92,20 @@ const Projects = () => {
             <li>Used HTML, CSS, JQuery</li>
             <li>Used Firebase to store the data</li>
           </ul>
+          Problems faced
+          <ul>
+            <li>
+              Understanding the functions of Firebase and how to access it's
+              database
+            </li>
+          </ul>
+          Solution to problem
+          <ul>
+            <li>
+              Spent hours of research &amp; practicing using Firebase's
+              documentation
+            </li>
+          </ul>
         </p>
         <br />
         <br />
@@ -87,6 +120,14 @@ const Projects = () => {
             <li>Developed an e-commerce web application using J2EE</li>
             <li>Used HTML, CSS, JServlet</li>
             <li>Used Oracle database to store the data</li>
+          </ul>
+          Problems faced
+          <ul>
+            <li>Needed to create a dynamic web app</li>
+          </ul>
+          Solution to problem
+          <ul>
+            <li>Spent hours of research on how to make a web page dynamic</li>
           </ul>
         </p>
         <br />
@@ -111,6 +152,17 @@ const Projects = () => {
               hosted by Nanyang Polytechnic
             </li>
           </ul>
+          Problems faced
+          <ul>
+            <li>Understanding how HTML, CSS &amp; Javascript works</li>
+          </ul>
+          Solution to problem
+          <ul>
+            <li>
+              Practicing numerous hours everyday &amp; also asking questions
+              online, e.g Stackoverflow
+            </li>
+          </ul>
         </p>
         <br />
         <br />
@@ -131,6 +183,24 @@ const Projects = () => {
             <li>Used Design Thinking Approach to gather data from students.</li>
             <li>Develop a program using Java.</li>
             <li>Used Indigo Studio to create user interface</li>
+          </ul>
+          Problems faced
+          <ul>
+            <li>Designing of user interface</li>
+            <li>
+              Collecting data to find out if this application would solve their
+              problem
+            </li>
+          </ul>
+          Solution to problem
+          <ul>
+            <li>
+              Took up courses online to find out how to design a good user
+              interface
+            </li>
+            <li>
+              Went to conduct interview with people who are grouped up together
+            </li>
           </ul>
         </p>
       </div>
