@@ -4,23 +4,17 @@
   padding: 2rem;
   text-align: center;
   color: black;
-  animation: appear 0.8s ease-out forwards;
+  /* animation: appear 0.8s ease-out forwards; */
   top: 80px;
   position: relative;
 }
+
 .container .overview {
   text-align: left;
   display: block;
   color: black;
   font-size: 200%;
   font-weight: bold;
-}
-.container {
-  text-align: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-.container table {
-  width: 100%;
 }
 
 .wrapper {

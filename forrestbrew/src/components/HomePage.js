@@ -132,14 +132,12 @@ const HomePage = () => {
       .get()
       .then((snapshot) => {
         let testing = [];
-        let i = 0;
         snapshot.forEach((doc) => {
           const dt = getDate(doc.data().dateAdded["seconds"]);
           if (!testing[dt]) {
             testing[dt] = 1;
           } else {
             testing[dt] += 1;
-            i++;
           }
         });
         console.log(testing);
@@ -167,6 +165,7 @@ const HomePage = () => {
     const unique = [...new Set(data.map((item) => item.category))];
     return unique;
   };
+  
   if (!isLoaded) {
     return (
       <section className={classes.container}>

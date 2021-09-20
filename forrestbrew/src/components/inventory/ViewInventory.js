@@ -83,21 +83,24 @@ const ViewInventory = (props) => {
   };
 
   return (
-    <div>
+    <div className={classes.container}>
+      {overlay && (
+        <ViewProduct
+          data={list}
+          user={ctx.currentUseruser}
+          onClose={hideOverlay}
+        />
+      )}
       <div className={classes.actions}>
         <Link to="/AddProduct">
           <button>Add New Product</button>
         </Link>
         <button>Remove a Product</button>
       </div>
-      <div className={classes.container}>
-        {overlay && (
-          <ViewProduct
-            data={list}
-            user={ctx.currentUseruser}
-            onClose={hideOverlay}
-          />
-        )}
+      <span className={classes.overview}>Inventory</span>
+      <br />
+      <div className={classes.wrapper}>
+        <br />
         <form>
           <table>
             <tbody>

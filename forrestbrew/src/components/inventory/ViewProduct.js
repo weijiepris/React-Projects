@@ -26,7 +26,7 @@ const ViewProduct = (props) => {
       .then((snapshot) => {
         if (snapshot.size) {
           snapshot.forEach((doc) => {
-            if (props.data.data.id == doc.data().prodID) {
+            if (props.data.data.id === doc.data().prodID) {
               addData(doc.data());
             }
           });
@@ -55,7 +55,7 @@ const ViewProduct = (props) => {
     //   });
     //   setLoadingData(true);
     // });
-  }, [ctx.currentUser.companyName]);
+  }, [ctx.currentUser.companyName, props.data.data.id]);
 
   function toTimestamp(strDate) {
     var datum = Date.parse(strDate);
