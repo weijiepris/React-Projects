@@ -1,6 +1,9 @@
 import React from "react";
 import classes from "./css/AboutMe.module.css";
 
+import inventoryImage from "../image/inventory.png";
+import inventoryImage2 from "../image/inventory2.png";
+
 const Projects = () => {
   return (
     <div className={classes.container}>
@@ -15,6 +18,8 @@ const Projects = () => {
             <li>Working to meet client's requirements</li>
             <li>Hosted the web app using firebase hosting</li>
           </ul>
+          <img className={classes.portImage} src={inventoryImage} />
+          <img className={classes.portImage} src={inventoryImage2} />
         </p>
         <br />
         <br />
