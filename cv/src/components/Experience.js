@@ -43,21 +43,6 @@ const Experience = () => {
         <hr />
         <br />
         <br />
-        <div className={classes.header}>Crystal Jade</div>
-        <br />
-        <p>
-          December 2013 - March 2014
-          <ul>
-            <li>Serve customers food and drinks</li>
-            <li>Prepare and cook dishes. </li>
-            <li>Understanding work infrastructure in the kitchen</li>
-          </ul>
-        </p>
-        <br />
-        <br />
-        <hr />
-        <br />
-        <br />
         <div className={classes.header}>Micro 2000 Ptd Ltd</div>
         <br />
         <p>

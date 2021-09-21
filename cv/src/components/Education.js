@@ -35,6 +35,12 @@ const Education = () => {
               </ul>
             </li>
             <li>
+              Activities
+              <ul>
+                <li>Student Leader for Nanyang Polytechnic Open House</li>
+              </ul>
+            </li>
+            <li>
               Projects
               <ul>
                 <li>IT For Finance &amp; Case Study (SAP)</li>
@@ -70,7 +76,9 @@ const Education = () => {
             <li>
               Activities
               <ul>
-                <li>Computer Club</li>
+                <li>Commitee Member of Computer Club
+                  <ul><li>Awarded Platinum for best conduct</li></ul>
+                </li>
               </ul>
             </li>
           </ul>
