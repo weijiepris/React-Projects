@@ -9,6 +9,7 @@
   text-align: center;
   color: white;
   animation: login-appear 0.8s ease-out forwards;
+  margin-top:240px;
 }
 
 .auth h1 {
