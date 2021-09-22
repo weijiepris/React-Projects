@@ -18,8 +18,8 @@ const Projects = () => {
             <li>Working to meet client's requirements</li>
             <li>Hosted the web app using firebase hosting</li>
           </ul>
-          <img className={classes.portImage} src={inventoryImage} />
-          <img className={classes.portImage} src={inventoryImage2} />
+          {/* <img className={classes.portImage} src={inventoryImage} />
+          <img className={classes.portImage} src={inventoryImage2} /> */}
         </p>
         <br />
         <br />

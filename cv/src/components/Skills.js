@@ -5,18 +5,11 @@ const Skills = () => {
   return (
     <div className={classes.container}>
       <div className={classes.content}>
-        <div className={classes.header}>Programming Languages</div>
+        <div className={classes.header}>Frameworks</div>
         <p>
           <ul>
-            <li>JavaScript (ES6)</li>
-            <li>Java</li>
-            <li>Python</li>
-            <li>C++</li>
-            <li>HTML5</li>
-            <li>CSS3</li>
-            <li>Basic SQL</li>
-            <li>Ruby</li>
-            <li>PHP</li>
+            <li>React</li>
+            <li>Ruby on Rails</li>
           </ul>
         </p>
         <br />
@@ -24,7 +17,33 @@ const Skills = () => {
         <hr />
         <br />
         <br />
-        <div className={classes.header}>Spoken Languages</div>
+        <div className={classes.header}>Skills</div>
+        <p>
+          <ul>
+            <li>Basic SQL</li>
+            <li>CSS3</li>
+            <li>C++</li>
+            <li>Java</li>
+            <li>JavaScript (ES6)</li>
+            <li>JQuery</li>
+            <li>Python</li>
+            <li>HTML5</li>
+            <li>Ruby</li>
+            <li>PHP</li>
+            <li>Scrum</li>
+            <li>UML</li>
+            <li>PHP</li>
+            <li>Object Oriented Programming</li>
+            <li>JSON</li>
+            <li>XML</li>
+          </ul>
+        </p>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <br />
+        <div className={classes.header}>Languages</div>
         <p>
           <ul>
             <li>English (Written &amp; Spoken</li>

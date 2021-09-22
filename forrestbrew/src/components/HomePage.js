@@ -119,7 +119,7 @@ const HomePage = () => {
               },
             ];
           });
-          console.log(tempQuantity);
+          // console.log(tempQuantity);
           setQuantity(snapshot.docs.length);
           setStockQuantity(tempQuantity);
           drawChart(temp);
@@ -175,38 +175,47 @@ const HomePage = () => {
 
         setOverall(testing);
         for (const t in testing) {
-          firebase
-            .firestore()
-            .collection("batch")
-            .doc(ctx.currentUser.companyName)
-            .collection("products")
-            .where("prodID", "==", t)
-            .orderBy("dateAdded", "desc")
-            .get()
-            .then((snapshot) => {
-              console.log("firebase where product => ", t);
-              let testing2 = [];
-              snapshot.forEach((doc) => {
-                const dt = getDate(doc.data().dateAdded["seconds"]);
-                if (!testing2["prodID"]) {
-                  testing2["count"] = 1;
-                  testing2["date"] = dt;
-                  testing2["prodID"] = t;
-                } else {
-                  console.log(t, " exists");
-                  testing2["count"] += 1;
-                }
+          if (t === "004") {
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("products")
+              .where("prodID", "==", t)
+              .orderBy("dateAdded", "desc")
+              .get()
+              .then((snapshot) => {
+                let testing2 = [];
+                let c = 0;
+                snapshot.forEach((doc) => {
+                  const dt = getDate(doc.data().dateAdded["seconds"]);
+                  if (!testing2["prodID"]) {
+                    // testing2["count"] = 1;
+                    // testing2["date"] = dt;
+                    // testing2["prodID"] = t;
+                    testing2[c] = { count: 1, date: dt, prodID: t };
+                  } else {
+                    if (testing2.prodID == t) {
+                      for (const d in testing2) {
+                        if (testing2[d].count) {
+                          testing2[d].count++;
+                        }
+                      }
+                    }
+                  }
+                  c++;
+                });
+                // console.log("for product ID => ", t, "=>", testing2);
+                let v = {};
+                v["data"] = testing2;
+                // console.log(v);
+                addSummary(v);
               });
-              console.log("for product ID => ", t, "=>", testing2);
-              let v = {};
-              v["data"] = testing2;
-              console.log(v);
-              addSummary(v);
-            });
+          }
         }
       });
 
-    console.log(summary);
+    // console.log(summary);
   }, [userid, ctx.currentUser.companyName]);
 
   const getDate = (date) => {
@@ -220,10 +229,18 @@ const HomePage = () => {
   };
 
   const getSummary = () => {
-    console.log("summary => ", summary);
-    for (const i in summary) {
-      console.log("product id => ", summary[i]);
+    // summary.map((list) => console.log(list.data));
+
+    // for (const i in summary) {
+    // console.log(summary[i].data);
+
+    for (let j = 0; j < summary.length; j++) {
+      console.log(summary[j].data);
+      for (let k = 0; k < summary[j].data.length; k++) {
+        console.log(summary[j].data[k]);
+      }
     }
+    // }
   };
   const getCategory = () => {
     const data = inventory;
@@ -271,7 +288,7 @@ const HomePage = () => {
                 </tr>
                 {summary.map((list) => (
                   <tr>
-                    <td>{list.data.prodID}</td>
+                    <td>{list.prodID}</td>
                     <td>{list.data.date}</td>
                     <td>{list.data.count}</td>
                   </tr>
