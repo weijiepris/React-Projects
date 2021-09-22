@@ -46,7 +46,7 @@
 }
 .flex {
   display: grid;
-  grid-template-columns: 40% 59%;
+  grid-template-columns: 50% 50%;
   grid-gap: 1em;
   padding: 10px;
 }
@@ -65,4 +65,9 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+.table{
+  width:100%;
 }

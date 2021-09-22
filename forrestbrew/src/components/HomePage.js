@@ -16,6 +16,8 @@ const HomePage = () => {
   const [stockQuantity, setStockQuantity] = useState(0);
   const [options, setOptions] = useState({});
   const [line, setLine] = useState({});
+  const [overall, setOverall] = useState([]);
+  const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("Bargraph");
 
@@ -143,7 +145,6 @@ const HomePage = () => {
         console.log(testing);
         let op = [];
         for (const value in testing) {
-          console.log(new Date(value));
           op = [
             ...op,
             {
@@ -154,18 +155,82 @@ const HomePage = () => {
         }
         lineChart(op);
       });
+
+    firebase
+      .firestore()
+      .collection("batch")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .get()
+      .then((snapshot) => {
+        let testing = [];
+        snapshot.forEach((doc) => {
+          const dt = doc.data().prodID;
+          if (!testing[dt]) {
+            testing[dt] = 1;
+          } else {
+            testing[dt] += 1;
+          }
+        });
+
+        setOverall(testing);
+        for (const t in testing) {
+          firebase
+            .firestore()
+            .collection("batch")
+            .doc(ctx.currentUser.companyName)
+            .collection("products")
+            .where("prodID", "==", t)
+            .orderBy("dateAdded", "desc")
+            .get()
+            .then((snapshot) => {
+              console.log("firebase where product => ", t);
+              let testing2 = [];
+              snapshot.forEach((doc) => {
+                const dt = getDate(doc.data().dateAdded["seconds"]);
+                if (!testing2["prodID"]) {
+                  testing2["count"] = 1;
+                  testing2["date"] = dt;
+                  testing2["prodID"] = t;
+                } else {
+                  console.log(t, " exists");
+                  testing2["count"] += 1;
+                }
+              });
+              console.log("for product ID => ", t, "=>", testing2);
+              let v = {};
+              v["data"] = testing2;
+              console.log(v);
+              addSummary(v);
+            });
+        }
+      });
+
+    console.log(summary);
   }, [userid, ctx.currentUser.companyName]);
 
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(4, 15);
   };
 
+  const addSummary = (list) => {
+    setSummary((prevList) => {
+      return [list, ...prevList];
+    });
+  };
+
+  const getSummary = () => {
+    console.log("summary => ", summary);
+    for (const i in summary) {
+      console.log("product id => ", summary[i]);
+    }
+  };
   const getCategory = () => {
     const data = inventory;
     const unique = [...new Set(data.map((item) => item.category))];
     return unique;
   };
-  
+
   if (!isLoaded) {
     return (
       <section className={classes.container}>
@@ -196,10 +261,23 @@ const HomePage = () => {
       <div className={classes.wrapper}>
         <div className={classes.flex}>
           <div className={classes.flexContent}>
-            <h1>Product Category</h1>
-            {getCategory().map((productCategory) => (
-              <h4>{productCategory}</h4>
-            ))}
+            <h1 onClick={getSummary}>Production Summary</h1>
+            <table className={classes.table}>
+              <tbody>
+                <tr>
+                  <th>Product ID</th>
+                  <th>Date produced</th>
+                  <th>Stock Count</th>
+                </tr>
+                {summary.map((list) => (
+                  <tr>
+                    <td>{list.data.prodID}</td>
+                    <td>{list.data.date}</td>
+                    <td>{list.data.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
           <div className={classes.flexContent}>
             <select id="charts" name="charts" onChange={test}>
