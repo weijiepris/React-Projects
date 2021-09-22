@@ -67,7 +67,12 @@
   }
 }
 
+.table {
+  width: 100%;
+}
 
-.table{
-  width:100%;
+.flexContent {
+  height:500px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

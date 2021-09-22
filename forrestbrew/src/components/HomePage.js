@@ -142,7 +142,7 @@ const HomePage = () => {
             testing[dt] += 1;
           }
         });
-        console.log(testing);
+        // console.log(testing);
         let op = [];
         for (const value in testing) {
           op = [
@@ -163,55 +163,47 @@ const HomePage = () => {
       .collection("products")
       .get()
       .then((snapshot) => {
-        let testing = [];
+        let arr = [];
         snapshot.forEach((doc) => {
           const dt = doc.data().prodID;
-          if (!testing[dt]) {
-            testing[dt] = 1;
+          if (!arr[dt]) {
+            arr[dt] = 1;
           } else {
-            testing[dt] += 1;
+            arr[dt] += 1;
           }
         });
-
-        setOverall(testing);
-        for (const t in testing) {
-          if (t === "004") {
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("products")
-              .where("prodID", "==", t)
-              .orderBy("dateAdded", "desc")
-              .get()
-              .then((snapshot) => {
-                let testing2 = [];
-                let c = 0;
-                snapshot.forEach((doc) => {
-                  const dt = getDate(doc.data().dateAdded["seconds"]);
-                  if (!testing2["prodID"]) {
-                    // testing2["count"] = 1;
-                    // testing2["date"] = dt;
-                    // testing2["prodID"] = t;
-                    testing2[c] = { count: 1, date: dt, prodID: t };
-                  } else {
-                    if (testing2.prodID == t) {
-                      for (const d in testing2) {
-                        if (testing2[d].count) {
-                          testing2[d].count++;
-                        }
+        // console.log("testing => ", arr);
+        for (const t in arr) {
+          firebase
+            .firestore()
+            .collection("batch")
+            .doc(ctx.currentUser.companyName)
+            .collection("products")
+            .where("prodID", "==", t)
+            .orderBy("dateAdded", "desc")
+            .get()
+            .then((snapshot) => {
+              let arr2 = [];
+              let c = 0;
+              snapshot.forEach((doc) => {
+                const dt = getDate(doc.data().dateAdded["seconds"]);
+                if (!arr2[c]) {
+                  arr2[c] = { count: 1, date: dt, prodID: t };
+                } else {
+                  if (arr2.prodID === t) {
+                    for (const d in arr2) {
+                      if (arr2[d].count) {
+                        arr2[d].count++;
                       }
                     }
                   }
-                  c++;
-                });
-                // console.log("for product ID => ", t, "=>", testing2);
-                let v = {};
-                v["data"] = testing2;
-                // console.log(v);
-                addSummary(v);
+                }
+                c++;
               });
-          }
+              let v = {};
+              v["data"] = arr2;
+              addSummary(v);
+            });
         }
       });
 
@@ -229,18 +221,22 @@ const HomePage = () => {
   };
 
   const getSummary = () => {
-    // summary.map((list) => console.log(list.data));
+    const result = [];
+    // console.log("summary => ", summary);
+    summary.forEach((d) => {
+      let dates = new Set(d.data.map((prod) => prod.date));
+      dates.forEach((date) => {
+        result.push({
+          date: date,
+          prodID: d.data[0].prodID,
+          count: d.data.filter((prod) => prod.date === date).length,
+        });
+      });
+    });
+    // console.log(result);
 
-    // for (const i in summary) {
-    // console.log(summary[i].data);
-
-    for (let j = 0; j < summary.length; j++) {
-      console.log(summary[j].data);
-      for (let k = 0; k < summary[j].data.length; k++) {
-        console.log(summary[j].data[k]);
-      }
-    }
-    // }
+    // setOverall(result);
+    return result;
   };
   const getCategory = () => {
     const data = inventory;
@@ -286,11 +282,11 @@ const HomePage = () => {
                   <th>Date produced</th>
                   <th>Stock Count</th>
                 </tr>
-                {summary.map((list) => (
-                  <tr>
+                {getSummary().map((list) => (
+                  <tr key={Math.random()}>
                     <td>{list.prodID}</td>
-                    <td>{list.data.date}</td>
-                    <td>{list.data.count}</td>
+                    <td>{list.date}</td>
+                    <td>{list.count}</td>
                   </tr>
                 ))}
               </tbody>

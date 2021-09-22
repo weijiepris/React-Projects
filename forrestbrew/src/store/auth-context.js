@@ -88,7 +88,6 @@ export const AuthContextProvider = (props) => {
       }
     });
 
-    testFunction();
   }, []);
 
   const loggedInHandler = () => {
