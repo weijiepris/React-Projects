@@ -8,18 +8,35 @@ const Education = () => {
         <div className={classes.header}>
           Bachelor of Computer Science (Big Data)
         </div>
-        <br />
-        <p>2019 - Current</p>
-        <ul></ul>
+        <p>
+          Singapore Institute of Management(UOW) <br /> 2019 - Current
+          <ul>
+            <li>
+              Skills Learnt
+              <ul>
+                <li>Python</li>
+                <li>C++</li>
+                <li>R Studio</li>
+                <li>Jupyter Notebook</li>
+                <li>Apache Pig</li>
+                <li>Big Data applications</li>
+                <li>Hive</li>
+                <li>Hadoop</li>
+                <li>Map Reduce</li>
+              </ul>
+            </li>
+          </ul>
+        </p>
         <br />
         <br />
         <hr />
         <br />
         <br />
         <div className={classes.header}>Diploma in Business Enterprise IT</div>
-        <br />
         <p>
+          Nanyang Polytechnic <br />
           2014 - 2017
+          <br />
           <br />
           Cumulative GPA - 3.20
           <ul>
@@ -61,9 +78,11 @@ const Education = () => {
         <div className={classes.header}>
           NITEC in Information-Communications Technology
         </div>
-        <br />
         <p>
+          ITE College East (Simei)
+          <br />
           2012 - 2013 <br />
+          <br />
           Cumulative GPA - 3.94
           <ul>
             <li>
@@ -76,8 +95,11 @@ const Education = () => {
             <li>
               Activities
               <ul>
-                <li>Commitee Member of Computer Club
-                  <ul><li>Awarded Platinum for best conduct</li></ul>
+                <li>
+                  Commitee Member of Computer Club
+                  <ul>
+                    <li>Awarded Platinum for best conduct</li>
+                  </ul>
                 </li>
               </ul>
             </li>
@@ -91,6 +113,7 @@ const Education = () => {
         <div className={classes.header}>GCE 'N' Levels</div>
         <br />
         <p>
+          Bedok Green Secondary School <br />
           2007 - 2011
           <ul>
             <li>
@@ -103,11 +126,6 @@ const Education = () => {
             </li>
           </ul>
         </p>
-        <br />
-        <br />
-        <hr />
-        <br />
-        <br />
       </div>
       <br />
       <br />

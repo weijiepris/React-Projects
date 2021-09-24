@@ -55,6 +55,12 @@ const Skills = () => {
         <hr />
         <br />
         <br />
+        <div className={classes.header}>Others</div>
+        <p>
+          <ul>
+            <li>Class 3 Driving license (6 Years)</li>
+          </ul>
+        </p>
       </div>
       <br />
       <br />

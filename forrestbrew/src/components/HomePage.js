@@ -10,13 +10,12 @@ const HomePage = () => {
 
   // const [user, setUser] = useState([]);
   const userid = firebase.auth().currentUser.uid;
-  const [inventory, setInventory] = useState([]);
+  // const [inventory, setInventory] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [stockQuantity, setStockQuantity] = useState(0);
   const [options, setOptions] = useState({});
   const [line, setLine] = useState({});
-  const [overall, setOverall] = useState([]);
   const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("Bargraph");
@@ -70,11 +69,11 @@ const HomePage = () => {
     setLine(options);
   };
 
-  const addInventory = (list) => {
-    setInventory((prevList) => {
-      return [list, ...prevList];
-    });
-  };
+  // const addInventory = (list) => {
+  //   setInventory((prevList) => {
+  //     return [list, ...prevList];
+  //   });
+  // };
   const test = (event) => {
     setGraph(event.target.value);
   };
@@ -108,7 +107,7 @@ const HomePage = () => {
         if (snapshot.docs.length) {
           let temp = [];
           snapshot.forEach((doc) => {
-            addInventory(doc.data());
+            // addInventory(doc.data());
             tempQuantity += doc.data().quantity;
             temp = [
               ...temp,
@@ -238,11 +237,11 @@ const HomePage = () => {
     // setOverall(result);
     return result;
   };
-  const getCategory = () => {
-    const data = inventory;
-    const unique = [...new Set(data.map((item) => item.category))];
-    return unique;
-  };
+  // const getCategory = () => {
+  //   const data = inventory;
+  //   const unique = [...new Set(data.map((item) => item.category))];
+  //   return unique;
+  // };
 
   if (!isLoaded) {
     return (

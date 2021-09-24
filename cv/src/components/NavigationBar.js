@@ -31,6 +31,8 @@ function NavigationBar() {
             <h1>Chan Wei Jie</h1>
           </Link>
           <p>
+            +65 9616 4636 <br />
+            <br />
             Front-end <br />
             Back-end Developer
           </p>
@@ -72,13 +74,22 @@ function NavigationBar() {
             Skills
           </Link>
         </div>
-        <div className={classes.last}>
+        <div className={classes.a}>
           <Link
             to="/Education"
             exact="true"
             style={{ textDecoration: "none", color: "white" }}
           >
             Education
+          </Link>
+        </div>
+        <div className={classes.last}>
+          <Link
+            to="/Documents"
+            exact="true"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            Documents
           </Link>
         </div>
 

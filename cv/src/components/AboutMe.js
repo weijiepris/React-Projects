@@ -17,6 +17,7 @@ const AboutMe = () => {
         <p>
           I'm a front-end &amp; back-end developer based in Singapore, and I
           build web applications with React!
+          <br />
           <br /> My passion for programming began during my time studying in
           ITE. <br />
           Through this passion, I learned to stay up to date with the javascript
@@ -28,36 +29,22 @@ const AboutMe = () => {
           <br />
           My personal goal is to work on projects and building tools that help
           enrich lives through technology.
+          <br />
+          <br />
+          I enjoy guiding my peers on how to solve any problems especially if
+          they are programming related. I also have lots of patience when it
+          comes to solving a difficult problem
+          <br />
+          <br /> I'm always up for a challenge and keen to gain new knowledge!
+          <br />
+          <br />I hope to work on more personal projects, building tools that help
+          enrich lives through technology.
         </p>
         <br />
         <br />
-        <hr />
         <br />
         <br />
-        <div className={classes.header}>About Me</div>
-        <br />
-        <p>
-          Found my interest in programming during my time studying in ITE.
-          <br />
-          <br />
-          Currently working on an cloud-based inventory system for a client.
-          <br />
-          <br />
-          Self taught in building web applications using React.
-          <br />
-          <br />
-          Hope to work on personal projects, building tools that help enrich
-          lives through technology.
-        </p>
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
     </div>
   );
 };

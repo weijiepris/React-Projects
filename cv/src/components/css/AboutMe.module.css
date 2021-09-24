@@ -15,6 +15,8 @@
   margin: 0 auto;
   position: relative;
   margin-top: 120px;
+  width: 80%;
+  left: -60px;
 }
 .content p {
   font-size: 120%;
@@ -67,8 +69,14 @@ hr {
   .headerphoto {
     display: block;
   }
-}
+  .content {
+    left: 0px;
+  }
 
+  .popOut {
+    height: 900px;
+  }
+}
 .portImage {
   height: 150px;
   width: 200px;

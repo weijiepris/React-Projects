@@ -41,11 +41,18 @@ const Projects = () => {
           </ul>
           Problems faced
           <ul>
-            <li>Gathering information about the school's food stalls</li>
+            <li>Understanding how to include an API into the project</li>
+            <li>Understanding how to use google's geolocation API</li>
           </ul>
           Solution to problem
           <ul>
-            <li>Conducted interviews with the students</li>
+            <li>
+              Watched tutorial videos on Youtube on how does API work and how to
+              use them
+            </li>
+            <li>
+              Read through the documentation and also trying out each function
+            </li>
           </ul>
         </p>
         <br />
@@ -69,13 +76,18 @@ const Projects = () => {
           </ul>
           Problems faced
           <ul>
-            <li>Researching on how to use Google's geolocation api</li>
+            <li>
+              Needed to find out if this web application will benefit new
+              students in Singapore Polytechnic
+            </li>
+            <li>Not sure where are the food stalls located at</li>
           </ul>
           Solution to problem
           <ul>
+            <li>Conducted interviews with the students</li>
             <li>
-              Practicing numerous hours everyday &amp; also asking questions
-              online, e.g Stackoverflow
+              Gathered information about the school's food stalls by asking the
+              students
             </li>
           </ul>
         </p>
@@ -106,10 +118,7 @@ const Projects = () => {
           </ul>
           Solution to problem
           <ul>
-            <li>
-              Spent hours of research &amp; practicing using Firebase's
-              documentation
-            </li>
+            <li>Research &amp; practicing using Firebase's documentation</li>
           </ul>
         </p>
         <br />
@@ -128,11 +137,17 @@ const Projects = () => {
           </ul>
           Problems faced
           <ul>
-            <li>Needed to create a dynamic web app</li>
+            <li>
+              Needed to create a dynamic web app to ensure that the web page can
+              handle additional contents and data
+            </li>
           </ul>
           Solution to problem
           <ul>
-            <li>Spent hours of research on how to make a web page dynamic</li>
+            <li>
+              Creating functions that are reusable and are able to handle
+              additional data passed in
+            </li>
           </ul>
         </p>
         <br />
@@ -159,13 +174,24 @@ const Projects = () => {
           </ul>
           Problems faced
           <ul>
-            <li>Understanding how HTML, CSS &amp; Javascript works</li>
+            <li>
+              Understanding the limitations of HTML, CSS &amp; Javascript and
+              how they work.
+            </li>
+            <li>
+              Passing user data to different pages as the web page needed to
+              authenticate the user
+            </li>
           </ul>
           Solution to problem
           <ul>
             <li>
               Practicing numerous hours everyday &amp; also asking questions
               online, e.g Stackoverflow
+            </li>
+            <li>
+              Started researching and implementing on Local Storage as it stores
+              the data on the browser throughout all the pages
             </li>
           </ul>
         </p>
@@ -187,24 +213,28 @@ const Projects = () => {
             </li>
             <li>Used Design Thinking Approach to gather data from students.</li>
             <li>Develop a program using Java.</li>
-            <li>Used Indigo Studio to create user interface</li>
+            <li>Used Indigo Studio to create wireframes</li>
           </ul>
           Problems faced
           <ul>
-            <li>Designing of user interface</li>
             <li>
-              Collecting data to find out if this application would solve their
-              problem
+              Designing of user interface to ensure that it is error-free, easy
+              to use, easy to understand and seamless
+            </li>
+            <li>
+              Needed to find out how impactful this application will be, and
+              also to make sure that people will actually use the app
             </li>
           </ul>
           Solution to problem
           <ul>
             <li>
-              Took up courses online to find out how to design a good user
-              interface
+              Creating wireframes for each page and determine the positions of
+              each buttons, text and functions
             </li>
             <li>
-              Went to conduct interview with people who are grouped up together
+              Collected student's feedback to better understand, and explore the
+              possible functions to develop
             </li>
           </ul>
         </p>

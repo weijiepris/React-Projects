@@ -12,7 +12,7 @@ const Header = () => {
     if (toggle) {
       x.style.height = "0";
     } else {
-      x.style.height = "300px";
+      x.style.height = "350px";
     }
   };
 
@@ -58,6 +58,13 @@ const Header = () => {
             onClick={untoggle}
           >
             <div>Skills</div>
+          </Link>
+          <Link
+            to="/Documents"
+            style={{ textDecoration: "none" }}
+            onClick={untoggle}
+          >
+            <div>Documents</div>
           </Link>
         </div>
         <div
