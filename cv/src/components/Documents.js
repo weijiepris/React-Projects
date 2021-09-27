@@ -7,6 +7,10 @@ import itecert from "../image/itecert.jpg";
 import itetranscript from "../image/itetranscript.jpg";
 import nscert from "../image/nscert.jpg";
 import nstranscript from "../image/nstranscript.jpg";
+import dlist1 from "../image/dlist1.jpg";
+import dlist2 from "../image/dlist2.jpg";
+
+import unitranscript from "../image/unitranscript.jpg";
 
 import ViewImage from "./ViewImage";
 const Documents = () => {
@@ -17,8 +21,17 @@ const Documents = () => {
     setOverlay(false);
   };
 
+  const setUniTranscript = () => {
+    openList(unitranscript);
+  };
   const setDipCert = () => {
     openList(diplomacert);
+  };
+  const setDlist1 = () => {
+    openList(dlist1);
+  };
+  const setDlist2 = () => {
+    openList(dlist2);
   };
   const setDipTranscript = () => {
     openList(diplomatranscript);
@@ -48,6 +61,20 @@ const Documents = () => {
     <div className={classes.container}>
       {overlay && <ViewImage onClose={hideOverlay} image={image} />}
       <div className={classes.content}>
+        <div className={classes.header}>Degree Transcript</div>
+        <br />
+        <p>
+          <img
+            className={classes.portImage}
+            src={unitranscript}
+            onClick={setUniTranscript}
+          />
+        </p>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <br />
         <div className={classes.header}>
           Diploma Certificate &amp; Transcript
         </div>
@@ -82,6 +109,8 @@ const Documents = () => {
             src={itetranscript}
             onClick={setIteTranscript}
           />
+          <img className={classes.portImage} src={dlist1} onClick={setDlist1} />
+          <img className={classes.portImage} src={dlist2} onClick={setDlist2} />
         </p>
         <br />
         <br />

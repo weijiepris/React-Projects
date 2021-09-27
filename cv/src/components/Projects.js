@@ -18,8 +18,6 @@ const Projects = () => {
             <li>Working to meet client's requirements</li>
             <li>Hosted the web app using firebase hosting</li>
           </ul>
-          {/* <img className={classes.portImage} src={inventoryImage} />
-          <img className={classes.portImage} src={inventoryImage2} /> */}
         </p>
         <br />
         <br />
@@ -38,21 +36,6 @@ const Projects = () => {
             <li>Exposed to PhoneGap's framework </li>
             <li>Used HTML, CSS, Javascript</li>
             <li>Used Firebase to store the data</li>
-          </ul>
-          Problems faced
-          <ul>
-            <li>Understanding how to include an API into the project</li>
-            <li>Understanding how to use google's geolocation API</li>
-          </ul>
-          Solution to problem
-          <ul>
-            <li>
-              Watched tutorial videos on Youtube on how does API work and how to
-              use them
-            </li>
-            <li>
-              Read through the documentation and also trying out each function
-            </li>
           </ul>
         </p>
         <br />
@@ -74,22 +57,6 @@ const Projects = () => {
             <li>Exposed to PHP </li>
             <li>Used HTML, CSS, PHP</li>
           </ul>
-          Problems faced
-          <ul>
-            <li>
-              Needed to find out if this web application will benefit new
-              students in Singapore Polytechnic
-            </li>
-            <li>Not sure where are the food stalls located at</li>
-          </ul>
-          Solution to problem
-          <ul>
-            <li>Conducted interviews with the students</li>
-            <li>
-              Gathered information about the school's food stalls by asking the
-              students
-            </li>
-          </ul>
         </p>
         <br />
         <br />
@@ -109,17 +76,6 @@ const Projects = () => {
             <li>Used HTML, CSS, JQuery</li>
             <li>Used Firebase to store the data</li>
           </ul>
-          Problems faced
-          <ul>
-            <li>
-              Understanding the functions of Firebase and how to access it's
-              database
-            </li>
-          </ul>
-          Solution to problem
-          <ul>
-            <li>Research &amp; practicing using Firebase's documentation</li>
-          </ul>
         </p>
         <br />
         <br />
@@ -134,20 +90,6 @@ const Projects = () => {
             <li>Developed an e-commerce web application using J2EE</li>
             <li>Used HTML, CSS, JServlet</li>
             <li>Used Oracle database to store the data</li>
-          </ul>
-          Problems faced
-          <ul>
-            <li>
-              Needed to create a dynamic web app to ensure that the web page can
-              handle additional contents and data
-            </li>
-          </ul>
-          Solution to problem
-          <ul>
-            <li>
-              Creating functions that are reusable and are able to handle
-              additional data passed in
-            </li>
           </ul>
         </p>
         <br />
@@ -172,28 +114,6 @@ const Projects = () => {
               hosted by Nanyang Polytechnic
             </li>
           </ul>
-          Problems faced
-          <ul>
-            <li>
-              Understanding the limitations of HTML, CSS &amp; Javascript and
-              how they work.
-            </li>
-            <li>
-              Passing user data to different pages as the web page needed to
-              authenticate the user
-            </li>
-          </ul>
-          Solution to problem
-          <ul>
-            <li>
-              Practicing numerous hours everyday &amp; also asking questions
-              online, e.g Stackoverflow
-            </li>
-            <li>
-              Started researching and implementing on Local Storage as it stores
-              the data on the browser throughout all the pages
-            </li>
-          </ul>
         </p>
         <br />
         <br />
@@ -214,28 +134,6 @@ const Projects = () => {
             <li>Used Design Thinking Approach to gather data from students.</li>
             <li>Develop a program using Java.</li>
             <li>Used Indigo Studio to create wireframes</li>
-          </ul>
-          Problems faced
-          <ul>
-            <li>
-              Designing of user interface to ensure that it is error-free, easy
-              to use, easy to understand and seamless
-            </li>
-            <li>
-              Needed to find out how impactful this application will be, and
-              also to make sure that people will actually use the app
-            </li>
-          </ul>
-          Solution to problem
-          <ul>
-            <li>
-              Creating wireframes for each page and determine the positions of
-              each buttons, text and functions
-            </li>
-            <li>
-              Collected student's feedback to better understand, and explore the
-              possible functions to develop
-            </li>
           </ul>
         </p>
       </div>
