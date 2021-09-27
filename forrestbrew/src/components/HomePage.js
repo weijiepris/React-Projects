@@ -3,7 +3,7 @@ import firebase from "firebase";
 import classes from "./HomePage.module.css";
 import AuthContext from "../store/auth-context";
 
-import Bargraph from "./charts/Bargraph";
+import Graph from "./charts/Graph";
 
 const HomePage = () => {
   const ctx = useContext(AuthContext);
@@ -25,6 +25,12 @@ const HomePage = () => {
       animationEnabled: true,
       title: {
         text: "Stock Count",
+      },
+      axisX: {
+        title: "Flavours",
+      },
+      axisY: {
+        title: "Quantity",
       },
       data: [
         {
@@ -48,7 +54,7 @@ const HomePage = () => {
         valueFormatString: "DD MMM YYYY",
       },
       axisY: {
-        title: "Inputs",
+        title: "Quantity",
       },
       legend: {
         cursor: "pointer",
@@ -130,6 +136,7 @@ const HomePage = () => {
       .collection("batch")
       .doc(ctx.currentUser.companyName)
       .collection("products")
+      .orderBy("dateAdded", "desc")
       .get()
       .then((snapshot) => {
         let testing = [];
@@ -234,7 +241,12 @@ const HomePage = () => {
     });
     // console.log(result);
 
-    // setOverall(result);
+    // setOverall(result);.
+    result.sort(function (a, b) {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      return new Date(b.date) - new Date(a.date);
+    });
     return result;
   };
   // const getCategory = () => {
@@ -253,7 +265,14 @@ const HomePage = () => {
 
   return (
     <section className={classes.container}>
-      <span className={classes.overview}>Overview Dashboard</span>
+      <span className={classes.overview}>
+        Overview Dashboard
+        <select id="charts" name="charts">
+          <option value="default">All Time</option>
+          <option value="30">Last 30 Days</option>
+          <option value="7">Last 7 Days</option>
+        </select>
+      </span>
       <br />
 
       <div className={classes.wrapper}>
@@ -292,16 +311,19 @@ const HomePage = () => {
             </table>
           </div>
           <div className={classes.flexContent}>
-            <select id="charts" name="charts" onChange={test}>
+            <select
+              id="charts"
+              name="charts"
+              onChange={test}
+              className={classes.input}
+            >
               <option value="Bargraph">Stock count</option>
               <option value="Linegraph">Timeline</option>
-              <option value="fiat">Fiat</option>
-              <option value="audi">Audi</option>
             </select>
             {graph === "Bargraph" ? (
-              <Bargraph options={options} />
+              <Graph options={options} />
             ) : graph === "Linegraph" ? (
-              <Bargraph options={line} />
+              <Graph options={line} />
             ) : (
               <div>test</div>
             )}

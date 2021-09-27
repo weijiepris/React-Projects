@@ -98,7 +98,7 @@ const AddProduct = () => {
         <br></br>
         <input
           type="text"
-          placeholder="Product Color"
+          placeholder="Product Color Code (e.g. #FFFFFF)"
           ref={prodColorRef}
           className={classes.input}
         />
