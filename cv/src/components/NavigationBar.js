@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./css/NavigationBar.module.css";
 import image from "../image/face.jpg";
+import body from "../image/body.jpg";
 import { Link } from "react-router-dom";
 import { FaGithubSquare } from "@react-icons/all-files/fa/FaGithubSquare";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
