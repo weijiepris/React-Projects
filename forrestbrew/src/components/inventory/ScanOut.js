@@ -123,13 +123,10 @@ const ScanOut = () => {
       <div className={classes.wrapper}>
         <br />
         <br />
-        <Link to="/ScanIn">
-          <button>Scan In</button>
-        </Link>
         <form onSubmit={scanIn}>
           <input
             type="text"
-            placeholder="QR CODE / UNIQUE ID"
+            placeholder="SCAN QR CODE"
             ref={outRef}
             onChange={onChange}
           />

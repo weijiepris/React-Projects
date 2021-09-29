@@ -41,45 +41,13 @@ const ScanIn = () => {
 
     const key = generateKey();
     var date = new Date();
-    firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .doc(key)
-      .set({
-        id: data.length + 1,
-        prodID: prodID,
-        batchNo: batchNo,
-        addedBy: ctx.currentUser.name,
-        dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-        dateRemoved: "",
-        remarks: "",
-        companyName: ctx.currentUser.companyName,
-        companyID: ctx.currentUser.companyID,
-        scanType: "in",
-        uniqueID: key,
-      })
-      .then(function () {
-        addData({
-          id: data.length + 1,
-          prodID: prodID,
-          batchNo: batchNo,
-          addedBy: ctx.currentUser.name,
-          dateAdded: { seconds: toTimestamp(date) },
-          scanType: "in",
-        });
-        firebase
-          .firestore()
-          .collection("products")
-          .doc(ctx.currentUser.companyName)
-          .collection("products")
-          .doc(prodID)
-          .update({ quantity: data.length + 1 });
-      })
-      .then(function () {
-        setErrorMessage("data entered successfully");
-      });
+    addData({
+      id: data.length + 1,
+      prodID: prodID,
+      batchNo: batchNo,
+      addedBy: ctx.currentUser.name,
+      dateAdded: { seconds: toTimestamp(date) },
+    });
   };
   const scanIn = (event) => {
     event.preventDefault();
@@ -91,6 +59,7 @@ const ScanIn = () => {
       outValue.includes("$%FORRESTBREW%/")
     ) {
       // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/
+      // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/
       var str = outValue;
       var res = str.split("$%FORRESTBREW%/");
       if (res[1] !== "") {
@@ -117,20 +86,19 @@ const ScanIn = () => {
     outRef.current.value = "";
   };
 
+  const updateAmount = (event, prodID, batchNo) => {
+    console.log(event);
+  };
   return (
     <div className={classes.container}>
       <span className={classes.overview}>Scan In</span>
-
       <div className={classes.wrapper}>
         <br />
         <br />
-        <Link to="/ScanOut">
-          <button>Scan out</button>
-        </Link>
         <form onSubmit={scanIn}>
           <input
             type="text"
-            placeholder="QR CODE / UNIQUE ID"
+            placeholder="SCAN QR CODE"
             ref={outRef}
             onChange={onChange}
           />
@@ -144,21 +112,27 @@ const ScanIn = () => {
               <tr>
                 <th>Product ID</th>
                 <th>Batch No</th>
-                <th>Action by</th>
                 <th>Date</th>
-                <th>Action</th>
+                <th>Amount</th>
               </tr>
               {data.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
                   <td>{entry.prodID}</td>
                   <td>{entry.batchNo}</td>
-                  <td>{entry.addedBy}</td>
                   <td>{getDate(entry.dateAdded["seconds"])}</td>
-                  <td>{entry.scanType}</td>
+                  <td>
+                    <input
+                      type="text"
+                      defaultValue="1"
+                      onChange={updateAmount(entry.prodID, entry.batchNo)}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <br />
+          <button>Save input</button>
         </div>
       </div>
     </div>
