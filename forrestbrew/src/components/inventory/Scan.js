@@ -27,6 +27,9 @@ const Scan = (props) => {
           });
         }
       });
+    return () => {
+      setData([]); // clean up
+    };
   }, [ctx.currentUser.companyName]);
 
   const addData = (data) => {
