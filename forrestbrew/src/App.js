@@ -11,6 +11,9 @@ import AddProduct from "./components/inventory/AddProduct";
 import Admin from "./components/admin/Admin";
 
 import AuthContext from "./store/auth-context";
+import Scan from "./components/inventory/Scan";
+import ScanOut from "./components/inventory/ScanOut";
+import ScanIn from "./components/inventory/ScanIn";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -40,6 +43,12 @@ function App() {
         <Route path="/AddProduct" component={AddProduct} />
 
         <Route path="/Admin" component={Admin} />
+
+        <Route path="/Scan" component={Scan} />
+
+        <Route path="/ScanOut" component={ScanOut} />
+        
+        <Route path="/ScanIn" component={ScanIn} />
       </Switch>
     </React.Fragment>
   );

@@ -3,7 +3,8 @@ import firebase from "firebase";
 import classes from "./HomePage.module.css";
 import AuthContext from "../store/auth-context";
 
-import Graph from "./charts/Graph";
+import Bargraph from "./charts/Bargraph";
+import LineGraph from "./charts/Linegraph";
 
 const HomePage = () => {
   const ctx = useContext(AuthContext);
@@ -257,14 +258,14 @@ const HomePage = () => {
 
   if (!isLoaded) {
     return (
-      <section className={classes.container}>
+      <div className={classes.container}>
         <h1>Loading . . . </h1>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className={classes.container}>
+    <div className={classes.container}>
       <span className={classes.overview}>
         Overview Dashboard
         <select id="charts" name="charts">
@@ -321,9 +322,9 @@ const HomePage = () => {
               <option value="Linegraph">Timeline</option>
             </select>
             {graph === "Bargraph" ? (
-              <Graph options={options} />
+              <Bargraph options={options} />
             ) : graph === "Linegraph" ? (
-              <Graph options={line} />
+              <LineGraph options={line} />
             ) : (
               <div>test</div>
             )}
@@ -367,7 +368,7 @@ const HomePage = () => {
 ) : (
   <div></div>
 )} */}
-    </section>
+    </div>
   );
 };
 

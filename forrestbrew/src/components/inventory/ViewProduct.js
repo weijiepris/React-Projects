@@ -86,8 +86,12 @@ const ViewProduct = (props) => {
         batchNo: enteredData,
         addedBy: ctx.currentUser.name,
         dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+        dateRemoved: "",
+        remarks: "",
         companyName: ctx.currentUser.companyName,
         companyID: ctx.currentUser.companyID,
+        scanType: "in",
+        uniqueID: key,
       })
       .then(function () {
         addData({

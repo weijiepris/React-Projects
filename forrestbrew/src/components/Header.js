@@ -17,6 +17,9 @@ const Header = (props) => {
         </Link>
         {props.isLoggedIn && (
           <div className={classes.nav}>
+            <Link to="/Scan" style={{ textDecoration: "none" }}>
+              <div>Scan In/Out</div>
+            </Link>
             <Link to="/viewInventory" style={{ textDecoration: "none" }}>
               <div>View Inventory</div>
             </Link>

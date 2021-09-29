@@ -63,7 +63,7 @@ export const AuthContextProvider = (props) => {
   };
 
   useEffect(() => {
-    console.log("inventory web app version 1.1");
+    console.log("inventory web app version 1.2");
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
         setIsLoggedIn(false);
@@ -77,12 +77,12 @@ export const AuthContextProvider = (props) => {
           .get()
           .then((userObject) => {
             if (userObject.exists) {
-              console.log("userObject data loaded");
+              // console.log("userObject data loaded");
               setCompanyName(userObject.data().companyName);
               setCurrentUser(userObject.data());
               setIsLoggedIn(true);
               setIsLoaded(true);
-              console.log("user logged in as, " + userObject.data().name);
+              // console.log("user logged in as, " + userObject.data().name);
             }
           });
       }

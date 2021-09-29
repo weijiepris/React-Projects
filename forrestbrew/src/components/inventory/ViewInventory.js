@@ -91,13 +91,17 @@ const ViewInventory = (props) => {
           onClose={hideOverlay}
         />
       )}
-      <div className={classes.actions}>
-        <Link to="/AddProduct">
-          <button>Add New Product</button>
-        </Link>
-        <button>Remove a Product</button>
-      </div>
       <span className={classes.overview}>Inventory</span>
+      <div className={classes.wrapper}>
+        <div className={classes.actions}>
+          <br />
+          <Link to="/AddProduct">
+            <button>Add New Product</button>
+          </Link>
+          <button>Remove a Product</button>
+        </div>
+      </div>
+
       <br />
       <div className={classes.wrapper}>
         <br />
