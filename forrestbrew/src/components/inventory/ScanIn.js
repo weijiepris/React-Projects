@@ -36,8 +36,8 @@ const ScanIn = () => {
     return autoId;
   };
   const insertData = (batchNo, prodID) => {
-    console.log("batch number => ", batchNo);
-    console.log("product ID => ", prodID);
+    // console.log("batch number => ", batchNo);
+    // console.log("product ID => ", prodID);
 
     const key = generateKey();
     var date = new Date();
@@ -87,8 +87,37 @@ const ScanIn = () => {
   };
 
   const updateAmount = (event, prodID, batchNo) => {
-    console.log(event);
+    // console.log(event);
   };
+  const integrate = () => {
+    // console.log("summary => ", summary);
+    // console.log("data => ", data);
+    const result = [];
+
+    var date = new Date();
+    data.forEach((x) => {
+      // console.log("test => ", x.prodID);
+      result[x.prodID + "//" + x.batchNo] =
+        (result[x.prodID + "//" + x.batchNo] || 0) + 1;
+    });
+    // console.log(result);
+
+    for (let i in result) {
+      // console.log(i);
+
+      let res = i.split("//");
+      // console.log(res);
+      result.push({
+        prodID: res[0],
+        batchNo: res[1],
+        dateAdded: { seconds: toTimestamp(date) },
+        amount: result[i],
+      });
+    }
+
+    return result;
+  };
+
   return (
     <div className={classes.container}>
       <span className={classes.overview}>Scan In</span>
@@ -112,18 +141,16 @@ const ScanIn = () => {
               <tr>
                 <th>Product ID</th>
                 <th>Batch No</th>
-                <th>Date</th>
                 <th>Amount</th>
               </tr>
-              {data.map((entry) => (
+              {integrate().map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
                   <td>{entry.prodID}</td>
                   <td>{entry.batchNo}</td>
-                  <td>{getDate(entry.dateAdded["seconds"])}</td>
                   <td>
                     <input
                       type="text"
-                      defaultValue="1"
+                      defaultValue={entry.amount}
                       onChange={updateAmount(entry.prodID, entry.batchNo)}
                     />
                   </td>
