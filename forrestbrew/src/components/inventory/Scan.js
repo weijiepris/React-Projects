@@ -73,6 +73,7 @@ const Scan = (props) => {
                 <th>Action by</th>
                 <th>Date</th>
                 <th>Action</th>
+                <th>Remarks</th>
               </tr>
               {data.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
@@ -81,6 +82,7 @@ const Scan = (props) => {
                   <td>{entry.addedBy}</td>
                   <td>{getDate(entry.dateAdded["seconds"])}</td>
                   <td>{entry.scanType}</td>
+                  <td>{entry.remarks}</td>
                 </tr>
               ))}
             </tbody>

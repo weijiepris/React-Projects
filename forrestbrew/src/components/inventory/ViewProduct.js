@@ -150,13 +150,17 @@ const ViewProduct = (props) => {
               <td>Batch Number</td>
               <td>Added By</td>
               <td>Date Added</td>
+              <td>Action</td>
+              <td>Remarks</td>
             </tr>
           )}
           {data.map((entry) => (
-            <tr key={entry.id}>
+            <tr key={entry.uniqueID}>
               <td>{entry.batchNo}</td>
               <td>{entry.addedBy}</td>
               <td>{getDate(entry.dateAdded["seconds"])}</td>
+              <td>{entry.scanType}</td>
+              <td>{entry.remarks}</td>
             </tr>
           ))}
         </tbody>

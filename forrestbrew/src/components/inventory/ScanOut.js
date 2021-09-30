@@ -7,6 +7,7 @@ import AuthContext from "../../store/auth-context";
 const ScanOut = () => {
   const ctx = useContext(AuthContext);
   const outRef = useRef();
+  const remarksRef = useRef();
   const [valid, setValid] = useState(false);
   const [data, setData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -35,7 +36,7 @@ const ScanOut = () => {
     }
     return autoId;
   };
-  const insertData = (batchNo, prodID) => {
+  const insertData = (batchNo, prodID, remarks) => {
     console.log("batch number => ", batchNo);
     console.log("product ID => ", prodID);
 
@@ -54,7 +55,7 @@ const ScanOut = () => {
         addedBy: ctx.currentUser.name,
         dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
         dateRemoved: "",
-        remarks: "",
+        remarks: remarks,
         companyName: ctx.currentUser.companyName,
         companyID: ctx.currentUser.companyID,
         scanType: "out",
@@ -68,6 +69,7 @@ const ScanOut = () => {
           addedBy: ctx.currentUser.name,
           dateAdded: { seconds: toTimestamp(date) },
           scanType: "out",
+          remarks: remarks,
         });
         firebase
           .firestore()
@@ -78,35 +80,43 @@ const ScanOut = () => {
           .update({ quantity: data.length - 1 });
       })
       .then(function () {
-        setErrorMessage("data entered successfully");
+        setErrorMessage("Scan out successful");
       });
   };
   const scanIn = (event) => {
     event.preventDefault();
     const outValue = outRef.current.value;
+    const remarks = remarksRef.current.value;
 
     if (
       outValue.includes("$%ForrestBrew%/") &&
       outValue.includes("https://forrestbrew.com/$%forrestbrew%/") &&
-      outValue.includes("$%FORRESTBREW%/")
+      outValue.includes("$%FORRESTBREW%/") &&
+      outValue.includes("$%FORRESTbrew%/")
     ) {
-      // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/
+      // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/original$%FORRESTbrew%/
+      // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/apple-ginger$%FORRESTbrew%/
       var str = outValue;
-      var res = str.split("$%FORRESTBREW%/");
+      var res = str.split("$%FORRESTbrew%/");
+      // console.log(res);
       if (res[1] !== "") {
         setErrorMessage("Invalid data entered");
       } else {
         // console.log("res => ", res);
         var res2 = res[0].split("$%ForrestBrew%/");
-        // console.log(res2);
+        // console.log("Res2 => ", res2);
 
         var res3 = res2[0].split("https://forrestbrew.com/$%forrestbrew%/");
-        // console.log(res3);
+        // console.log("res3 => ", res3);
+
+        var res4 = res2[1].split("$%FORRESTBREW%/");
+
+        // console.log("res4 => ", res4);
 
         if (res3[0] === "") {
-          let batchNo = res2[1];
+          let batchNo = res4[0];
           let prodID = res3[1];
-          insertData(batchNo, prodID);
+          insertData(batchNo, prodID, remarks);
         } else {
           setErrorMessage("Invalid data entered");
         }
@@ -131,6 +141,7 @@ const ScanOut = () => {
             onChange={onChange}
           />
         </form>
+        <input type="text" placeholder="REMARKS" ref={remarksRef} />
         <div>{errorMessage}</div>
       </div>
       <div className={classes.wrapper}>
@@ -143,6 +154,7 @@ const ScanOut = () => {
                 <th>Action by</th>
                 <th>Date</th>
                 <th>Action</th>
+                <th>Remarks</th>
               </tr>
               {data.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
@@ -151,6 +163,7 @@ const ScanOut = () => {
                   <td>{entry.addedBy}</td>
                   <td>{getDate(entry.dateAdded["seconds"])}</td>
                   <td>{entry.scanType}</td>
+                  <td>{entry.remarks}</td>
                 </tr>
               ))}
             </tbody>

@@ -114,6 +114,7 @@ const HomePage = () => {
         if (snapshot.docs.length) {
           let temp = [];
           snapshot.forEach((doc) => {
+            console.log("doc => ", doc.data());
             // addInventory(doc.data());
             tempQuantity += doc.data().quantity;
             temp = [

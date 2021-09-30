@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import firebase from "firebase";
 import classes from "./inventory.module.css";
 import { Link } from "react-router-dom";
@@ -8,8 +8,14 @@ const ScanIn = () => {
   const ctx = useContext(AuthContext);
   const outRef = useRef();
   const [valid, setValid] = useState(false);
+  const [obj, setObj] = useState([]);
   const [data, setData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    integrate();
+  }, [data]);
+
   const onChange = (event) => {
     setErrorMessage("");
   };
@@ -35,7 +41,7 @@ const ScanIn = () => {
     }
     return autoId;
   };
-  const insertData = (batchNo, prodID) => {
+  const insertData = (batchNo, prodID, prodName) => {
     // console.log("batch number => ", batchNo);
     // console.log("product ID => ", prodID);
 
@@ -45,6 +51,7 @@ const ScanIn = () => {
       id: data.length + 1,
       prodID: prodID,
       batchNo: batchNo,
+      prodName: prodName,
       addedBy: ctx.currentUser.name,
       dateAdded: { seconds: toTimestamp(date) },
     });
@@ -56,26 +63,33 @@ const ScanIn = () => {
     if (
       outValue.includes("$%ForrestBrew%/") &&
       outValue.includes("https://forrestbrew.com/$%forrestbrew%/") &&
-      outValue.includes("$%FORRESTBREW%/")
+      outValue.includes("$%FORRESTBREW%/") &&
+      outValue.includes("$%FORRESTbrew%/")
     ) {
-      // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/
-      // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/
+      // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/original$%FORRESTbrew%/
+      // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/apple-ginger$%FORRESTbrew%/
       var str = outValue;
-      var res = str.split("$%FORRESTBREW%/");
+      var res = str.split("$%FORRESTbrew%/");
+      // console.log(res);
       if (res[1] !== "") {
         setErrorMessage("Invalid data entered");
       } else {
         // console.log("res => ", res);
         var res2 = res[0].split("$%ForrestBrew%/");
-        // console.log(res2);
+        // console.log("Res2 => ", res2);
 
         var res3 = res2[0].split("https://forrestbrew.com/$%forrestbrew%/");
-        // console.log(res3);
+        // console.log("res3 => ", res3);
+
+        var res4 = res2[1].split("$%FORRESTBREW%/");
+
+        // console.log("res4 => ", res4);
 
         if (res3[0] === "") {
-          let batchNo = res2[1];
+          let batchNo = res4[0];
           let prodID = res3[1];
-          insertData(batchNo, prodID);
+          let prodName = res4[1];
+          insertData(batchNo, prodID, prodName);
         } else {
           setErrorMessage("Invalid data entered");
         }
@@ -86,9 +100,6 @@ const ScanIn = () => {
     outRef.current.value = "";
   };
 
-  const updateAmount = (event, prodID, batchNo) => {
-    // console.log(event);
-  };
   const integrate = () => {
     // console.log("summary => ", summary);
     // console.log("data => ", data);
@@ -97,27 +108,73 @@ const ScanIn = () => {
     var date = new Date();
     data.forEach((x) => {
       // console.log("test => ", x.prodID);
-      result[x.prodID + "//" + x.batchNo] =
-        (result[x.prodID + "//" + x.batchNo] || 0) + 1;
+      result[x.prodID + "//" + x.batchNo + "//" + x.prodName] =
+        (result[x.prodID + "//" + x.batchNo + "//" + x.prodName] || 0) + 1;
     });
     // console.log(result);
-
+    const r = [];
     for (let i in result) {
       // console.log(i);
 
       let res = i.split("//");
       // console.log(res);
-      result.push({
+      r.push({
         prodID: res[0],
         batchNo: res[1],
+        prodName: res[2].replace("-", " "),
         dateAdded: { seconds: toTimestamp(date) },
         amount: result[i],
       });
     }
-
-    return result;
+    setObj(r);
   };
 
+  const testf = () => {
+    obj.forEach((d) => {
+      let amount = document.getElementById(d.prodID).value;
+      console.log(d.prodName, ", ", d.batchNo, " => ", amount);
+      for (let i = 0; i < amount; i++) {
+        const key = generateKey();
+        var date = new Date();
+        firebase
+          .firestore()
+          .collection("batch")
+          .doc(ctx.currentUser.companyName)
+          .collection("products")
+          .doc(key)
+          .set({
+            id: data.length + 1,
+            prodID: d.prodID,
+            batchNo: d.batchNo,
+            addedBy: ctx.currentUser.name,
+            dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+            dateRemoved: "",
+            remarks: "",
+            companyName: ctx.currentUser.companyName,
+            companyID: ctx.currentUser.companyID,
+            scanType: "in",
+            uniqueID: key,
+          })
+          .then(function () {
+            firebase
+              .firestore()
+              .collection("products")
+              .doc(ctx.currentUser.companyName)
+              .collection("products")
+              .doc(d.prodID)
+              .update({ quantity: data.length + amount });
+          })
+          .then(function () {
+            setErrorMessage("data entered successfully");
+            setObj([]);
+          });
+      }
+    });
+  };
+
+  const updateAmount = (event) => {
+    console.log(event);
+  };
   return (
     <div className={classes.container}>
       <span className={classes.overview}>Scan In</span>
@@ -141,17 +198,19 @@ const ScanIn = () => {
               <tr>
                 <th>Product ID</th>
                 <th>Batch No</th>
+                <th>Product Name</th>
                 <th>Amount</th>
               </tr>
-              {integrate().map((entry) => (
+              {obj.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
                   <td>{entry.prodID}</td>
                   <td>{entry.batchNo}</td>
+                  <td>{entry.prodName}</td>
                   <td>
                     <input
                       type="text"
+                      id={entry.prodID}
                       defaultValue={entry.amount}
-                      onChange={updateAmount(entry.prodID, entry.batchNo)}
                     />
                   </td>
                 </tr>
@@ -159,7 +218,7 @@ const ScanIn = () => {
             </tbody>
           </table>
           <br />
-          <button>Save input</button>
+          <button onClick={testf}>Save input</button>
         </div>
       </div>
     </div>
