@@ -1,14 +1,12 @@
 import React, { useRef, useState, useContext } from "react";
 import firebase from "firebase";
 import classes from "./inventory.module.css";
-import { Link } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
 const ScanOut = () => {
   const ctx = useContext(AuthContext);
   const outRef = useRef();
   const remarksRef = useRef();
-  const [valid, setValid] = useState(false);
   const [data, setData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const onChange = (event) => {
@@ -77,7 +75,7 @@ const ScanOut = () => {
           .doc(ctx.currentUser.companyName)
           .collection("products")
           .doc(prodID)
-          .update({ quantity: data.length - 1 });
+          .update({ quantity: firebase.firestore.FieldValue.increment(-1) });
       })
       .then(function () {
         setErrorMessage("Scan out successful");

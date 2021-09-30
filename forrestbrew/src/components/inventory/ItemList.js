@@ -9,9 +9,7 @@ const ItemList = (props) => {
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(0, 25);
   };
-  const checkQuantity = () => {
-    return "";
-  };
+
   return (
     <React.Fragment>
       <td onClick={openHandler}>{props.data.serialno}</td>

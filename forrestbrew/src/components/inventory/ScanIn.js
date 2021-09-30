@@ -1,28 +1,52 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
 import firebase from "firebase";
 import classes from "./inventory.module.css";
-import { Link } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
 const ScanIn = () => {
   const ctx = useContext(AuthContext);
   const outRef = useRef();
-  const [valid, setValid] = useState(false);
   const [obj, setObj] = useState([]);
   const [data, setData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    integrate();
+    // integrate();
+    // console.log("summary => ", summary);
+    // console.log("data => ", data);
+    const result = [];
+
+    var date = new Date();
+    data.forEach((x) => {
+      // console.log("test => ", x.prodID);
+      result[x.prodID + "//" + x.batchNo + "//" + x.prodName] =
+        (result[x.prodID + "//" + x.batchNo + "//" + x.prodName] || 0) + 1;
+    });
+    // console.log(result);
+    const r = [];
+    for (let i in result) {
+      // console.log(i);
+
+      let res = i.split("//");
+      // console.log(res);
+      r.push({
+        prodID: res[0],
+        batchNo: res[1],
+        prodName: res[2].replace("-", " "),
+        dateAdded: { seconds: toTimestamp(date) },
+        amount: result[i],
+      });
+    }
+    setObj(r);
   }, [data]);
 
   const onChange = (event) => {
     setErrorMessage("");
   };
 
-  const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(0, 25);
-  };
+  // const getDate = (date) => {
+  //   return new Date(date * 1000).toString().substring(0, 25);
+  // };
   function toTimestamp(strDate) {
     var datum = Date.parse(strDate);
     return datum / 1000;
@@ -45,7 +69,6 @@ const ScanIn = () => {
     // console.log("batch number => ", batchNo);
     // console.log("product ID => ", prodID);
 
-    const key = generateKey();
     var date = new Date();
     addData({
       id: data.length + 1,
@@ -100,34 +123,32 @@ const ScanIn = () => {
     outRef.current.value = "";
   };
 
-  const integrate = () => {
-    // console.log("summary => ", summary);
-    // console.log("data => ", data);
-    const result = [];
-
-    var date = new Date();
-    data.forEach((x) => {
-      // console.log("test => ", x.prodID);
-      result[x.prodID + "//" + x.batchNo + "//" + x.prodName] =
-        (result[x.prodID + "//" + x.batchNo + "//" + x.prodName] || 0) + 1;
-    });
-    // console.log(result);
-    const r = [];
-    for (let i in result) {
-      // console.log(i);
-
-      let res = i.split("//");
-      // console.log(res);
-      r.push({
-        prodID: res[0],
-        batchNo: res[1],
-        prodName: res[2].replace("-", " "),
-        dateAdded: { seconds: toTimestamp(date) },
-        amount: result[i],
-      });
-    }
-    setObj(r);
-  };
+  // const integrate = () => {
+  // // console.log("summary => ", summary);
+  // // console.log("data => ", data);
+  // const result = [];
+  // var date = new Date();
+  // data.forEach((x) => {
+  //   // console.log("test => ", x.prodID);
+  //   result[x.prodID + "//" + x.batchNo + "//" + x.prodName] =
+  //     (result[x.prodID + "//" + x.batchNo + "//" + x.prodName] || 0) + 1;
+  // });
+  // // console.log(result);
+  // const r = [];
+  // for (let i in result) {
+  //   // console.log(i);
+  //   let res = i.split("//");
+  //   // console.log(res);
+  //   r.push({
+  //     prodID: res[0],
+  //     batchNo: res[1],
+  //     prodName: res[2].replace("-", " "),
+  //     dateAdded: { seconds: toTimestamp(date) },
+  //     amount: result[i],
+  //   });
+  // }
+  // setObj(r);
+  // };
 
   const testf = () => {
     obj.forEach((d) => {
@@ -135,7 +156,7 @@ const ScanIn = () => {
       console.log(d.prodName, ", ", d.batchNo, " => ", amount);
       for (let i = 0; i < amount; i++) {
         const key = generateKey();
-        var date = new Date();
+        // var date = new Date();
         firebase
           .firestore()
           .collection("batch")
@@ -162,7 +183,9 @@ const ScanIn = () => {
               .doc(ctx.currentUser.companyName)
               .collection("products")
               .doc(d.prodID)
-              .update({ quantity: data.length + amount });
+              .update({
+                quantity: firebase.firestore.FieldValue.increment(1),
+              });
           })
           .then(function () {
             setErrorMessage("data entered successfully");
@@ -172,9 +195,9 @@ const ScanIn = () => {
     });
   };
 
-  const updateAmount = (event) => {
-    console.log(event);
-  };
+  // const updateAmount = (event) => {
+  //   console.log(event);
+  // };
   return (
     <div className={classes.container}>
       <span className={classes.overview}>Scan In</span>
