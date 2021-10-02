@@ -6,6 +6,7 @@ import AuthContext from "../../store/auth-context";
 const ScanIn = () => {
   const ctx = useContext(AuthContext);
   const outRef = useRef();
+  const remarksRef = useRef();
   const [obj, setObj] = useState([]);
   const [data, setData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -65,7 +66,7 @@ const ScanIn = () => {
     }
     return autoId;
   };
-  const insertData = (batchNo, prodID, prodName) => {
+  const insertData = (batchNo, prodID, prodName, remarks) => {
     // console.log("batch number => ", batchNo);
     // console.log("product ID => ", prodID);
 
@@ -77,11 +78,13 @@ const ScanIn = () => {
       prodName: prodName,
       addedBy: ctx.currentUser.name,
       dateAdded: { seconds: toTimestamp(date) },
+      remarks: remarks,
     });
   };
   const scanIn = (event) => {
     event.preventDefault();
     const outValue = outRef.current.value;
+    const remarks = remarksRef.current.value;
 
     if (
       outValue.includes("$%ForrestBrew%/") &&
@@ -112,7 +115,7 @@ const ScanIn = () => {
           let batchNo = res4[0];
           let prodID = res3[1];
           let prodName = res4[1];
-          insertData(batchNo, prodID, prodName);
+          insertData(batchNo, prodID, prodName, remarks);
         } else {
           setErrorMessage("Invalid data entered");
         }
@@ -162,6 +165,8 @@ const ScanIn = () => {
           })
           .then(function () {
             console.log("test new batch id");
+            console.log("d.prod id > ", d.prodID);
+            console.log("d.batchNo id > ", d.batchNo);
             firebase
               .firestore()
               .collection("batch")
@@ -173,6 +178,8 @@ const ScanIn = () => {
               .set(
                 {
                   quantity: firebase.firestore.FieldValue.increment(1),
+                  batchNo: d.batchNo,
+                  prodName: d.prodName,
                 },
                 { merge: true }
               );
@@ -201,6 +208,7 @@ const ScanIn = () => {
             onChange={onChange}
           />
         </form>
+        <input type="text" placeholder="REMARKS" ref={remarksRef} />
         <div>{errorMessage}</div>
       </div>
       <div className={classes.wrapper}>

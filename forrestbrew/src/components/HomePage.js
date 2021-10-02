@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import firebase from "firebase";
 import classes from "./HomePage.module.css";
 import AuthContext from "../store/auth-context";
@@ -11,7 +11,7 @@ const HomePage = () => {
 
   // const [user, setUser] = useState([]);
   const userid = firebase.auth().currentUser.uid;
-  // const [inventory, setInventory] = useState([]);
+  const [currentInventory, setCurrentInventory] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [stockQuantity, setStockQuantity] = useState(0);
@@ -20,6 +20,7 @@ const HomePage = () => {
   const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("TotalStock");
+  const [panel, setPanel] = useState("prodSummary");
 
   const drawChart = (dataPoints) => {
     const options = {
@@ -76,13 +77,16 @@ const HomePage = () => {
     setLine(options);
   };
 
-  // const addInventory = (list) => {
-  //   setInventory((prevList) => {
-  //     return [list, ...prevList];
-  //   });
-  // };
+  const addCurrentInventory = (list) => {
+    setCurrentInventory((prevList) => {
+      return [list, ...prevList];
+    });
+  };
   const test = (event) => {
     setGraph(event.target.value);
+  };
+  const test2 = (event) => {
+    setPanel(event.target.value);
   };
   useEffect(() => {
     firebase
@@ -114,7 +118,30 @@ const HomePage = () => {
         if (snapshot.docs.length) {
           let temp = [];
           snapshot.forEach((doc) => {
-            // addInventory(doc.data());
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("prodID")
+              .doc(doc.data().id)
+              .collection("batchNo")
+              .get()
+              .then((snapshot) => {
+                if (snapshot.docs.length) {
+                  snapshot.forEach((docs) => {
+                    let r = [];
+
+                    r = {
+                      prodID: doc.data().id,
+                      quantity: docs.data().quantity,
+                      batchNo: docs.data().batchNo,
+                      prodName: docs.data().prodName,
+                    };
+                    addCurrentInventory(r);
+                  });
+                }
+              });
+
             tempQuantity += doc.data().quantity;
             temp = [
               ...temp,
@@ -217,6 +244,9 @@ const HomePage = () => {
         }
       });
 
+    return () => {
+      console.log("cleanup");
+    };
     // console.log(summary);
   }, [userid, ctx.currentUser.companyName]);
 
@@ -259,6 +289,58 @@ const HomePage = () => {
   //   return unique;
   // };
 
+  const ProdSummary = () => {
+    return (
+      <React.Fragment>
+        <h1>Production Summary</h1>
+        <table className={classes.table}>
+          <tbody>
+            <tr>
+              <th>Product ID</th>
+              <th>Date produced</th>
+              <th>Amount</th>
+            </tr>
+            {getSummary().map((list) => (
+              <tr key={Math.random()}>
+                <td>{list.prodID}</td>
+                <td>{list.date}</td>
+                <td>{list.count}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </React.Fragment>
+    );
+  };
+
+  const CurrentInventory = () => {
+    return (
+      <React.Fragment>
+        <h1>Current Inventory</h1>
+        <table className={classes.table}>
+          <tbody>
+            <tr>
+              <th>Product Name</th>
+              <th>Product ID</th>
+              <th>Batch Number</th>
+              <th>Quantity</th>
+              <th>Date Produced</th>
+            </tr>
+            {currentInventory.map((list) => (
+              <tr key={Math.random()}>
+                <td>{list.prodName}</td>
+                <td>{list.prodID}</td>
+                <td>{list.batchNo}</td>
+                <td>{list.quantity}</td>
+                <td>{list.dateAdded}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </React.Fragment>
+    );
+  };
+
   if (!isLoaded) {
     return (
       <div className={classes.container}>
@@ -289,30 +371,29 @@ const HomePage = () => {
           Total stock count
           <span className={classes.quantity}>{stockQuantity}</span>
         </div>
-        {/* <Bargraph options={options} /> */}
       </div>
       <br />
 
       <div className={classes.wrapper}>
         <div className={classes.flex}>
           <div className={classes.flexContent}>
-            <h1 onClick={getSummary}>Production Summary</h1>
-            <table className={classes.table}>
-              <tbody>
-                <tr>
-                  <th>Product ID</th>
-                  <th>Date produced</th>
-                  <th>Amount</th>
-                </tr>
-                {getSummary().map((list) => (
-                  <tr key={Math.random()}>
-                    <td>{list.prodID}</td>
-                    <td>{list.date}</td>
-                    <td>{list.count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <select
+              id="leftPanel"
+              name="leftPanel"
+              onChange={test2}
+              className={classes.input}
+            >
+              <option value="prodSummary">Production Summary</option>
+              <option value="currentInventory">Current Inventory</option>
+            </select>
+
+            {panel === "prodSummary" ? (
+              <ProdSummary />
+            ) : panel === "currentInventory" ? (
+              <CurrentInventory />
+            ) : (
+              <div>test</div>
+            )}
           </div>
           <div className={classes.flexContent}>
             <select
@@ -336,26 +417,6 @@ const HomePage = () => {
             )}
           </div>
         </div>
-        {/* {user.companyID === "" ? (
-          <div>Company details not found</div>
-        ) : (
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Quantity</th>
-                </tr>
-                {inventory.map((entry) => (
-                  <tr key={entry.id}>
-                    <td>{entry.name}</td>
-                    <td>{entry.quantity}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )} */}
       </div>
       <br></br>
 

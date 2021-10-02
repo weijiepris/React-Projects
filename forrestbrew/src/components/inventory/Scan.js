@@ -70,18 +70,18 @@ const Scan = (props) => {
               <tr>
                 <th>Product ID</th>
                 <th>Batch No</th>
+                <th>Action</th>
                 <th>Action by</th>
                 <th>Date</th>
-                <th>Action</th>
                 <th>Remarks</th>
               </tr>
               {data.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
                   <td>{entry.prodID}</td>
                   <td>{entry.batchNo}</td>
+                  <td>{entry.scanType}</td>
                   <td>{entry.addedBy}</td>
                   <td>{getDate(entry.dateAdded["seconds"])}</td>
-                  <td>{entry.scanType}</td>
                   <td>{entry.remarks}</td>
                 </tr>
               ))}

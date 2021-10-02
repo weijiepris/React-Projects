@@ -14,6 +14,7 @@ import AuthContext from "./store/auth-context";
 import Scan from "./components/inventory/Scan";
 import ScanOut from "./components/inventory/ScanOut";
 import ScanIn from "./components/inventory/ScanIn";
+import Checker from "./components/inventory/Checker";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -47,8 +48,10 @@ function App() {
         <Route path="/Scan" component={Scan} />
 
         <Route path="/ScanOut" component={ScanOut} />
-        
+
         <Route path="/ScanIn" component={ScanIn} />
+
+        <Route path="/Checker" component={Checker} />
       </Switch>
     </React.Fragment>
   );

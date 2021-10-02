@@ -91,6 +91,23 @@ const ScanOut = () => {
                 .doc(prodID)
                 .update({
                   quantity: firebase.firestore.FieldValue.increment(-1),
+                })
+                .then(function () {
+                  firebase
+                    .firestore()
+                    .collection("batch")
+                    .doc(ctx.currentUser.companyName)
+                    .collection("prodID")
+                    .doc(prodID)
+                    .collection("batchNo")
+                    .doc(batchNo)
+                    .set(
+                      {
+                        quantity: firebase.firestore.FieldValue.increment(-1),
+                        batchNo: batchNo,
+                      },
+                      { merge: true }
+                    );
                 });
             })
             .then(function () {
@@ -144,24 +161,6 @@ const ScanOut = () => {
     }
     outRef.current.value = "";
   };
-  const tttt = () => {
-    let tempQuantity = 0;
-    firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("prodID")
-      .doc("000")
-      .collection("batchNo")
-      .doc("b000")
-      .get()
-      .then((snapshot) => {
-        tempQuantity = snapshot.data().quantity;
-      })
-      .then(function () {
-        console.log(tempQuantity);
-      });
-  };
 
   return (
     <div className={classes.container}>
@@ -206,7 +205,6 @@ const ScanOut = () => {
           </table>
         </div>
       </div>
-      <button onClick={tttt}>Test</button>
     </div>
   );
 };
