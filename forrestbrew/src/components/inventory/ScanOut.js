@@ -35,50 +35,70 @@ const ScanOut = () => {
     return autoId;
   };
   const insertData = (batchNo, prodID, remarks) => {
-    console.log("batch number => ", batchNo);
-    console.log("product ID => ", prodID);
+    //   console.log("batch number => ", batchNo);
+    //   console.log("product ID => ", prodID);
 
     const key = generateKey();
     var date = new Date();
+
+    let tempQuantity = 0;
     firebase
       .firestore()
-      .collection("batch")
+      .collection("products")
       .doc(ctx.currentUser.companyName)
       .collection("products")
-      .doc(key)
-      .set({
-        id: data.length + 1,
-        prodID: prodID,
-        batchNo: batchNo,
-        addedBy: ctx.currentUser.name,
-        dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-        dateRemoved: "",
-        remarks: remarks,
-        companyName: ctx.currentUser.companyName,
-        companyID: ctx.currentUser.companyID,
-        scanType: "out",
-        uniqueID: key,
+      .doc(prodID)
+      .get()
+      .then((snapshot) => {
+        tempQuantity = snapshot.data().quantity;
       })
       .then(function () {
-        addData({
-          id: data.length + 1,
-          prodID: prodID,
-          batchNo: batchNo,
-          addedBy: ctx.currentUser.name,
-          dateAdded: { seconds: toTimestamp(date) },
-          scanType: "out",
-          remarks: remarks,
-        });
-        firebase
-          .firestore()
-          .collection("products")
-          .doc(ctx.currentUser.companyName)
-          .collection("products")
-          .doc(prodID)
-          .update({ quantity: firebase.firestore.FieldValue.increment(-1) });
-      })
-      .then(function () {
-        setErrorMessage("Scan out successful");
+        if (tempQuantity > 0) {
+          firebase
+            .firestore()
+            .collection("batch")
+            .doc(ctx.currentUser.companyName)
+            .collection("products")
+            .doc(key)
+            .set({
+              id: data.length + 1,
+              prodID: prodID,
+              batchNo: batchNo,
+              addedBy: ctx.currentUser.name,
+              dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+              dateRemoved: "",
+              remarks: remarks,
+              companyName: ctx.currentUser.companyName,
+              companyID: ctx.currentUser.companyID,
+              scanType: "out",
+              uniqueID: key,
+            })
+            .then(function () {
+              addData({
+                id: data.length + 1,
+                prodID: prodID,
+                batchNo: batchNo,
+                addedBy: ctx.currentUser.name,
+                dateAdded: { seconds: toTimestamp(date) },
+                scanType: "out",
+                remarks: remarks,
+              });
+              firebase
+                .firestore()
+                .collection("products")
+                .doc(ctx.currentUser.companyName)
+                .collection("products")
+                .doc(prodID)
+                .update({
+                  quantity: firebase.firestore.FieldValue.increment(-1),
+                });
+            })
+            .then(function () {
+              setErrorMessage("Scan out successful");
+            });
+        } else {
+          setErrorMessage("Invalid data entered");
+        }
       });
   };
   const scanIn = (event) => {
@@ -124,6 +144,24 @@ const ScanOut = () => {
     }
     outRef.current.value = "";
   };
+  const tttt = () => {
+    let tempQuantity = 0;
+    firebase
+      .firestore()
+      .collection("batch")
+      .doc(ctx.currentUser.companyName)
+      .collection("prodID")
+      .doc("000")
+      .collection("batchNo")
+      .doc("b000")
+      .get()
+      .then((snapshot) => {
+        tempQuantity = snapshot.data().quantity;
+      })
+      .then(function () {
+        console.log(tempQuantity);
+      });
+  };
 
   return (
     <div className={classes.container}>
@@ -168,6 +206,7 @@ const ScanOut = () => {
           </table>
         </div>
       </div>
+      <button onClick={tttt}>Test</button>
     </div>
   );
 };

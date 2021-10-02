@@ -19,13 +19,13 @@ const HomePage = () => {
   const [line, setLine] = useState({});
   const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
-  const [graph, setGraph] = useState("Bargraph");
+  const [graph, setGraph] = useState("TotalStock");
 
   const drawChart = (dataPoints) => {
     const options = {
       animationEnabled: true,
       title: {
-        text: "Stock Count",
+        text: "Total Stock Count",
       },
       axisX: {
         title: "Flavours",
@@ -99,7 +99,7 @@ const HomePage = () => {
         }
       });
 
-    console.log("company => ", ctx.currentUser.companyName);
+    // console.log("company => ", ctx.currentUser.companyName);
 
     firebase
       .firestore()
@@ -137,6 +137,7 @@ const HomePage = () => {
       .collection("batch")
       .doc(ctx.currentUser.companyName)
       .collection("products")
+      .where("scanType", "==", "in")
       .orderBy("dateAdded", "desc")
       .get()
       .then((snapshot) => {
@@ -168,6 +169,7 @@ const HomePage = () => {
       .collection("batch")
       .doc(ctx.currentUser.companyName)
       .collection("products")
+      .where("scanType", "==", "in")
       .get()
       .then((snapshot) => {
         let arr = [];
@@ -187,6 +189,7 @@ const HomePage = () => {
             .doc(ctx.currentUser.companyName)
             .collection("products")
             .where("prodID", "==", t)
+            .where("scanType", "==", "in")
             .orderBy("dateAdded", "desc")
             .get()
             .then((snapshot) => {
@@ -299,7 +302,7 @@ const HomePage = () => {
                 <tr>
                   <th>Product ID</th>
                   <th>Date produced</th>
-                  <th>Stock Count</th>
+                  <th>Amount</th>
                 </tr>
                 {getSummary().map((list) => (
                   <tr key={Math.random()}>
@@ -318,13 +321,16 @@ const HomePage = () => {
               onChange={test}
               className={classes.input}
             >
-              <option value="Bargraph">Stock count</option>
-              <option value="Linegraph">Timeline</option>
+              <option value="TotalStock">Total stock count</option>
+              <option value="Timeline">Timeline</option>
+              <option value="ScanOut">Scan outs</option>
             </select>
-            {graph === "Bargraph" ? (
+            {graph === "TotalStock" ? (
               <Bargraph options={options} />
-            ) : graph === "Linegraph" ? (
+            ) : graph === "Timeline" ? (
               <LineGraph options={line} />
+            ) : graph === "ScanOut" ? (
+              <Bargraph options={options} />
             ) : (
               <div>test</div>
             )}

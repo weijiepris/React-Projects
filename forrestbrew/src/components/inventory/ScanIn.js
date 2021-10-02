@@ -123,37 +123,10 @@ const ScanIn = () => {
     outRef.current.value = "";
   };
 
-  // const integrate = () => {
-  // // console.log("summary => ", summary);
-  // // console.log("data => ", data);
-  // const result = [];
-  // var date = new Date();
-  // data.forEach((x) => {
-  //   // console.log("test => ", x.prodID);
-  //   result[x.prodID + "//" + x.batchNo + "//" + x.prodName] =
-  //     (result[x.prodID + "//" + x.batchNo + "//" + x.prodName] || 0) + 1;
-  // });
-  // // console.log(result);
-  // const r = [];
-  // for (let i in result) {
-  //   // console.log(i);
-  //   let res = i.split("//");
-  //   // console.log(res);
-  //   r.push({
-  //     prodID: res[0],
-  //     batchNo: res[1],
-  //     prodName: res[2].replace("-", " "),
-  //     dateAdded: { seconds: toTimestamp(date) },
-  //     amount: result[i],
-  //   });
-  // }
-  // setObj(r);
-  // };
-
   const testf = () => {
     obj.forEach((d) => {
       let amount = document.getElementById(d.prodID).value;
-      console.log(d.prodName, ", ", d.batchNo, " => ", amount);
+      // console.log(d.prodName, ", ", d.batchNo, " => ", amount);
       for (let i = 0; i < amount; i++) {
         const key = generateKey();
         // var date = new Date();
@@ -188,8 +161,24 @@ const ScanIn = () => {
               });
           })
           .then(function () {
+            console.log("test new batch id");
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("prodID")
+              .doc(d.prodID)
+              .collection("batchNo")
+              .doc(d.batchNo)
+              .set(
+                {
+                  quantity: firebase.firestore.FieldValue.increment(1),
+                },
+                { merge: true }
+              );
             setErrorMessage("data entered successfully");
             setObj([]);
+            setData([]);
           });
       }
     });

@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Darker Grotesque";
+  src: url("../assets/DarkerGrotesque-Regular.ttf");
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -15,7 +20,12 @@
 }
 
 .header h1 {
+  font-family: "Darker Grotesque";
   color: black;
+  position: relative;
+  font-size: 300%;
+  right:40px;
+  bottom:5px;
 }
 .main-image {
   width: 100%;
