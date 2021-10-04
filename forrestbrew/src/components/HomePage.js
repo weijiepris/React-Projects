@@ -208,6 +208,7 @@ const HomePage = () => {
             arr[dt] += 1;
           }
         });
+
         // console.log("testing => ", arr);
         for (const t in arr) {
           firebase
