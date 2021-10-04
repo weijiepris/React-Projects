@@ -9,7 +9,7 @@ const ScanOut = () => {
   const remarksRef = useRef();
   const [data, setData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const onChange = (event) => {
+  const onChange = () => {
     setErrorMessage("");
   };
 
