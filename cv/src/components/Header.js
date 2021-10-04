@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classes from "./css/Header.module.css";
 import { Link } from "react-router-dom";
-import image from "../image/face.jpg";
+// import image from "../image/face.jpg";
 const Header = () => {
   const [toggle, setToggle] = useState(false);
 

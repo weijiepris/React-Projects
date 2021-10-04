@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./css/AboutMe.module.css";
-import image from "../image/face.jpg";
+// import image from "../image/face.jpg";
+import body from "../image/body.jpg";
 const AboutMe = () => {
   return (
     <div className={classes.container}>
@@ -10,7 +11,7 @@ const AboutMe = () => {
         <br />
         <br />
         <br />
-        <img src={image} alt="profile" />
+        <img src={body} alt="profile" />
       </div>
       <div className={classes.content}>
         <h1>I'm Chan Wei Jie</h1>
@@ -37,8 +38,8 @@ const AboutMe = () => {
           <br />
           <br /> I'm always up for a challenge and keen to gain new knowledge!
           <br />
-          <br />I hope to work on more personal projects, building tools that help
-          enrich lives through technology.
+          <br />I hope to work on more personal projects, building tools that
+          help enrich lives through technology.
         </p>
         <br />
         <br />

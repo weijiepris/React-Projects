@@ -1,8 +1,8 @@
 import React from "react";
 import classes from "./css/AboutMe.module.css";
 
-import inventoryImage from "../image/inventory.png";
-import inventoryImage2 from "../image/inventory2.png";
+// import inventoryImage from "../image/inventory.png";
+// import inventoryImage2 from "../image/inventory2.png";
 
 const Projects = () => {
   return (

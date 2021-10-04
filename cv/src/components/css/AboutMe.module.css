@@ -91,3 +91,8 @@ hr {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   transition: 0.5s ease;
 }
+
+
+.body{
+  width:60%;
+}

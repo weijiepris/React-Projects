@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./css/NavigationBar.module.css";
-import image from "../image/face.jpg";
+// import image from "../image/face.jpg";
 import body from "../image/body.jpg";
 import { Link } from "react-router-dom";
 import { FaGithubSquare } from "@react-icons/all-files/fa/FaGithubSquare";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { FaMailBulk } from "@react-icons/all-files/fa/FaMailBulk";
+import ViewImage from "./ViewImage";
 
 function NavigationBar() {
+  const [overlay, setOverlay] = useState(false);
+  const [image, setImage] = useState();
+  const openList = (image) => {
+    setImage(image);
+    showOverlay();
+  };
+
+  const hideOverlay = () => {
+    setOverlay(false);
+  };
+  const showOverlay = () => {
+    setOverlay(true);
+  };
+
+  const setBody = () => {
+    openList(body);
+  };
+
   return (
     <React.Fragment>
       <div className={classes.sidenav}>
+        {overlay && <ViewImage onClose={hideOverlay} image={image} />}
         <br></br>
         <br></br>
         <Link
@@ -19,7 +39,7 @@ function NavigationBar() {
           style={{ textDecoration: "none", marginTop: "none" }}
         >
           <div className={classes.photo}>
-            <img src={image} alt="profile" />
+            <img src={body} alt="profile" onClick={setBody} />
           </div>
         </Link>
         <br></br>
