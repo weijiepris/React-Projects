@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import classes from "./css/NavigationBar.module.css";
 // import image from "../image/face.jpg";
 import body from "../image/body.jpg";
+import actualbody from "../image/actualbody.jpg";
 import { Link } from "react-router-dom";
 import { FaGithubSquare } from "@react-icons/all-files/fa/FaGithubSquare";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
@@ -24,7 +25,7 @@ function NavigationBar() {
   };
 
   const setBody = () => {
-    openList(body);
+    openList(actualbody);
   };
 
   return (
@@ -33,15 +34,15 @@ function NavigationBar() {
         {overlay && <ViewImage onClose={hideOverlay} image={image} />}
         <br></br>
         <br></br>
-        <Link
+        {/* <Link
           to="/"
           exact="true"
           style={{ textDecoration: "none", marginTop: "none" }}
-        >
-          <div className={classes.photo}>
-            <img src={body} alt="profile" onClick={setBody} />
-          </div>
-        </Link>
+        > */}
+        <div className={classes.photo}>
+          <img src={body} alt="profile" onClick={setBody} />
+        </div>
+        {/* </Link> */}
         <br></br>
         <div className={classes.head}>
           <Link

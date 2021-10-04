@@ -96,7 +96,9 @@ const Documents = () => {
         <hr />
         <br />
         <br />
-        <div className={classes.header}>Nitec Certificate &amp; Transcript</div>
+        <div className={classes.header}>
+          Nitec Certificate, Transcript &amp; Achievements
+        </div>
         <br />
         <p>
           <img
