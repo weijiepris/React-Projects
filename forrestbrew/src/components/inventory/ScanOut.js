@@ -58,60 +58,81 @@ const ScanOut = () => {
             .firestore()
             .collection("batch")
             .doc(ctx.currentUser.companyName)
-            .collection("products")
-            .doc(key)
-            .set({
-              id: data.length + 1,
-              prodID: prodID,
-              batchNo: batchNo,
-              addedBy: ctx.currentUser.name,
-              dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-              dateRemoved: "",
-              remarks: remarks,
-              companyName: ctx.currentUser.companyName,
-              companyID: ctx.currentUser.companyID,
-              scanType: "out",
-              uniqueID: key,
-            })
-            .then(function () {
-              addData({
-                id: data.length + 1,
-                prodID: prodID,
-                batchNo: batchNo,
-                addedBy: ctx.currentUser.name,
-                dateAdded: { seconds: toTimestamp(date) },
-                scanType: "out",
-                remarks: remarks,
-              });
-              firebase
-                .firestore()
-                .collection("products")
-                .doc(ctx.currentUser.companyName)
-                .collection("products")
-                .doc(prodID)
-                .update({
-                  quantity: firebase.firestore.FieldValue.increment(-1),
-                })
-                .then(function () {
+            .collection("prodID")
+            .doc(prodID)
+            .collection("batchNo")
+            .doc(batchNo)
+            .get()
+            .then((snapshot) => {
+              if (snapshot.exists) {
+                if (snapshot.data().quantity > 0) {
                   firebase
                     .firestore()
                     .collection("batch")
                     .doc(ctx.currentUser.companyName)
-                    .collection("prodID")
-                    .doc(prodID)
-                    .collection("batchNo")
-                    .doc(batchNo)
-                    .set(
-                      {
-                        quantity: firebase.firestore.FieldValue.increment(-1),
+                    .collection("products")
+                    .doc(key)
+                    .set({
+                      id: data.length + 1,
+                      prodID: prodID,
+                      batchNo: batchNo,
+                      addedBy: ctx.currentUser.name,
+                      dateAdded:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                      dateRemoved: "",
+                      remarks: remarks,
+                      companyName: ctx.currentUser.companyName,
+                      companyID: ctx.currentUser.companyID,
+                      scanType: "out",
+                      uniqueID: key,
+                    })
+                    .then(function () {
+                      addData({
+                        id: data.length + 1,
+                        prodID: prodID,
                         batchNo: batchNo,
-                      },
-                      { merge: true }
-                    );
-                });
-            })
-            .then(function () {
-              setErrorMessage("Scan out successful");
+                        addedBy: ctx.currentUser.name,
+                        dateAdded: { seconds: toTimestamp(date) },
+                        scanType: "out",
+                        remarks: remarks,
+                      });
+                      firebase
+                        .firestore()
+                        .collection("products")
+                        .doc(ctx.currentUser.companyName)
+                        .collection("products")
+                        .doc(prodID)
+                        .update({
+                          quantity: firebase.firestore.FieldValue.increment(-1),
+                        })
+                        .then(function () {
+                          firebase
+                            .firestore()
+                            .collection("batch")
+                            .doc(ctx.currentUser.companyName)
+                            .collection("prodID")
+                            .doc(prodID)
+                            .collection("batchNo")
+                            .doc(batchNo)
+                            .set(
+                              {
+                                quantity:
+                                  firebase.firestore.FieldValue.increment(-1),
+                                batchNo: batchNo,
+                              },
+                              { merge: true }
+                            );
+                        });
+                    })
+                    .then(function () {
+                      setErrorMessage("Scan out successful");
+                    });
+                } else {
+                  setErrorMessage("Invalid data entered");
+                }
+              } else {
+                setErrorMessage("Invalid data entered");
+              }
             });
         } else {
           setErrorMessage("Invalid data entered");

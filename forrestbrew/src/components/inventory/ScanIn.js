@@ -94,11 +94,12 @@ const ScanIn = () => {
     ) {
       // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/original$%FORRESTbrew%/
       // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/apple-ginger$%FORRESTbrew%/
+
       var str = outValue;
       var res = str.split("$%FORRESTbrew%/");
       // console.log(res);
       if (res[1] !== "") {
-        setErrorMessage("Invalid data entered");
+        setErrorMessage("Invalid data entered111");
       } else {
         // console.log("res => ", res);
         var res2 = res[0].split("$%ForrestBrew%/");
@@ -117,18 +118,18 @@ const ScanIn = () => {
           let prodName = res4[1];
           insertData(batchNo, prodID, prodName, remarks);
         } else {
-          setErrorMessage("Invalid data entered");
+          setErrorMessage("Invalid data entered11");
         }
       }
     } else {
-      setErrorMessage("Invalid data entered");
+      setErrorMessage("Invalid data entered1");
     }
     outRef.current.value = "";
   };
 
   const testf = () => {
     obj.forEach((d) => {
-      let amount = document.getElementById(d.prodID).value;
+      let amount = document.getElementById(d.prodID + d.batchNo).value;
       // console.log(d.prodName, ", ", d.batchNo, " => ", amount);
       for (let i = 0; i < amount; i++) {
         const key = generateKey();
@@ -164,9 +165,9 @@ const ScanIn = () => {
               });
           })
           .then(function () {
-            console.log("test new batch id");
-            console.log("d.prod id > ", d.prodID);
-            console.log("d.batchNo id > ", d.batchNo);
+            // console.log("test new batch id");
+            // console.log("d.prod id > ", d.prodID);
+            // console.log("d.batchNo id > ", d.batchNo);
             firebase
               .firestore()
               .collection("batch")
@@ -178,11 +179,14 @@ const ScanIn = () => {
               .set(
                 {
                   quantity: firebase.firestore.FieldValue.increment(1),
+                  dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
                   batchNo: d.batchNo,
                   prodName: d.prodName,
                 },
                 { merge: true }
               );
+          })
+          .then(function () {
             setErrorMessage("data entered successfully");
             setObj([]);
             setData([]);
@@ -229,7 +233,7 @@ const ScanIn = () => {
                   <td>
                     <input
                       type="text"
-                      id={entry.prodID}
+                      id={entry.prodID + entry.batchNo}
                       defaultValue={entry.amount}
                     />
                   </td>

@@ -130,12 +130,12 @@ const HomePage = () => {
                 if (snapshot.docs.length) {
                   snapshot.forEach((docs) => {
                     let r = [];
-
                     r = {
                       prodID: doc.data().id,
                       quantity: docs.data().quantity,
                       batchNo: docs.data().batchNo,
                       prodName: docs.data().prodName,
+                      dateAdded: docs.data().dateAdded,
                     };
                     addCurrentInventory(r);
                   });
@@ -333,7 +333,7 @@ const HomePage = () => {
                 <td>{list.prodID}</td>
                 <td>{list.batchNo}</td>
                 <td>{list.quantity}</td>
-                <td>{list.dateAdded}</td>
+                <td>{getDate(list.dateAdded["seconds"])}</td>
               </tr>
             ))}
           </tbody>
