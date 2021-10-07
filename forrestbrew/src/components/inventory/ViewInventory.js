@@ -92,13 +92,14 @@ const ViewInventory = (props) => {
         />
       )}
       <span className={classes.overview}>Inventory</span>
+      <br />
       <div className={classes.wrapper}>
         <div className={classes.actions}>
           <br />
           <Link to="/AddProduct">
             <button>Add New Product</button>
           </Link>
-          <button>Remove a Product</button>
+          {/* <button>Remove a Product</button> */}
         </div>
       </div>
 

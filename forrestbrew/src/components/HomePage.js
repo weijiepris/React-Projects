@@ -25,7 +25,6 @@ const HomePage = () => {
   const drawChart = (dataPoints) => {
     const options = {
       animationEnabled: true,
-      width: 750,
       title: {
         text: "Total Stock Count",
       },
@@ -228,7 +227,7 @@ const HomePage = () => {
               let arr2 = [];
               let c = 0;
               snapshot.forEach((doc) => {
-                console.log("d = ", doc.data());
+                // console.log("d = ", doc.data());
                 const dt = getDate(doc.data().dateAdded["seconds"]);
                 if (!arr2[c]) {
                   arr2[c] = {
@@ -283,7 +282,7 @@ const HomePage = () => {
     const result = [];
     // console.log("summary => ", summary);
     summary.forEach((d) => {
-      console.log(d);
+      // console.log(d);
       let dates = new Set(d.data.map((prod) => prod.date));
       dates.forEach((date) => {
         result.push({
@@ -298,10 +297,17 @@ const HomePage = () => {
 
     // setOverall(result);.
     result.sort(function (a, b) {
+      var textA = a.prodID.toUpperCase();
+      var textB = b.prodID.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+
+    result.sort(function (a, b) {
       // Turn your strings into dates, and then subtract them
       // to get a value that is either negative, positive, or zero.
       return new Date(b.date) - new Date(a.date);
     });
+
     return result;
   };
   // const getCategory = () => {
@@ -371,13 +377,13 @@ const HomePage = () => {
     );
   };
 
-  if (!isLoaded) {
-    return (
-      <div className={classes.container}>
-        <h1>Loading . . . </h1>
-      </div>
-    );
-  }
+  // if (!isLoaded) {
+  //   return (
+  //     <div className={classes.container}>
+  //       <h1>Loading . . . </h1>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className={classes.container} id="container">

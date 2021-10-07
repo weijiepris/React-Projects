@@ -17,7 +17,7 @@ const Header = (props) => {
         </Link>
         {props.isLoggedIn && (
           <div className={classes.nav}>
-            <Link to="/Checker" style={{ textDecoration: "none" }}>
+            {/* <Link to="/Checker" style={{ textDecoration: "none" }}>
               <div>Checker</div>
             </Link>
             <Link to="/Scan" style={{ textDecoration: "none" }}>
@@ -25,10 +25,10 @@ const Header = (props) => {
             </Link>
             <Link to="/viewInventory" style={{ textDecoration: "none" }}>
               <div>View Inventory</div>
-            </Link>
+            </Link> 
             <Link to="/profile" style={{ textDecoration: "none" }}>
               <div>Profile</div>
-            </Link>
+            </Link>*/}
             <Link to="/" style={{ textDecoration: "none" }}>
               <div onClick={onLogout}>Logout</div>
             </Link>

@@ -60,16 +60,23 @@ const Checker = () => {
     outRef.current.value = "";
   };
   return (
-    <div className={classes.container}>
-      <form onSubmit={scanIn}>
-        <input
-          type="text"
-          placeholder="SCAN QR CODE"
-          ref={outRef}
-          onChange={onChange}
-        />
-      </form>
-      <label>{errorMessage}</label>
+    <div className={classes.container} id="container">
+      <span className={classes.overview}>QR Code Checker</span>
+      <br />
+      <div className={classes.wrapper}>
+        <div className={classes.content}>
+          <form onSubmit={scanIn}>
+            <input
+              type="text"
+              placeholder="SCAN QR CODE"
+              ref={outRef}
+              onChange={onChange}
+              className={classes.input}
+            />
+          </form>
+          <label>{errorMessage}</label>
+        </div>
+      </div>
     </div>
   );
 };

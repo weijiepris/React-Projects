@@ -30,13 +30,14 @@ function App() {
   return (
     <React.Fragment>
       <Header isLoggedIn={ctx.isLoggedIn} />
-      <Sidebar />
+      {ctx.isLoggedIn ? <Sidebar /> : ""}
       <Switch>
         {ctx.isLoggedIn ? (
           <Route path="/" exact component={HomePage} />
         ) : (
           <Route path="/" exact component={Login} />
         )}
+
         <Route path="/profile" component={Profile} />
 
         <Route path="/register" component={Register} />

@@ -50,6 +50,7 @@ const Scan = (props) => {
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In/Out</span>
+      <br/>
       <div className={classes.wrapper}>
         <div className={classes.actions}>
           <br />
