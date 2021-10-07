@@ -26,8 +26,6 @@ const ScanIn = () => {
     // console.log(result);
     const r = [];
     for (let i in result) {
-      // console.log(i);
-
       let res = i.split("//");
       // console.log(res);
       r.push({
@@ -36,6 +34,7 @@ const ScanIn = () => {
         prodName: res[2].replace("-", " "),
         dateAdded: { seconds: toTimestamp(date) },
         amount: result[i],
+        remarks: document.getElementById("remarks").value,
       });
     }
     setObj(r);
@@ -85,30 +84,29 @@ const ScanIn = () => {
     event.preventDefault();
     const outValue = outRef.current.value;
     const remarks = remarksRef.current.value;
-
     if (
-      outValue.includes("$%ForrestBrew%/") &&
-      outValue.includes("https://forrestbrew.com/$%forrestbrew%/") &&
-      outValue.includes("$%FORRESTBREW%/") &&
-      outValue.includes("$%FORRESTbrew%/")
+      outValue.includes("/$FB/") &&
+      outValue.includes("$fb/") &&
+      outValue.includes("$Fb/") &&
+      outValue.includes("$fB/")
     ) {
-      // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/original$%FORRESTbrew%/
-      // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/apple-ginger$%FORRESTbrew%/
+      // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
 
       var str = outValue;
-      var res = str.split("$%FORRESTbrew%/");
+      // console.log(str);
+      var res = str.split("$fB/");
       // console.log(res);
       if (res[1] !== "") {
-        setErrorMessage("Invalid data entered111");
+        setErrorMessage("Invalid data entered");
       } else {
         // console.log("res => ", res);
-        var res2 = res[0].split("$%ForrestBrew%/");
+        var res2 = res[0].split("$fb/");
         // console.log("Res2 => ", res2);
 
-        var res3 = res2[0].split("https://forrestbrew.com/$%forrestbrew%/");
+        var res3 = res2[0].split("/$FB/");
         // console.log("res3 => ", res3);
 
-        var res4 = res2[1].split("$%FORRESTBREW%/");
+        var res4 = res2[1].split("$Fb/");
 
         // console.log("res4 => ", res4);
 
@@ -118,11 +116,11 @@ const ScanIn = () => {
           let prodName = res4[1];
           insertData(batchNo, prodID, prodName, remarks);
         } else {
-          setErrorMessage("Invalid data entered11");
+          setErrorMessage("Invalid data entered");
         }
       }
     } else {
-      setErrorMessage("Invalid data entered1");
+      setErrorMessage("Invalid data entered");
     }
     outRef.current.value = "";
   };
@@ -142,12 +140,13 @@ const ScanIn = () => {
           .doc(key)
           .set({
             id: data.length + 1,
+            prodName: d.prodName,
             prodID: d.prodID,
             batchNo: d.batchNo,
             addedBy: ctx.currentUser.name,
             dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
             dateRemoved: "",
-            remarks: "",
+            remarks: d.remarks,
             companyName: ctx.currentUser.companyName,
             companyID: ctx.currentUser.companyID,
             scanType: "in",
@@ -168,6 +167,8 @@ const ScanIn = () => {
             // console.log("test new batch id");
             // console.log("d.prod id > ", d.prodID);
             // console.log("d.batchNo id > ", d.batchNo);
+
+            let bn = d.batchNo.replaceAll("/", "");
             firebase
               .firestore()
               .collection("batch")
@@ -175,7 +176,7 @@ const ScanIn = () => {
               .collection("prodID")
               .doc(d.prodID)
               .collection("batchNo")
-              .doc(d.batchNo)
+              .doc(bn)
               .set(
                 {
                   quantity: firebase.firestore.FieldValue.increment(1),
@@ -199,7 +200,7 @@ const ScanIn = () => {
   //   console.log(event);
   // };
   return (
-    <div className={classes.container}>
+    <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In</span>
       <div className={classes.wrapper}>
         <br />
@@ -212,7 +213,12 @@ const ScanIn = () => {
             onChange={onChange}
           />
         </form>
-        <input type="text" placeholder="REMARKS" ref={remarksRef} />
+        <input
+          type="text"
+          placeholder="REMARKS"
+          id="remarks"
+          ref={remarksRef}
+        />
         <div>{errorMessage}</div>
       </div>
       <div className={classes.wrapper}>
@@ -224,6 +230,7 @@ const ScanIn = () => {
                 <th>Batch No</th>
                 <th>Product Name</th>
                 <th>Amount</th>
+                <th>Remarks</th>
               </tr>
               {obj.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
@@ -237,6 +244,7 @@ const ScanIn = () => {
                       defaultValue={entry.amount}
                     />
                   </td>
+                  <td>{entry.remarks}</td>
                 </tr>
               ))}
             </tbody>

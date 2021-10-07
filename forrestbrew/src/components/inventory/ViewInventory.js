@@ -83,7 +83,7 @@ const ViewInventory = (props) => {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} id="container">
       {overlay && (
         <ViewProduct
           data={list}

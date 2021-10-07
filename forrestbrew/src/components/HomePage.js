@@ -20,11 +20,12 @@ const HomePage = () => {
   const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("TotalStock");
-  const [panel, setPanel] = useState("prodSummary");
+  const [panel, setPanel] = useState("currentInventory");
 
   const drawChart = (dataPoints) => {
     const options = {
       animationEnabled: true,
+      width: 750,
       title: {
         text: "Total Stock Count",
       },
@@ -67,7 +68,7 @@ const HomePage = () => {
       },
       data: [
         {
-          name: "Date",
+          name: "Inputs",
           type: "line",
           showInLegend: true,
           dataPoints: dataPoints,
@@ -125,19 +126,22 @@ const HomePage = () => {
               .collection("prodID")
               .doc(doc.data().id)
               .collection("batchNo")
+              .orderBy("quantity", "asc")
               .get()
               .then((snapshot) => {
                 if (snapshot.docs.length) {
                   snapshot.forEach((docs) => {
-                    let r = [];
-                    r = {
-                      prodID: doc.data().id,
-                      quantity: docs.data().quantity,
-                      batchNo: docs.data().batchNo,
-                      prodName: docs.data().prodName,
-                      dateAdded: docs.data().dateAdded,
-                    };
-                    addCurrentInventory(r);
+                    if (docs.data().quantity > 0) {
+                      let r = [];
+                      r = {
+                        prodID: doc.data().id,
+                        quantity: docs.data().quantity,
+                        batchNo: docs.data().batchNo,
+                        prodName: docs.data().prodName,
+                        dateAdded: docs.data().dateAdded,
+                      };
+                      addCurrentInventory(r);
+                    }
                   });
                 }
               });
@@ -224,9 +228,15 @@ const HomePage = () => {
               let arr2 = [];
               let c = 0;
               snapshot.forEach((doc) => {
+                console.log("d = ", doc.data());
                 const dt = getDate(doc.data().dateAdded["seconds"]);
                 if (!arr2[c]) {
-                  arr2[c] = { count: 1, date: dt, prodID: t };
+                  arr2[c] = {
+                    count: 1,
+                    date: dt,
+                    prodID: t,
+                    prodName: doc.data().prodName,
+                  };
                 } else {
                   if (arr2.prodID === t) {
                     for (const d in arr2) {
@@ -255,6 +265,14 @@ const HomePage = () => {
     return new Date(date * 1000).toString().substring(4, 15);
   };
 
+  const getExpire = (date) => {
+    let d = new Date(date * 1000);
+
+    d.setDate(d.getDate() + 60);
+
+    return d.toString().substring(4, 15);
+  };
+
   const addSummary = (list) => {
     setSummary((prevList) => {
       return [list, ...prevList];
@@ -265,12 +283,14 @@ const HomePage = () => {
     const result = [];
     // console.log("summary => ", summary);
     summary.forEach((d) => {
+      console.log(d);
       let dates = new Set(d.data.map((prod) => prod.date));
       dates.forEach((date) => {
         result.push({
           date: date,
           prodID: d.data[0].prodID,
           count: d.data.filter((prod) => prod.date === date).length,
+          prodName: d.data[0].prodName,
         });
       });
     });
@@ -298,12 +318,14 @@ const HomePage = () => {
           <tbody>
             <tr>
               <th>Product ID</th>
+              <th>Product Name</th>
               <th>Date produced</th>
               <th>Amount</th>
             </tr>
             {getSummary().map((list) => (
               <tr key={Math.random()}>
                 <td>{list.prodID}</td>
+                <td>{list.prodName}</td>
                 <td>{list.date}</td>
                 <td>{list.count}</td>
               </tr>
@@ -315,6 +337,11 @@ const HomePage = () => {
   };
 
   const CurrentInventory = () => {
+    var byDate = currentInventory.slice(0);
+    byDate.sort(function (a, b) {
+      return b.quantity - a.quantity;
+    });
+
     return (
       <React.Fragment>
         <h1>Current Inventory</h1>
@@ -326,14 +353,16 @@ const HomePage = () => {
               <th>Batch Number</th>
               <th>Quantity</th>
               <th>Date Produced</th>
+              <th>Expiry Date</th>
             </tr>
-            {currentInventory.map((list) => (
+            {byDate.map((list) => (
               <tr key={Math.random()}>
                 <td>{list.prodName}</td>
                 <td>{list.prodID}</td>
                 <td>{list.batchNo}</td>
                 <td>{list.quantity}</td>
                 <td>{getDate(list.dateAdded["seconds"])}</td>
+                <td>{getExpire(list.dateAdded["seconds"])}</td>
               </tr>
             ))}
           </tbody>
@@ -351,7 +380,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} id="container">
       <span className={classes.overview}>
         Overview Dashboard
         <select id="charts" name="charts">
@@ -384,8 +413,8 @@ const HomePage = () => {
               onChange={test2}
               className={classes.input}
             >
-              <option value="prodSummary">Production Summary</option>
               <option value="currentInventory">Current Inventory</option>
+              <option value="prodSummary">Production Summary</option>
             </select>
 
             {panel === "prodSummary" ? (
@@ -404,8 +433,8 @@ const HomePage = () => {
               className={classes.input}
             >
               <option value="TotalStock">Total stock count</option>
-              <option value="Timeline">Timeline</option>
-              <option value="ScanOut">Scan outs</option>
+              <option value="Timeline">Input Timeline</option>
+              {/* <option value="ScanOut">Scan outs</option> */}
             </select>
             {graph === "TotalStock" ? (
               <Bargraph options={options} />

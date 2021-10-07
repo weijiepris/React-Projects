@@ -1,15 +1,16 @@
 .container {
+  margin-left: 50px;
   background-color: #ebebeb;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   text-align: center;
   color: black;
-  width: 100%;
   /* animation: appear 0.8s ease-out forwards; */
   top: 80px;
   position: relative;
   min-height: 850px;
   height: 100%;
+  transition: 0.4s ease;
 }
 
 .container .overview {
@@ -76,7 +77,6 @@
 }
 
 .flexContent {
-  height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -121,7 +121,7 @@
   }
 
   .wrapper {
-    font-size: 80%;
+    font-size: 90%;
   }
 
   .input {
@@ -129,7 +129,5 @@
     width: 70%;
     padding: 10px;
     border-radius: 5px;
-  }
-  .flexContent {
   }
 }

@@ -48,7 +48,7 @@ const Scan = (props) => {
     return autoId;
   };
   return (
-    <div className={classes.container}>
+    <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In/Out</span>
       <div className={classes.wrapper}>
         <div className={classes.actions}>

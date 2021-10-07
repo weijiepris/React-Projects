@@ -17,15 +17,16 @@
   padding: 0 10%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   z-index: 10;
+  overflow: hidden;
 }
 
 .header h1 {
   font-family: "Darker Grotesque";
-  color: #003F82;
+  color: #003f82;
   position: relative;
   font-size: 300%;
-  right:40px;
-  bottom:5px;
+  right: 40px;
+  bottom: 5px;
 }
 .main-image {
   width: 100%;

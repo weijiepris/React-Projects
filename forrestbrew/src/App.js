@@ -15,6 +15,7 @@ import Scan from "./components/inventory/Scan";
 import ScanOut from "./components/inventory/ScanOut";
 import ScanIn from "./components/inventory/ScanIn";
 import Checker from "./components/inventory/Checker";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -29,6 +30,7 @@ function App() {
   return (
     <React.Fragment>
       <Header isLoggedIn={ctx.isLoggedIn} />
+      <Sidebar />
       <Switch>
         {ctx.isLoggedIn ? (
           <Route path="/" exact component={HomePage} />

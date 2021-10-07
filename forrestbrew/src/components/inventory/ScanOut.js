@@ -35,8 +35,9 @@ const ScanOut = () => {
     return autoId;
   };
   const insertData = (batchNo, prodID, remarks) => {
-    //   console.log("batch number => ", batchNo);
+    console.log("batch number => ", batchNo);
     //   console.log("product ID => ", prodID);
+    batchNo = batchNo.replaceAll("/", "");
 
     const key = generateKey();
     var date = new Date();
@@ -50,7 +51,9 @@ const ScanOut = () => {
       .doc(prodID)
       .get()
       .then((snapshot) => {
-        tempQuantity = snapshot.data().quantity;
+        if (snapshot.exists) {
+          tempQuantity = snapshot.data().quantity;
+        }
       })
       .then(function () {
         if (tempQuantity > 0) {
@@ -127,6 +130,22 @@ const ScanOut = () => {
                     .then(function () {
                       setErrorMessage("Scan out successful");
                     });
+                } else if (snapshot.data().quantity < 0) {
+                  firebase
+                    .firestore()
+                    .collection("batch")
+                    .doc(ctx.currentUser.companyName)
+                    .collection("prodID")
+                    .doc(prodID)
+                    .collection("batchNo")
+                    .doc(batchNo)
+                    .set(
+                      {
+                        quantity: 0,
+                        batchNo: batchNo,
+                      },
+                      { merge: true }
+                    );
                 } else {
                   setErrorMessage("Invalid data entered");
                 }
@@ -145,27 +164,28 @@ const ScanOut = () => {
     const remarks = remarksRef.current.value;
 
     if (
-      outValue.includes("$%ForrestBrew%/") &&
-      outValue.includes("https://forrestbrew.com/$%forrestbrew%/") &&
-      outValue.includes("$%FORRESTBREW%/") &&
-      outValue.includes("$%FORRESTbrew%/")
+      outValue.includes("/$FB/") &&
+      outValue.includes("$fb/") &&
+      outValue.includes("$Fb/") &&
+      outValue.includes("$fB/")
     ) {
-      // https://forrestbrew.com/$%forrestbrew%/000$%ForrestBrew%/b001$%FORRESTBREW%/original$%FORRESTbrew%/
-      // https://forrestbrew.com/$%forrestbrew%/001$%ForrestBrew%/b001$%FORRESTBREW%/apple-ginger$%FORRESTbrew%/
+      // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
+
       var str = outValue;
-      var res = str.split("$%FORRESTbrew%/");
+      // console.log(str);
+      var res = str.split("$fB/");
       // console.log(res);
       if (res[1] !== "") {
-        setErrorMessage("Invalid data entered");
+        setErrorMessage("Invalid data entered111");
       } else {
         // console.log("res => ", res);
-        var res2 = res[0].split("$%ForrestBrew%/");
+        var res2 = res[0].split("$fb/");
         // console.log("Res2 => ", res2);
 
-        var res3 = res2[0].split("https://forrestbrew.com/$%forrestbrew%/");
+        var res3 = res2[0].split("/$FB/");
         // console.log("res3 => ", res3);
 
-        var res4 = res2[1].split("$%FORRESTBREW%/");
+        var res4 = res2[1].split("$Fb/");
 
         // console.log("res4 => ", res4);
 
@@ -184,7 +204,7 @@ const ScanOut = () => {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} id="container">
       <span className={classes.overview}>Scan Out</span>
       <div className={classes.wrapper}>
         <br />

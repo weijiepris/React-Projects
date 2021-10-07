@@ -17,6 +17,7 @@
   border-color: black;
 }
 .container {
+  margin-left:50px;
   background-color: #ebebeb;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   padding: 2rem;
@@ -27,6 +28,7 @@
   position: relative;
   min-height: 850px;
   height: 100%;
+  transition: 0.4s ease;
 }
 .container .overview {
   text-align: left;
@@ -70,7 +72,7 @@ table {
 td {
   padding: 20px;
 }
-.trow:nth-child(odd) {
+.trow:nth-child(even) {
   background-color: #d7d7d7;
 }
 
