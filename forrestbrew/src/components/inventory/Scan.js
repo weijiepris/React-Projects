@@ -11,7 +11,6 @@ const Scan = (props) => {
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(0, 25);
   };
-
   useEffect(() => {
     firebase
       .firestore()
@@ -50,7 +49,7 @@ const Scan = (props) => {
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In/Out</span>
-      <br/>
+      <br />
       <div className={classes.wrapper}>
         <div className={classes.actions}>
           <br />

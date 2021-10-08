@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import classes from "./Sidebar.module.css";
 import { Link } from "react-router-dom";
-import { FaHome } from "@react-icons/all-files/fa/FaHome";
-import { FaDatabase } from "@react-icons/all-files/fa/FaDatabase";
-import { FaConfluence } from "@react-icons/all-files/fa/FaConfluence";
-import { FaGlasses } from "@react-icons/all-files/fa/FaGlasses";
+
 import { FaTimes } from "@react-icons/all-files/fa/FaTimes";
 import { FaBars } from "@react-icons/all-files/fa/FaBars";
-import AuthContext from "../store/auth-context";
+import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
+import { AiOutlineScan } from "@react-icons/all-files/ai/AiOutlineScan";
+import { AiOutlineDatabase } from "@react-icons/all-files/ai/AiOutlineDatabase";
+import { GiSpectacles } from "@react-icons/all-files/gi/GiSpectacles";
+import { IoIosMenu } from "@react-icons/all-files/io/IoIosMenu";
+import { TiTimesOutline } from "@react-icons/all-files/ti/TiTimesOutline";
+import { BiMenuAltLeft } from "@react-icons/all-files/bi/BiMenuAltLeft";
 
 const Sidebar = () => {
   const [arrow, setArrow] = useState(true);
-  const [toggle, setToggle] = useState(false);
   const showHide = () => {
     // setToggle(!toggle);
   };
@@ -33,7 +35,7 @@ const Sidebar = () => {
       document.getElementById("sidenav").style.width = "130px";
       document.getElementById("container").style.marginLeft = "130px";
       setTimeout(function () {
-        document.getElementById("home").innerHTML = "Home";
+        document.getElementById("home").innerHTML = "Overview";
         document.getElementById("inventory").innerHTML = "Inventory";
         document.getElementById("scan").innerHTML = "Scan";
         document.getElementById("checker").innerHTML = "Checker";
@@ -55,10 +57,10 @@ const Sidebar = () => {
           <Link
             to="/"
             exact="true"
-            style={{ textDecoration: "none", color: "#383838" }}
+            style={{ textDecoration: "none" }}
             onClick={closeNav}
           >
-            <FaHome size="30px" id="ihome" />
+            <BiHomeAlt size="30px" id="ihome" />
             <span id="home" className={classes.hideText}></span>
           </Link>
           <br />
@@ -66,10 +68,10 @@ const Sidebar = () => {
           <Link
             to="/ViewInventory"
             exact="true"
-            style={{ textDecoration: "none", color: "#383838" }}
+            style={{ textDecoration: "none" }}
             onClick={closeNav}
           >
-            <FaDatabase size="30px" id="iinventory" />
+            <AiOutlineDatabase size="30px" id="iinventory" />
             <span id="inventory" className={classes.hideText}></span>
           </Link>
           <br />
@@ -77,10 +79,10 @@ const Sidebar = () => {
           <Link
             to="/Scan"
             exact="true"
-            style={{ textDecoration: "none", color: "#383838" }}
+            style={{ textDecoration: "none" }}
             onClick={closeNav}
           >
-            <FaConfluence size="30px" id="iscan" />
+            <AiOutlineScan size="30px" id="iscan" />
             <span id="scan" className={classes.hideText}></span>
           </Link>
           <br />
@@ -88,23 +90,20 @@ const Sidebar = () => {
           <Link
             to="/Checker"
             exact="true"
-            style={{ textDecoration: "none", color: "#383838" }}
+            style={{ textDecoration: "none" }}
             onClick={closeNav}
           >
-            <FaGlasses size="30px" id="ichecker" />
+            <GiSpectacles size="30px" id="ichecker" />
             <span id="checker" className={classes.hideText}></span>
           </Link>
         </div>
       </div>
       <div className={classes.pullButton} id="pullButton" onClick={openNav}>
-        <div
-          className={(classes.icon, toggle ? classes.change : "")}
-          onClick={showHide}
-        >
+        <div className={classes.icon} onClick={showHide}>
           {arrow ? (
-            <FaBars size="30px" color="#383838" className={classes.fixed} />
+            <IoIosMenu size="30px" color="#383838" className={classes.fixed} />
           ) : (
-            <FaTimes size="30px" color="#383838" className={classes.fixed} />
+            <IoIosMenu size="30px" color="#383838" className={classes.fixed} />
           )}
           {/* <div className={classes.bar1}></div>
           <div className={classes.bar2}></div>

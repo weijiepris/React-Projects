@@ -106,39 +106,43 @@ const ViewInventory = (props) => {
       <br />
       <div className={classes.wrapper}>
         <br />
-        <form>
-          <table>
-            <tbody>
-              {!isLoaded ? (
-                <tr>
-                  <th>Getting inventory list . . .</th>
-                </tr>
-              ) : (
-                <tr>
-                  <th>S/N</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Product Description</th>
-                  <th>Product Quantity</th>
-                  <th>Date Created</th>
-                </tr>
-              )}
-
-              {!isLoaded ? (
-                <tr></tr>
-              ) : (
-                inventory.map((entry) => (
-                  <tr key={entry.serialno} className={classes.trow}>
-                    <ItemList data={entry} open={openList} />
+        <div className={classes.content}>
+          <form>
+            <table>
+              <tbody>
+                {!isLoaded ? (
+                  <tr>
+                    <th>Getting inventory list . . .</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-          <br></br>
-          {!dataExists ? <div>No data found</div> : <div></div>}
-          <br></br>
-        </form>
+                ) : (
+                  <tr>
+                    <th>S/N</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Quantity on hand</th>
+                    <th>Sales Price</th>
+                    <th>Cost Price</th>
+                    <th>Date Created</th>
+                  </tr>
+                )}
+
+                {!isLoaded ? (
+                  <tr></tr>
+                ) : (
+                  inventory.map((entry) => (
+                    <tr key={entry.serialno} className={classes.trow}>
+                      <ItemList data={entry} open={openList} />
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+            <br></br>
+            {!dataExists ? <div>No data found</div> : <div></div>}
+            <br></br>
+          </form>
+        </div>
       </div>
     </div>
   );

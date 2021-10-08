@@ -14,6 +14,8 @@ const AddProduct = () => {
   const prodIDRef = useRef();
   const prodDescRef = useRef();
   const prodColorRef = useRef();
+  const salesPriceRef = useRef();
+  const costPriceRef = useRef();
 
   const add = async (event) => {
     setLoading(true);
@@ -22,6 +24,9 @@ const AddProduct = () => {
     const prodID = prodIDRef.current.value;
     const prodDesc = prodDescRef.current.value;
     const prodColor = prodColorRef.current.value;
+    const salesPrice = salesPriceRef.current.value;
+    const costPrice = costPriceRef.current.value;
+
     let count = 0;
     console.log("company name: " + ctx.currentUser.companyName);
     count = await firebase
@@ -49,6 +54,7 @@ const AddProduct = () => {
           .doc(prodID)
           .set({
             serialno: count,
+            prodID: prodID,
             id: prodID,
             name: prodName,
             description: prodDesc,
@@ -60,6 +66,8 @@ const AddProduct = () => {
             category: "drinks",
             status: "available",
             color: prodColor,
+            salesPrice: salesPrice,
+            costPrice: costPrice,
             datecreated: firebase.firestore.FieldValue.serverTimestamp(),
           })
           .then(function () {
@@ -80,6 +88,7 @@ const AddProduct = () => {
           placeholder="Product Name"
           ref={prodNameRef}
           className={classes.input}
+          required
         />
         <br></br>
         <input
@@ -87,6 +96,7 @@ const AddProduct = () => {
           placeholder="Product ID"
           ref={prodIDRef}
           className={classes.input}
+          required
         />
         <br></br>
         <input
@@ -94,6 +104,7 @@ const AddProduct = () => {
           placeholder="Product Description"
           ref={prodDescRef}
           className={classes.input}
+          required
         />
         <br></br>
         <input
@@ -101,9 +112,27 @@ const AddProduct = () => {
           placeholder="Product Color Code (e.g. #FFFFFF)"
           ref={prodColorRef}
           className={classes.input}
+          required
+        />
+        <br></br>
+        <input
+          type="text"
+          placeholder="Sales Price"
+          ref={prodColorRef}
+          className={classes.input}
+          required
+        />
+        <br></br>
+        <input
+          type="number"
+          placeholder="Cost Price"
+          ref={prodColorRef}
+          className={classes.input}
+          required
         />
         <br></br>
         <br></br>
+
         <button className={classes.button}>Add Product</button>
         <Link to="/viewInventory" exact="true">
           <button className={classes.button}>Go Back</button>

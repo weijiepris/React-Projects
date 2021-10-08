@@ -22,6 +22,8 @@ const ItemList = (props) => {
       >
         {props.data.quantity}
       </td>
+      <td onClick={openHandler}>${props.data.salesPrice}</td>
+      <td onClick={openHandler}>${props.data.costPrice}</td>
       <td onClick={openHandler}>
         {getDate(props.data.datecreated["seconds"])}
       </td>

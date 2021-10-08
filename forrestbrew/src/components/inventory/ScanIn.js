@@ -80,44 +80,35 @@ const ScanIn = () => {
       remarks: remarks,
     });
   };
+
   const scanIn = (event) => {
     event.preventDefault();
     const outValue = outRef.current.value;
     const remarks = remarksRef.current.value;
-    if (
-      outValue.includes("/$FB/") &&
-      outValue.includes("$fb/") &&
-      outValue.includes("$Fb/") &&
-      outValue.includes("$fB/")
-    ) {
-      // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
+    // console.log(outValue);
 
+    if (outValue.includes("`")) {
+      // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
       var str = outValue;
       // console.log(str);
-      var res = str.split("$fB/");
-      // console.log(res);
-      if (res[1] !== "") {
-        setErrorMessage("Invalid data entered");
-      } else {
-        // console.log("res => ", res);
-        var res2 = res[0].split("$fb/");
-        // console.log("Res2 => ", res2);
+      var res = str.split("`");
+      console.log(res);
+      if (res.length === 3) {
+        if (
+          res[0].replaceAll(" ", "").length > 1 &&
+          res[1].replaceAll(" ", "").length > 1 &&
+          res[2].replaceAll(" ", "").length > 1
+        ) {
+          let prodID = res[0];
+          let batchNo = res[1];
+          let prodName = res[2];
 
-        var res3 = res2[0].split("/$FB/");
-        // console.log("res3 => ", res3);
-
-        var res4 = res2[1].split("$Fb/");
-
-        // console.log("res4 => ", res4);
-
-        if (res3[0] === "") {
-          let batchNo = res4[0];
-          let prodID = res3[1];
-          let prodName = res4[1];
           insertData(batchNo, prodID, prodName, remarks);
         } else {
           setErrorMessage("Invalid data entered");
         }
+      } else {
+        setErrorMessage("Invalid data entered");
       }
     } else {
       setErrorMessage("Invalid data entered");

@@ -35,7 +35,7 @@ const ScanOut = () => {
     return autoId;
   };
   const insertData = (batchNo, prodID, remarks) => {
-    console.log("batch number => ", batchNo);
+    // console.log("batch number => ", batchNo);
     //   console.log("product ID => ", prodID);
     batchNo = batchNo.replaceAll("/", "");
 
@@ -131,6 +131,7 @@ const ScanOut = () => {
                       setErrorMessage("Scan out successful");
                     });
                 } else if (snapshot.data().quantity < 0) {
+                  let bn = batchNo.replaceAll("/", "");
                   firebase
                     .firestore()
                     .collection("batch")
@@ -138,7 +139,7 @@ const ScanOut = () => {
                     .collection("prodID")
                     .doc(prodID)
                     .collection("batchNo")
-                    .doc(batchNo)
+                    .doc(bn)
                     .set(
                       {
                         quantity: 0,
@@ -158,44 +159,34 @@ const ScanOut = () => {
         }
       });
   };
+
   const scanIn = (event) => {
     event.preventDefault();
     const outValue = outRef.current.value;
     const remarks = remarksRef.current.value;
+    // console.log(outValue);
 
-    if (
-      outValue.includes("/$FB/") &&
-      outValue.includes("$fb/") &&
-      outValue.includes("$Fb/") &&
-      outValue.includes("$fB/")
-    ) {
+    if (outValue.includes("`")) {
       // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
-
       var str = outValue;
       // console.log(str);
-      var res = str.split("$fB/");
+      var res = str.split("`");
       // console.log(res);
-      if (res[1] !== "") {
-        setErrorMessage("Invalid data entered111");
-      } else {
-        // console.log("res => ", res);
-        var res2 = res[0].split("$fb/");
-        // console.log("Res2 => ", res2);
+      if (res.length === 3) {
+        if (
+          res[0].replaceAll(" ", "").length > 1 &&
+          res[1].replaceAll(" ", "").length > 1 &&
+          res[2].replaceAll(" ", "").length > 1
+        ) {
+          let prodID = res[0];
+          let batchNo = res[1];
 
-        var res3 = res2[0].split("/$FB/");
-        // console.log("res3 => ", res3);
-
-        var res4 = res2[1].split("$Fb/");
-
-        // console.log("res4 => ", res4);
-
-        if (res3[0] === "") {
-          let batchNo = res4[0];
-          let prodID = res3[1];
           insertData(batchNo, prodID, remarks);
         } else {
           setErrorMessage("Invalid data entered");
         }
+      } else {
+        setErrorMessage("Invalid data entered");
       }
     } else {
       setErrorMessage("Invalid data entered");

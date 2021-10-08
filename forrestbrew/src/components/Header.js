@@ -9,10 +9,18 @@ const Header = (props) => {
     ctx.onLogout();
   };
 
+  const closeNav = () => {
+    document.getElementById("sidenav").style.width = "50px";
+    document.getElementById("container").style.marginLeft = "50px";
+    document.getElementById("home").innerHTML = "";
+    document.getElementById("inventory").innerHTML = "";
+    document.getElementById("scan").innerHTML = "";
+    document.getElementById("checker").innerHTML = "";
+  };
   return (
     <React.Fragment>
       <header className={classes.header}>
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }} onClick={closeNav}>
           <h1>Apricot</h1>
         </Link>
         {props.isLoggedIn && (

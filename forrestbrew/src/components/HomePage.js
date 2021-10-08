@@ -12,7 +12,7 @@ const HomePage = () => {
   // const [user, setUser] = useState([]);
   const userid = firebase.auth().currentUser.uid;
   const [currentInventory, setCurrentInventory] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  // const [isLoaded, setIsLoaded] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [stockQuantity, setStockQuantity] = useState(0);
   const [options, setOptions] = useState({});
@@ -97,7 +97,7 @@ const HomePage = () => {
       .then((snapshot) => {
         if (snapshot.exists) {
           // setUser(snapshot.data());
-          setIsLoaded(true);
+          // setIsLoaded(true);
         } else {
           console.log("user does not exist");
         }
@@ -400,7 +400,7 @@ const HomePage = () => {
       <div className={classes.wrapper}>
         <br />
         <div className={classes.individual}>
-          Total products
+          Total products created
           <span className={classes.quantity}>{quantity}</span>
         </div>
         <div className={classes.individual}>

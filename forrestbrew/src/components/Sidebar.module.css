@@ -26,6 +26,13 @@
 .content a {
   position: relative;
   left: 10px;
+  color: #383838;
+  transition: 0.4s ease;
+}
+.content a:hover {
+  color: #a7a7a7;
+  height: 100px;
+  transition: 0.2s ease;
 }
 .hideText {
   position: relative;
@@ -67,7 +74,7 @@
 }
 .fixed {
   position: fixed;
-  margin-left:-2px;
+  margin-left: -2px;
 }
 .icon {
   display: inline-block;
