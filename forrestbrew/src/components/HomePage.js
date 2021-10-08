@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import firebase from "firebase";
 import classes from "./HomePage.module.css";
 import AuthContext from "../store/auth-context";
@@ -6,8 +6,16 @@ import AuthContext from "../store/auth-context";
 import Bargraph from "./charts/Bargraph";
 import LineGraph from "./charts/Linegraph";
 
+import Chart from "react-google-charts";
+
+import useContainerDimensions from "./Reusables/useContainerDimensions";
+import TotalStockCount from "./charts/TotalStockCount";
+
 const HomePage = () => {
   const ctx = useContext(AuthContext);
+
+  const flexContent = useRef();
+  const { width, height } = useContainerDimensions(flexContent);
 
   // const [user, setUser] = useState([]);
   const userid = firebase.auth().currentUser.uid;
@@ -17,6 +25,7 @@ const HomePage = () => {
   const [stockQuantity, setStockQuantity] = useState(0);
   const [options, setOptions] = useState({});
   const [line, setLine] = useState({});
+  const [temp, setTemp] = useState([]);
   const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("TotalStock");
@@ -44,6 +53,9 @@ const HomePage = () => {
     };
 
     setOptions(options);
+  };
+  const tempChart = (dataPoints) => {
+    setTemp(dataPoints);
   };
 
   const lineChart = (dataPoints) => {
@@ -117,6 +129,8 @@ const HomePage = () => {
         let tempQuantity = 0;
         if (snapshot.docs.length) {
           let temp = [];
+          let temp2 = [];
+          let c = 1;
           snapshot.forEach((doc) => {
             firebase
               .firestore()
@@ -154,11 +168,15 @@ const HomePage = () => {
                 color: doc.data().color,
               },
             ];
+            temp2[0] = ["Element", "Density", { role: "style" }];
+            temp2[c] = [doc.data().name, doc.data().quantity, doc.data().color];
+            c++;
           });
           // console.log(tempQuantity);
           setQuantity(snapshot.docs.length);
           setStockQuantity(tempQuantity);
           drawChart(temp);
+          tempChart(temp2);
         }
       });
 
@@ -343,11 +361,12 @@ const HomePage = () => {
   };
 
   const CurrentInventory = () => {
-    var byDate = currentInventory.slice(0);
-    byDate.sort(function (a, b) {
-      return b.quantity - a.quantity;
-    });
+    // var byDate = currentInventory.slice(0);
+    // byDate.sort(function (a, b) {
+    //   return b.quantity - a.quantity;
+    // });
 
+    console.log("ci => ", currentInventory);
     return (
       <React.Fragment>
         <h1>Current Inventory</h1>
@@ -361,7 +380,7 @@ const HomePage = () => {
               <th>Date Produced</th>
               <th>Expiry Date</th>
             </tr>
-            {byDate.map((list) => (
+            {currentInventory.map((list) => (
               <tr key={Math.random()}>
                 <td>{list.prodName}</td>
                 <td>{list.prodID}</td>
@@ -431,7 +450,7 @@ const HomePage = () => {
               <div>test</div>
             )}
           </div>
-          <div className={classes.flexContent}>
+          <div className={classes.flexContent} ref={flexContent}>
             <select
               id="charts"
               name="charts"
@@ -440,16 +459,16 @@ const HomePage = () => {
             >
               <option value="TotalStock">Total stock count</option>
               <option value="Timeline">Input Timeline</option>
-              {/* <option value="ScanOut">Scan outs</option> */}
+              <option value="ScanOut1">Scan outs</option>
             </select>
             {graph === "TotalStock" ? (
-              <Bargraph options={options} />
+              <TotalStockCount width={width} height={height} data={temp} />
             ) : graph === "Timeline" ? (
               <LineGraph options={line} />
             ) : graph === "ScanOut" ? (
               <Bargraph options={options} />
             ) : (
-              <div>test</div>
+              <Bargraph options={options} />
             )}
           </div>
         </div>

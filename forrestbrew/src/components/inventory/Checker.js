@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import classes from "./inventory.module.css";
 
+import Chart from "react-google-charts";
 const Checker = () => {
   const outRef = useRef();
   const [errorMessage, setErrorMessage] = useState("");
