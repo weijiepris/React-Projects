@@ -158,25 +158,26 @@ const ScanIn = () => {
             // console.log("test new batch id");
             // console.log("d.prod id > ", d.prodID);
             // console.log("d.batchNo id > ", d.batchNo);
-
-            let bn = d.batchNo.replaceAll("/", "");
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("prodID")
-              .doc(d.prodID)
-              .collection("batchNo")
-              .doc(bn)
-              .set(
-                {
-                  quantity: firebase.firestore.FieldValue.increment(1),
-                  dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-                  batchNo: d.batchNo,
-                  prodName: d.prodName,
-                },
-                { merge: true }
-              );
+            // let key = generateKey();
+            // let bn = d.batchNo.replaceAll("/", "");
+            // firebase
+            //   .firestore()
+            //   .collection("batch")
+            //   .doc(ctx.currentUser.companyName)
+            //   .collection("prodID")
+            //   .doc(d.prodID)
+            //   .collection("batchNo")
+            //   .doc(key)
+            //   .set(
+            //     {
+            //       quantity: firebase.firestore.FieldValue.increment(1),
+            //       dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+            //       batchNo: d.batchNo,
+            //       prodName: d.prodName,
+            //       key: key,
+            //     },
+            //     { merge: true }
+            //   );
           })
           .then(function () {
             setErrorMessage("data entered successfully");
@@ -187,9 +188,6 @@ const ScanIn = () => {
     });
   };
 
-  // const updateAmount = (event) => {
-  //   console.log(event);
-  // };
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In</span>

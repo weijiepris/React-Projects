@@ -116,9 +116,9 @@ const AddProduct = () => {
         />
         <br></br>
         <input
-          type="text"
+          type="number"
           placeholder="Sales Price"
-          ref={prodColorRef}
+          ref={salesPriceRef}
           className={classes.input}
           required
         />
@@ -126,7 +126,7 @@ const AddProduct = () => {
         <input
           type="number"
           placeholder="Cost Price"
-          ref={prodColorRef}
+          ref={costPriceRef}
           className={classes.input}
           required
         />

@@ -2,14 +2,14 @@ import React from "react";
 
 import Chart from "react-google-charts";
 
-const TotalStockCount = (props) => {
+const TimelineChart = (props) => {
   return (
     <Chart
       loader={<div>Loading Chart</div>}
-      chartType="ColumnChart"
+      chartType="LineChart"
       data={props.data}
       options={{
-        title: "Total Stock Count",
+        title: "Input Frequency",
         width: props.width + 5,
         height: props.height - 50,
         bar: { groupWidth: "70%" },
@@ -60,4 +60,4 @@ const TotalStockCount = (props) => {
   );
 };
 
-export default TotalStockCount;
+export default TimelineChart;

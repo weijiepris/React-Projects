@@ -10,6 +10,7 @@ import Chart from "react-google-charts";
 
 import useContainerDimensions from "./Reusables/useContainerDimensions";
 import TotalStockCount from "./charts/TotalStockCount";
+import TimelineChart from "./charts/TimelineChart";
 
 const HomePage = () => {
   const ctx = useContext(AuthContext);
@@ -26,6 +27,7 @@ const HomePage = () => {
   const [options, setOptions] = useState({});
   const [line, setLine] = useState({});
   const [temp, setTemp] = useState([]);
+  const [tempLine, setTempLine] = useState([]);
   const [summary, setSummary] = useState([]);
   // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("TotalStock");
@@ -56,6 +58,9 @@ const HomePage = () => {
   };
   const tempChart = (dataPoints) => {
     setTemp(dataPoints);
+  };
+  const tempLineChart = (dataPoints) => {
+    setTempLine(dataPoints);
   };
 
   const lineChart = (dataPoints) => {
@@ -119,87 +124,34 @@ const HomePage = () => {
 
     firebase
       .firestore()
-      .collection("products")
-      .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .orderBy("serialno", "desc")
-      .get()
-      .then((snapshot) => {
-        // console.log("testing => ", snapshot.docs);
-        let tempQuantity = 0;
-        if (snapshot.docs.length) {
-          let temp = [];
-          let temp2 = [];
-          let c = 1;
-          snapshot.forEach((doc) => {
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("prodID")
-              .doc(doc.data().id)
-              .collection("batchNo")
-              .orderBy("quantity", "asc")
-              .get()
-              .then((snapshot) => {
-                if (snapshot.docs.length) {
-                  snapshot.forEach((docs) => {
-                    if (docs.data().quantity > 0) {
-                      let r = [];
-                      r = {
-                        prodID: doc.data().id,
-                        quantity: docs.data().quantity,
-                        batchNo: docs.data().batchNo,
-                        prodName: docs.data().prodName,
-                        dateAdded: docs.data().dateAdded,
-                      };
-                      addCurrentInventory(r);
-                    }
-                  });
-                }
-              });
-
-            tempQuantity += doc.data().quantity;
-            temp = [
-              ...temp,
-              {
-                label: doc.data().name,
-                y: doc.data().quantity,
-                color: doc.data().color,
-              },
-            ];
-            temp2[0] = ["Element", "Density", { role: "style" }];
-            temp2[c] = [doc.data().name, doc.data().quantity, doc.data().color];
-            c++;
-          });
-          // console.log(tempQuantity);
-          setQuantity(snapshot.docs.length);
-          setStockQuantity(tempQuantity);
-          drawChart(temp);
-          tempChart(temp2);
-        }
-      });
-
-    firebase
-      .firestore()
       .collection("batch")
       .doc(ctx.currentUser.companyName)
       .collection("products")
       .where("scanType", "==", "in")
-      .orderBy("dateAdded", "desc")
+      .orderBy("dateAdded", "asc")
       .get()
       .then((snapshot) => {
+        let arr = [];
         let testing = [];
+        let temp2 = [];
         snapshot.forEach((doc) => {
-          const dt = getDate(doc.data().dateAdded["seconds"]);
-          if (!testing[dt]) {
-            testing[dt] = 1;
+          const dt = doc.data().prodID;
+          const dt2 = getDate(doc.data().dateAdded["seconds"]);
+          if (!arr[dt]) {
+            arr[dt] = 1;
           } else {
-            testing[dt] += 1;
+            arr[dt] += 1;
+          }
+
+          if (!testing[dt2]) {
+            testing[dt2] = 1;
+          } else {
+            testing[dt2] += 1;
           }
         });
-        // console.log(testing);
+
         let op = [];
+        let c = 1;
         for (const value in testing) {
           op = [
             ...op,
@@ -208,27 +160,18 @@ const HomePage = () => {
               y: testing[value],
             },
           ];
-        }
-        lineChart(op);
-      });
 
-    firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .where("scanType", "==", "in")
-      .get()
-      .then((snapshot) => {
-        let arr = [];
-        snapshot.forEach((doc) => {
-          const dt = doc.data().prodID;
-          if (!arr[dt]) {
-            arr[dt] = 1;
-          } else {
-            arr[dt] += 1;
-          }
-        });
+          temp2[0] = ["Date", "Scan in"];
+          temp2[c] = [
+            new Date(value).toString().substring(4, 15),
+            testing[value],
+          ];
+          c++;
+        }
+
+        lineChart(op);
+
+        setTempLine(temp2);
 
         // console.log("testing => ", arr);
         for (const t in arr) {
@@ -272,6 +215,77 @@ const HomePage = () => {
         }
       });
 
+    firebase
+      .firestore()
+      .collection("products")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .orderBy("serialno", "asc")
+      .get()
+      .then((snapshot) => {
+        // console.log("testing => ", snapshot.docs);
+        let tempQuantity = 0;
+        if (snapshot.docs.length) {
+          let temp = [];
+          let temp2 = [];
+          let c = 1;
+          snapshot.forEach((doc) => {
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("prodID")
+              .doc(doc.data().id)
+              .collection("batchNo")
+              .orderBy("quantity", "asc")
+              .get()
+              .then((snapshot) => {
+                if (snapshot.docs.length) {
+                  snapshot.forEach((docs) => {
+                    if (docs.data().quantity > 0) {
+                      // console.log("t =>", docs.data());
+
+                      let r = [];
+                      r = {
+                        prodID: doc.data().id,
+                        quantity: docs.data().quantity,
+                        batchNo: docs.data().batchNo,
+                        prodName: docs.data().prodName,
+                        dateAdded: docs.data().dateAdded,
+                      };
+                      addCurrentInventory(r);
+                    }
+                  });
+                }
+              });
+
+            tempQuantity += doc.data().quantity;
+            temp = [
+              ...temp,
+              {
+                label: doc.data().name,
+                y: doc.data().quantity,
+                color: doc.data().color,
+              },
+            ];
+
+            temp2[0] = ["Element", "In stock", { role: "style" }];
+            temp2[c] = [
+              doc.data().name,
+              doc.data().quantity,
+              "stroke-color: black;stroke-width: 2; fill-color:" +
+                doc.data().color +
+                ";",
+            ];
+            c++;
+          });
+          // console.log(tempQuantity);
+          setQuantity(snapshot.docs.length);
+          setStockQuantity(tempQuantity);
+          drawChart(temp);
+          tempChart(temp2);
+        }
+      });
     return () => {
       console.log("cleanup");
     };
@@ -366,7 +380,7 @@ const HomePage = () => {
     //   return b.quantity - a.quantity;
     // });
 
-    console.log("ci => ", currentInventory);
+    // console.log("ci => ", currentInventory);
     return (
       <React.Fragment>
         <h1>Current Inventory</h1>
@@ -464,7 +478,7 @@ const HomePage = () => {
             {graph === "TotalStock" ? (
               <TotalStockCount width={width} height={height} data={temp} />
             ) : graph === "Timeline" ? (
-              <LineGraph options={line} />
+              <TimelineChart width={width} height={height} data={tempLine} />
             ) : graph === "ScanOut" ? (
               <Bargraph options={options} />
             ) : (
