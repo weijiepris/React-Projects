@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import classes from "./Sidebar.module.css";
 import { Link } from "react-router-dom";
 
-import { FaTimes } from "@react-icons/all-files/fa/FaTimes";
-import { FaBars } from "@react-icons/all-files/fa/FaBars";
+// import { FaTimes } from "@react-icons/all-files/fa/FaTimes";
+// import { FaBars } from "@react-icons/all-files/fa/FaBars";
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
 import { AiOutlineScan } from "@react-icons/all-files/ai/AiOutlineScan";
 import { AiOutlineDatabase } from "@react-icons/all-files/ai/AiOutlineDatabase";
 import { GiSpectacles } from "@react-icons/all-files/gi/GiSpectacles";
 import { IoIosMenu } from "@react-icons/all-files/io/IoIosMenu";
-import { TiTimesOutline } from "@react-icons/all-files/ti/TiTimesOutline";
-import { BiMenuAltLeft } from "@react-icons/all-files/bi/BiMenuAltLeft";
+// import { TiTimesOutline } from "@react-icons/all-files/ti/TiTimesOutline";
+// import { BiMenuAltLeft } from "@react-icons/all-files/bi/BiMenuAltLeft";
 
 const Sidebar = () => {
   const [arrow, setArrow] = useState(true);

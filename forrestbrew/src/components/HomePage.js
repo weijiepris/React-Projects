@@ -4,9 +4,9 @@ import classes from "./HomePage.module.css";
 import AuthContext from "../store/auth-context";
 
 import Bargraph from "./charts/Bargraph";
-import LineGraph from "./charts/Linegraph";
+// import LineGraph from "./charts/Linegraph";
 
-import Chart from "react-google-charts";
+// import Chart from "react-google-charts";
 
 import useContainerDimensions from "./Reusables/useContainerDimensions";
 import TotalStockCount from "./charts/TotalStockCount";

@@ -44,6 +44,9 @@ const ScanIn = () => {
     setErrorMessage("");
   };
 
+  const getDateToday = () => {
+    return new Date().toString().substring(0, 15).replaceAll(" ", "");
+  };
   // const getDate = (date) => {
   //   return new Date(date * 1000).toString().substring(0, 25);
   // };
@@ -117,6 +120,7 @@ const ScanIn = () => {
   };
 
   const testf = () => {
+    console.log(getDateToday());
     obj.forEach((d) => {
       let amount = document.getElementById(d.prodID + d.batchNo).value;
       // console.log(d.prodName, ", ", d.batchNo, " => ", amount);
@@ -158,26 +162,27 @@ const ScanIn = () => {
             // console.log("test new batch id");
             // console.log("d.prod id > ", d.prodID);
             // console.log("d.batchNo id > ", d.batchNo);
-            // let key = generateKey();
-            // let bn = d.batchNo.replaceAll("/", "");
-            // firebase
-            //   .firestore()
-            //   .collection("batch")
-            //   .doc(ctx.currentUser.companyName)
-            //   .collection("prodID")
-            //   .doc(d.prodID)
-            //   .collection("batchNo")
-            //   .doc(key)
-            //   .set(
-            //     {
-            //       quantity: firebase.firestore.FieldValue.increment(1),
-            //       dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-            //       batchNo: d.batchNo,
-            //       prodName: d.prodName,
-            //       key: key,
-            //     },
-            //     { merge: true }
-            //   );
+            let key = generateKey();
+            let bn = d.batchNo.replaceAll("/", "");
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("prodID")
+              .doc(d.prodID)
+              .collection("batchNo")
+              .doc(getDateToday())
+              .set(
+                {
+                  quantity: firebase.firestore.FieldValue.increment(1),
+                  dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+                  batchNo: d.batchNo,
+                  prodName: d.prodName,
+                  key: key,
+                  addedBy: ctx.currentUser.name,
+                },
+                { merge: true }
+              );
           })
           .then(function () {
             setErrorMessage("data entered successfully");
