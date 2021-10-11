@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import firebase from "firebase";
 import classes from "./HomePage.module.css";
 import AuthContext from "../store/auth-context";
+import { Link } from "react-router-dom";
 
 import Bargraph from "./charts/Bargraph";
 // import LineGraph from "./charts/Linegraph";
@@ -18,82 +19,22 @@ const HomePage = () => {
   const flexContent = useRef();
   const { width, height } = useContainerDimensions(flexContent);
 
-  // const [user, setUser] = useState([]);
   const userid = firebase.auth().currentUser.uid;
   const [currentInventory, setCurrentInventory] = useState([]);
-  // const [isLoaded, setIsLoaded] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [stockQuantity, setStockQuantity] = useState(0);
-  const [options, setOptions] = useState({});
-  const [line, setLine] = useState({});
-  const [temp, setTemp] = useState([]);
-  const [tempLine, setTempLine] = useState([]);
+  const [bargraph, setBargraph] = useState([]);
+  const [linegraph, setLinegraph] = useState([]);
   const [summary, setSummary] = useState([]);
-  // const [category, setCategory] = useState("");
   const [graph, setGraph] = useState("TotalStock");
   const [panel, setPanel] = useState("currentInventory");
 
-  const drawChart = (dataPoints) => {
-    const options = {
-      animationEnabled: true,
-      title: {
-        text: "Total Stock Count",
-      },
-      axisX: {
-        title: "Flavours",
-      },
-      axisY: {
-        title: "Quantity",
-      },
-      data: [
-        {
-          // Change type to "doughnut", "line", "splineArea", etc.
-          type: "column",
-          dataPoints: dataPoints,
-        },
-      ],
-    };
-
-    setOptions(options);
+  const getBargraph = () => {
+    return bargraph;
   };
-  const tempChart = (dataPoints) => {
-    setTemp(dataPoints);
+  const getLinegraph = () => {
+    return linegraph;
   };
-  const tempLineChart = (dataPoints) => {
-    setTempLine(dataPoints);
-  };
-
-  const lineChart = (dataPoints) => {
-    const options = {
-      animationEnabled: true,
-      title: {
-        text: "Input dates",
-      },
-      axisX: {
-        valueFormatString: "DD MMM YYYY",
-      },
-      axisY: {
-        title: "Quantity",
-      },
-      legend: {
-        cursor: "pointer",
-        fontSize: 18,
-      },
-      toolTip: {
-        shared: true,
-      },
-      data: [
-        {
-          name: "Inputs",
-          type: "line",
-          showInLegend: true,
-          dataPoints: dataPoints,
-        },
-      ],
-    };
-    setLine(options);
-  };
-
   const addCurrentInventory = (list) => {
     setCurrentInventory((prevList) => {
       return [list, ...prevList];
@@ -108,19 +49,68 @@ const HomePage = () => {
   useEffect(() => {
     firebase
       .firestore()
-      .collection("users")
-      .doc(userid)
+      .collection("products")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .orderBy("serialno", "asc")
       .get()
       .then((snapshot) => {
-        if (snapshot.exists) {
-          // setUser(snapshot.data());
-          // setIsLoaded(true);
-        } else {
-          console.log("user does not exist");
+        let tempQuantity = 0;
+        if (snapshot.docs.length) {
+          let temp2 = [];
+          let c = 1;
+          snapshot.forEach((doc) => {
+            console.log(doc.data());
+            let tempQ = 0;
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("prodID")
+              .doc(doc.data().id)
+              .collection("batchNo")
+              .orderBy("quantity", "asc")
+              .get()
+              .then((snapshot) => {
+                if (snapshot.docs.length) {
+                  snapshot.forEach((docs) => {
+                    if (docs.data().quantity > 0) {
+                      // console.log("t =>", docs.data());
+
+                      let r = [];
+                      r = {
+                        prodID: doc.data().id,
+                        quantity: docs.data().quantity,
+                        batchNo: docs.data().batchNo,
+                        prodName: docs.data().prodName,
+                        dateAdded: docs.data().dateAdded,
+                      };
+                      addCurrentInventory(r);
+                      tempQ += docs.data().quantity;
+                    }
+                  });
+                }
+              })
+              .then(function () {
+                tempQuantity += tempQ;
+              })
+              .then(function () {
+                temp2[0] = ["Element", "In stock", { role: "style" }];
+                temp2[c] = [
+                  doc.data().name,
+                  tempQ,
+                  "stroke-color: black;stroke-width: 2; fill-color:" +
+                    doc.data().color +
+                    ";",
+                ];
+                setStockQuantity(tempQuantity);
+                setQuantity(snapshot.docs.length);
+                setBargraph(temp2);
+                c++;
+              });
+          });
         }
       });
-
-    // console.log("company => ", ctx.currentUser.companyName);
 
     firebase
       .firestore()
@@ -169,9 +159,7 @@ const HomePage = () => {
           c++;
         }
 
-        lineChart(op);
-
-        setTempLine(temp2);
+        setLinegraph(temp2);
 
         // console.log("testing => ", arr);
         for (const t in arr) {
@@ -217,75 +205,18 @@ const HomePage = () => {
 
     firebase
       .firestore()
-      .collection("products")
+      .collection("batch")
       .doc(ctx.currentUser.companyName)
       .collection("products")
-      .orderBy("serialno", "asc")
+      .where("scanType", "==", "out")
+      .orderBy("dateAdded", "desc")
       .get()
       .then((snapshot) => {
-        // console.log("testing => ", snapshot.docs);
-        let tempQuantity = 0;
-        if (snapshot.docs.length) {
-          let temp = [];
-          let temp2 = [];
-          let c = 1;
-          snapshot.forEach((doc) => {
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("prodID")
-              .doc(doc.data().id)
-              .collection("batchNo")
-              .orderBy("quantity", "asc")
-              .get()
-              .then((snapshot) => {
-                if (snapshot.docs.length) {
-                  snapshot.forEach((docs) => {
-                    if (docs.data().quantity > 0) {
-                      // console.log("t =>", docs.data());
-
-                      let r = [];
-                      r = {
-                        prodID: doc.data().id,
-                        quantity: docs.data().quantity,
-                        batchNo: docs.data().batchNo,
-                        prodName: docs.data().prodName,
-                        dateAdded: docs.data().dateAdded,
-                      };
-                      addCurrentInventory(r);
-                    }
-                  });
-                }
-              });
-
-            tempQuantity += doc.data().quantity;
-            temp = [
-              ...temp,
-              {
-                label: doc.data().name,
-                y: doc.data().quantity,
-                color: doc.data().color,
-              },
-            ];
-
-            temp2[0] = ["Element", "In stock", { role: "style" }];
-            temp2[c] = [
-              doc.data().name,
-              doc.data().quantity,
-              "stroke-color: black;stroke-width: 2; fill-color:" +
-                doc.data().color +
-                ";",
-            ];
-            c++;
-          });
-          // console.log(tempQuantity);
-          setQuantity(snapshot.docs.length);
-          setStockQuantity(tempQuantity);
-          drawChart(temp);
-          tempChart(temp2);
-        }
+        let arr2 = [];
+        let c = 0;
+        snapshot.forEach((doc) => {});
       });
+
     return () => {
       console.log("cleanup");
     };
@@ -342,11 +273,6 @@ const HomePage = () => {
 
     return result;
   };
-  // const getCategory = () => {
-  //   const data = inventory;
-  //   const unique = [...new Set(data.map((item) => item.category))];
-  //   return unique;
-  // };
 
   const ProdSummary = () => {
     return (
@@ -476,34 +402,37 @@ const HomePage = () => {
               <option value="ScanOut1">Scan outs</option>
             </select>
             {graph === "TotalStock" ? (
-              <TotalStockCount width={width} height={height} data={temp} />
+              <TotalStockCount
+                width={width}
+                height={height}
+                data={getBargraph()}
+              />
             ) : graph === "Timeline" ? (
-              <TimelineChart width={width} height={height} data={tempLine} />
+              <TimelineChart
+                width={width}
+                height={height}
+                data={getLinegraph()}
+              />
             ) : graph === "ScanOut" ? (
-              <Bargraph options={options} />
+              <Bargraph options={[]} />
             ) : (
-              <Bargraph options={options} />
+              <Bargraph options={[]} />
             )}
           </div>
         </div>
       </div>
       <br></br>
 
-      {/* {user.userRole === "admin" ? (
-  <div className={classes.actions}>
-    <br></br>
-    <Link
-      to={{
-        pathname: "/admin",
-        state: user,
-      }}
-    >
-      <button>Welcome admin</button>
-    </Link>
-  </div>
-) : (
-  <div></div>
-)} */}
+      {/* {ctx.currentUser.userRole === "developer" ? (
+        <div className={classes.actions}>
+          <br></br>
+          <Link to="/admin">
+            <button>Welcome admin</button>
+          </Link>
+        </div>
+      ) : (
+        <div></div>
+      )} */}
     </div>
   );
 };

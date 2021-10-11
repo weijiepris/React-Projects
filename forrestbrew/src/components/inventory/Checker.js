@@ -19,11 +19,10 @@ const Checker = () => {
       // console.log(str);
       var res = str.split("`");
       // console.log(res);
-      if (res.length === 3) {
+      if (res.length === 2) {
         if (
           res[0].replaceAll(" ", "").length > 1 &&
-          res[1].replaceAll(" ", "").length > 1 &&
-          res[2].replaceAll(" ", "").length > 1
+          res[1].replaceAll(" ", "").length > 1
         ) {
           let prodID = res[0];
           let batchNo = res[1];

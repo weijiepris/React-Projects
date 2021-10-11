@@ -21,7 +21,14 @@ const Header = (props) => {
     <React.Fragment>
       <header className={classes.header}>
         <Link to="/" style={{ textDecoration: "none" }} onClick={closeNav}>
-          <h1>Apricot</h1>
+          <h1>
+            Apricot
+            {ctx.currentUser.userRole === "developer" ? (
+              <span>Developer Account</span>
+            ) : (
+              <span></span>
+            )}
+          </h1>
         </Link>
         {props.isLoggedIn && (
           <div className={classes.nav}>

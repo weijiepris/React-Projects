@@ -25,11 +25,32 @@ const ViewInventory = (props) => {
       .orderBy("serialno", "desc")
       .get()
       .then((snapshot) => {
-        // console.log("testing => ", snapshot.docs);
         if (snapshot.docs.length) {
           snapshot.forEach((doc) => {
-            addInventory(doc.data());
-            // console.log(doc.data());
+            let t = doc.data();
+            let tempQ = 0;
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("prodID")
+              .doc(doc.data().id)
+              .collection("batchNo")
+              .orderBy("quantity", "asc")
+              .get()
+              .then((snapshot) => {
+                if (snapshot.docs.length) {
+                  snapshot.forEach((docs) => {
+                    if (docs.data().quantity > 0) {
+                      tempQ += docs.data().quantity;
+                    }
+                  });
+                }
+              })
+              .then(function () {
+                t.quantity = tempQ;
+                addInventory(t);
+              });
           });
         } else {
           console.log("no data found");

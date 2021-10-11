@@ -25,6 +25,7 @@ const ScanOut = () => {
       return [data, ...prevData];
     });
   };
+
   const generateKey = () => {
     const chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -99,33 +100,33 @@ const ScanOut = () => {
                         scanType: "out",
                         remarks: remarks,
                       });
+                      // firebase
+                      //   .firestore()
+                      //   .collection("products")
+                      //   .doc(ctx.currentUser.companyName)
+                      //   .collection("products")
+                      //   .doc(prodID)
+                      //   .update({
+                      //     quantity: firebase.firestore.FieldValue.increment(-1),
+                      //   })
+                      //   .then(function () {
                       firebase
                         .firestore()
-                        .collection("products")
+                        .collection("batch")
                         .doc(ctx.currentUser.companyName)
-                        .collection("products")
+                        .collection("prodID")
                         .doc(prodID)
-                        .update({
-                          quantity: firebase.firestore.FieldValue.increment(-1),
-                        })
-                        .then(function () {
-                          firebase
-                            .firestore()
-                            .collection("batch")
-                            .doc(ctx.currentUser.companyName)
-                            .collection("prodID")
-                            .doc(prodID)
-                            .collection("batchNo")
-                            .doc(batchNo)
-                            .set(
-                              {
-                                quantity:
-                                  firebase.firestore.FieldValue.increment(-1),
-                                batchNo: batchNo,
-                              },
-                              { merge: true }
-                            );
-                        });
+                        .collection("batchNo")
+                        .doc(batchNo)
+                        .set(
+                          {
+                            quantity:
+                              firebase.firestore.FieldValue.increment(-1),
+                            batchNo: batchNo,
+                          },
+                          { merge: true }
+                        );
+                      // });
                     })
                     .then(function () {
                       setErrorMessage("Scan out successful");
@@ -167,16 +168,15 @@ const ScanOut = () => {
     // console.log(outValue);
 
     if (outValue.includes("`")) {
-      // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
+      // FBK0000`101221
       var str = outValue;
       // console.log(str);
       var res = str.split("`");
       // console.log(res);
-      if (res.length === 3) {
+      if (res.length === 2) {
         if (
           res[0].replaceAll(" ", "").length > 1 &&
-          res[1].replaceAll(" ", "").length > 1 &&
-          res[2].replaceAll(" ", "").length > 1
+          res[1].replaceAll(" ", "").length > 1
         ) {
           let prodID = res[0];
           let batchNo = res[1];

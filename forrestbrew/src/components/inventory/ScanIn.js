@@ -12,11 +12,7 @@ const ScanIn = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // integrate();
-    // console.log("summary => ", summary);
-    // console.log("data => ", data);
     const result = [];
-
     var date = new Date();
     data.forEach((x) => {
       // console.log("test => ", x.prodID);
@@ -31,7 +27,7 @@ const ScanIn = () => {
       r.push({
         prodID: res[0],
         batchNo: res[1],
-        prodName: res[2].replace("-", " "),
+        prodName: res[2],
         dateAdded: { seconds: toTimestamp(date) },
         amount: result[i],
         remarks: document.getElementById("remarks").value,
@@ -47,18 +43,22 @@ const ScanIn = () => {
   const getDateToday = () => {
     return new Date().toString().substring(0, 15).replaceAll(" ", "");
   };
+
   // const getDate = (date) => {
   //   return new Date(date * 1000).toString().substring(0, 25);
   // };
+
   function toTimestamp(strDate) {
     var datum = Date.parse(strDate);
     return datum / 1000;
   }
+
   const addData = (data) => {
     setData((prevData) => {
       return [data, ...prevData];
     });
   };
+
   const generateKey = () => {
     const chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -68,20 +68,42 @@ const ScanIn = () => {
     }
     return autoId;
   };
-  const insertData = (batchNo, prodID, prodName, remarks) => {
-    // console.log("batch number => ", batchNo);
-    // console.log("product ID => ", prodID);
 
-    var date = new Date();
-    addData({
-      id: data.length + 1,
-      prodID: prodID,
-      batchNo: batchNo,
-      prodName: prodName,
-      addedBy: ctx.currentUser.name,
-      dateAdded: { seconds: toTimestamp(date) },
-      remarks: remarks,
-    });
+  const insertData = (batchNo, prodID, remarks) => {
+    let t = false;
+    firebase
+      .firestore()
+      .collection("products")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .orderBy("serialno", "asc")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().prodID === prodID) {
+            t = true;
+            var date = new Date();
+            addData({
+              id: data.length + 1,
+              prodID: prodID,
+              batchNo: batchNo,
+              prodName: doc.data().name,
+              addedBy: ctx.currentUser.name,
+              dateAdded: { seconds: toTimestamp(date) },
+              remarks: remarks,
+            });
+          }
+        });
+      })
+      .then(function () {
+        if (!t) {
+          setErrorMessage(
+            "Product does not exists or has not been created yet."
+          );
+          document.getElementById("errorMessage").style.backgroundColor = "red";
+          document.getElementById("errorMessage").style.color = "white";
+        }
+      });
   };
 
   const scanIn = (event) => {
@@ -91,106 +113,118 @@ const ScanIn = () => {
     // console.log(outValue);
 
     if (outValue.includes("`")) {
-      // /$FB/001$fb/27/10/21$Fb/apple-ginger$fB/
+      // FBK0000`101221
       var str = outValue;
       // console.log(str);
       var res = str.split("`");
       console.log(res);
-      if (res.length === 3) {
+      if (res.length === 2) {
         if (
           res[0].replaceAll(" ", "").length > 1 &&
           res[1].replaceAll(" ", "").length > 1 &&
-          res[2].replaceAll(" ", "").length > 1
+          res[1].length === 6
         ) {
           let prodID = res[0];
           let batchNo = res[1];
-          let prodName = res[2];
+          prodID = prodID.toUpperCase();
 
-          insertData(batchNo, prodID, prodName, remarks);
+          insertData(batchNo, prodID, remarks);
         } else {
           setErrorMessage("Invalid data entered");
+          document.getElementById("errorMessage").style.backgroundColor = "red";
+          document.getElementById("errorMessage").style.color = "white";
         }
       } else {
         setErrorMessage("Invalid data entered");
+        document.getElementById("errorMessage").style.backgroundColor = "red";
+        document.getElementById("errorMessage").style.color = "white";
       }
     } else {
       setErrorMessage("Invalid data entered");
+      document.getElementById("errorMessage").style.backgroundColor = "red";
+      document.getElementById("errorMessage").style.color = "white";
     }
     outRef.current.value = "";
   };
 
-  const testf = () => {
-    console.log(getDateToday());
-    obj.forEach((d) => {
-      let amount = document.getElementById(d.prodID + d.batchNo).value;
-      // console.log(d.prodName, ", ", d.batchNo, " => ", amount);
-      for (let i = 0; i < amount; i++) {
-        const key = generateKey();
-        // var date = new Date();
-        firebase
-          .firestore()
-          .collection("batch")
-          .doc(ctx.currentUser.companyName)
-          .collection("products")
-          .doc(key)
-          .set({
-            id: data.length + 1,
-            prodName: d.prodName,
-            prodID: d.prodID,
-            batchNo: d.batchNo,
-            addedBy: ctx.currentUser.name,
-            dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-            dateRemoved: "",
-            remarks: d.remarks,
-            companyName: ctx.currentUser.companyName,
-            companyID: ctx.currentUser.companyID,
-            scanType: "in",
-            uniqueID: key,
-          })
-          .then(function () {
-            firebase
-              .firestore()
-              .collection("products")
-              .doc(ctx.currentUser.companyName)
-              .collection("products")
-              .doc(d.prodID)
-              .update({
-                quantity: firebase.firestore.FieldValue.increment(1),
-              });
-          })
-          .then(function () {
-            // console.log("test new batch id");
-            // console.log("d.prod id > ", d.prodID);
-            // console.log("d.batchNo id > ", d.batchNo);
-            let key = generateKey();
-            let bn = d.batchNo.replaceAll("/", "");
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("prodID")
-              .doc(d.prodID)
-              .collection("batchNo")
-              .doc(getDateToday())
-              .set(
-                {
-                  quantity: firebase.firestore.FieldValue.increment(1),
-                  dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-                  batchNo: d.batchNo,
-                  prodName: d.prodName,
-                  key: key,
-                  addedBy: ctx.currentUser.name,
-                },
-                { merge: true }
-              );
-          })
-          .then(function () {
-            setErrorMessage("data entered successfully");
-            setObj([]);
-            setData([]);
-          });
-      }
-    });
+  const saveInput = () => {
+    // console.log(getDateToday());
+    if (obj.length === 0) {
+      setErrorMessage("Please scan in first");
+      document.getElementById("errorMessage").style.backgroundColor = "red";
+      document.getElementById("errorMessage").style.color = "white";
+    } else {
+      obj.forEach((d) => {
+        let amount = document.getElementById(d.prodID + d.batchNo).value;
+        // console.log(d.prodName, ", ", d.batchNo, " => ", amount);
+        for (let i = 0; i < amount; i++) {
+          const key = generateKey();
+          // var date = new Date();
+          firebase
+            .firestore()
+            .collection("batch")
+            .doc(ctx.currentUser.companyName)
+            .collection("products")
+            .doc(key)
+            .set({
+              id: data.length + 1,
+              prodName: d.prodName,
+              prodID: d.prodID,
+              batchNo: d.batchNo,
+              addedBy: ctx.currentUser.name,
+              dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+              dateRemoved: "",
+              remarks: d.remarks,
+              companyName: ctx.currentUser.companyName,
+              companyID: ctx.currentUser.companyID,
+              scanType: "in",
+              uniqueID: key,
+            })
+            // .then(function () {
+            //   firebase
+            //     .firestore()
+            //     .collection("products")
+            //     .doc(ctx.currentUser.companyName)
+            //     .collection("products")
+            //     .doc(d.prodID)
+            //     .update({
+            //       quantity: firebase.firestore.FieldValue.increment(1),
+            //     });
+            // })
+            .then(function () {
+              // console.log("test new batch id");
+              // console.log("d.prod id > ", d.prodID);
+              // console.log("d.batchNo id > ", d.batchNo);
+              let key = generateKey();
+              let bn = d.batchNo.replaceAll("/", "");
+              firebase
+                .firestore()
+                .collection("batch")
+                .doc(ctx.currentUser.companyName)
+                .collection("prodID")
+                .doc(d.prodID)
+                .collection("batchNo")
+                .doc(bn)
+                .set(
+                  {
+                    quantity: firebase.firestore.FieldValue.increment(1),
+                    dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
+                    batchNo: d.batchNo,
+                    prodName: d.prodName,
+                    key: key,
+                    addedBy: ctx.currentUser.name,
+                  },
+                  { merge: true }
+                );
+            })
+            .then(function () {
+              setErrorMessage("data entered successfully");
+              setObj([]);
+              setData([]);
+            });
+        }
+      });
+    }
   };
 
   return (
@@ -213,7 +247,7 @@ const ScanIn = () => {
           id="remarks"
           ref={remarksRef}
         />
-        <div>{errorMessage}</div>
+        <div id="errorMessage">{errorMessage}</div>
       </div>
       <div className={classes.wrapper}>
         <div className={classes.content}>
@@ -244,7 +278,7 @@ const ScanIn = () => {
             </tbody>
           </table>
           <br />
-          <button onClick={testf}>Save input</button>
+          <button onClick={saveInput}>Save input</button>
         </div>
       </div>
     </div>
