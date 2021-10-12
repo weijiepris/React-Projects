@@ -71,28 +71,28 @@ const ScanIn = () => {
 
   const insertData = (batchNo, prodID, remarks) => {
     let t = false;
+    batchNo = batchNo.replaceAll("/", "");
+
     firebase
       .firestore()
       .collection("products")
       .doc(ctx.currentUser.companyName)
       .collection("products")
-      .orderBy("serialno", "asc")
+      .where("prodID", "==", prodID)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
-          if (doc.data().prodID === prodID) {
-            t = true;
-            var date = new Date();
-            addData({
-              id: data.length + 1,
-              prodID: prodID,
-              batchNo: batchNo,
-              prodName: doc.data().name,
-              addedBy: ctx.currentUser.name,
-              dateAdded: { seconds: toTimestamp(date) },
-              remarks: remarks,
-            });
-          }
+          t = true;
+          var date = new Date();
+          addData({
+            id: data.length + 1,
+            prodID: prodID,
+            batchNo: batchNo,
+            prodName: doc.data().name,
+            addedBy: ctx.currentUser.name,
+            dateAdded: { seconds: toTimestamp(date) },
+            remarks: remarks,
+          });
         });
       })
       .then(function () {
@@ -180,43 +180,6 @@ const ScanIn = () => {
               scanType: "in",
               uniqueID: key,
             })
-            // .then(function () {
-            //   firebase
-            //     .firestore()
-            //     .collection("products")
-            //     .doc(ctx.currentUser.companyName)
-            //     .collection("products")
-            //     .doc(d.prodID)
-            //     .update({
-            //       quantity: firebase.firestore.FieldValue.increment(1),
-            //     });
-            // })
-            .then(function () {
-              // console.log("test new batch id");
-              // console.log("d.prod id > ", d.prodID);
-              // console.log("d.batchNo id > ", d.batchNo);
-              let key = generateKey();
-              let bn = d.batchNo.replaceAll("/", "");
-              firebase
-                .firestore()
-                .collection("batch")
-                .doc(ctx.currentUser.companyName)
-                .collection("prodID")
-                .doc(d.prodID)
-                .collection("batchNo")
-                .doc(bn)
-                .set(
-                  {
-                    quantity: firebase.firestore.FieldValue.increment(1),
-                    dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
-                    batchNo: d.batchNo,
-                    prodName: d.prodName,
-                    key: key,
-                    addedBy: ctx.currentUser.name,
-                  },
-                  { merge: true }
-                );
-            })
             .then(function () {
               setErrorMessage("data entered successfully");
               setObj([]);
@@ -230,6 +193,7 @@ const ScanIn = () => {
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In</span>
+      <br />
       <div className={classes.wrapper}>
         <br />
         <br />
@@ -249,6 +213,7 @@ const ScanIn = () => {
         />
         <div id="errorMessage">{errorMessage}</div>
       </div>
+      <br />
       <div className={classes.wrapper}>
         <div className={classes.content}>
           <table className={classes.table}>

@@ -60,7 +60,7 @@ const HomePage = () => {
           let temp2 = [];
           let c = 1;
           snapshot.forEach((doc) => {
-            console.log(doc.data());
+            // console.log(doc.data());
             let tempQ = 0;
             firebase
               .firestore()
@@ -301,12 +301,6 @@ const HomePage = () => {
   };
 
   const CurrentInventory = () => {
-    // var byDate = currentInventory.slice(0);
-    // byDate.sort(function (a, b) {
-    //   return b.quantity - a.quantity;
-    // });
-
-    // console.log("ci => ", currentInventory);
     return (
       <React.Fragment>
         <h1>Current Inventory</h1>
@@ -335,15 +329,6 @@ const HomePage = () => {
       </React.Fragment>
     );
   };
-
-  // if (!isLoaded) {
-  //   return (
-  //     <div className={classes.container}>
-  //       <h1>Loading . . . </h1>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
