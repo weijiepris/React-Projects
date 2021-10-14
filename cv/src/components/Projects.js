@@ -30,12 +30,13 @@ const Projects = () => {
           June 2017 - Dec 2017
           <ul>
             <li>
-              Developed using google's geolocation api to calculate distance to
-              reach destination
+              Developed a mobile application that can search for all cafe and
+              restaurant nearby
             </li>
-            <li>Exposed to PhoneGap's framework </li>
-            <li>Used HTML, CSS, Javascript</li>
-            <li>Used Firebase to store the data</li>
+            <li>
+              Technology used, HTML, CSS, Javascript, Firebase, PhoneGap,
+              Google's geolocation API
+            </li>
           </ul>
         </p>
         <br />
@@ -51,11 +52,10 @@ const Projects = () => {
           January 2017 - June 2017
           <ul>
             <li>
-              To guide new students on where &amp; what foods are there in the
-              school
+              Developed a web application to guide new students on where &amp;
+              what foods are there in the school
             </li>
-            <li>Exposed to PHP </li>
-            <li>Used HTML, CSS, PHP</li>
+            <li>Technology used HTML, CSS, PHP</li>
           </ul>
         </p>
         <br />
@@ -69,12 +69,12 @@ const Projects = () => {
           October 2015 - March 2016
           <ul>
             <li>
-              To develop a mobile application for users to shop through the
+              Developed a mobile application for users to shop through the
               application.
             </li>
-            <li>Exposed to ionic framework </li>
-            <li>Used HTML, CSS, JQuery</li>
-            <li>Used Firebase to store the data</li>
+            <li>
+              Technologies used, ionic framework, HTML, CSS, JQuery, Firebase
+            </li>
           </ul>
         </p>
         <br />
@@ -87,9 +87,8 @@ const Projects = () => {
         <p>
           April 2015 - August 2015
           <ul>
-            <li>Developed an e-commerce web application using J2EE</li>
-            <li>Used HTML, CSS, JServlet</li>
-            <li>Used Oracle database to store the data</li>
+            <li>Developed an e-commerce web application.</li>
+            <li>Technologies used, HTML, CSS, JServlet, Oracle database</li>
           </ul>
         </p>
         <br />
@@ -105,13 +104,13 @@ const Projects = () => {
           October 2014 - March 2015
           <ul>
             <li>
-              To promote a clean and green environment in Nanyang Polytechnic.
+              Developed a web application to promote a clean and green
+              environment which includes functions that can book any available
+              clean and green events hosted by Nanyang Polytechnic.
             </li>
-            <li>Used Design Thinking Approach to gather data from students.</li>
-            <li>Used HTML, CSS and JavaScript</li>
             <li>
-              Developed a website to book any available clean and green events
-              hosted by Nanyang Polytechnic
+              Technologies used, Design Thinking Approach, HTML, CSS and
+              JavaScript.
             </li>
           </ul>
         </p>
@@ -128,12 +127,12 @@ const Projects = () => {
           April 2014 - August 2014
           <ul>
             <li>
-              Help students to keep track of their health and book school’s
-              facilities on their mobile phones.
+              Developed an application for students to keep track of their
+              health and book school’s facilities on their mobile phones.
             </li>
-            <li>Used Design Thinking Approach to gather data from students.</li>
-            <li>Develop a program using Java.</li>
-            <li>Used Indigo Studio to create wireframes</li>
+            <li>
+              Technologies used, Design Thinking Approach, Java, Indigo Studio
+            </li>
           </ul>
         </p>
       </div>

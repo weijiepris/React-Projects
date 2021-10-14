@@ -5,13 +5,28 @@ const Experience = () => {
   return (
     <div className={classes.container}>
       <div className={classes.content}>
-        <div className={classes.header}>MindChamps</div>
+        <div className={classes.header}>
+          Senior Teacher Assistant / Covering Team Leader
+        </div>
         <p>
-          March 2014 - January 2020
+          MindChamps, March 2014 - January 2020
           <ul>
-            <li>Assisting trainers in classroom activities</li>
-            <li>Ensure students are behaving in class</li>
-            <li>Guide pre-school students phonics, reading and writing</li>
+            <li>Ensure that teaching centre is running smoothly.</li>
+            <li>
+              Make sure all resources and equipment needed are accounted for.
+            </li>
+            <li>
+              Setting up classes and making sure all the equipment needed for
+              the lessons are in the class
+            </li>
+            <li>
+              Assist teachers in class, ensure the class runs smoothly
+            </li>
+            <li>Clean up the classes and prepare for the next lesson</li>
+            <li>
+              Help to create new resources which are to be used during lessons
+            </li>
+            <li>Guiding new teacher assistants on the workflow procedures</li>
           </ul>
         </p>
         <br />
@@ -19,22 +34,29 @@ const Experience = () => {
         <hr />
         <br />
         <br />
-        <div className={classes.header}>NCS Pte Ltd</div>
+        <div className={classes.header}>Software Engineer (Internship)</div>
         <p>
-          October 2016 - December 2016
+          NCS Pte Ltd, October 2016 - December 2016
           <ul>
-            <li>Design and main website using HTML, CSS &amp; Javascript</li>
-            <li>Migration of old intranet systems to new intranet systems</li>
             <li>
-              Perform User Acceptance Test (UAT) for government intranet
-              systems.
+              Independently helped clients to upgrade their website with new
+              functions and add new contents and pages.
             </li>
             <li>
-              Help client’s query their needs based on their requirements.
+              Assisted the project team to Implement a password complexity
+              security for a new system development.
             </li>
             <li>
-              Enhance and implement new aesthetics and features of client’s
-              current website &amp; systems.
+              Helped the client to migrate their intranet system and services to
+              a new server.
+            </li>
+            <li>
+              Conducted User Acceptance Testing for every new system
+              development.
+            </li>
+            <li>
+              Technologies used, HTML, CSS, JavaScript, C++, Excel, Windows
+              Server
             </li>
           </ul>
         </p>

@@ -10,6 +10,8 @@ const Skills = () => {
           <ul>
             <li>React</li>
             <li>Ruby on Rails</li>
+            <li>PhoneGap</li>
+            <li>Ionic</li>
           </ul>
         </p>
         <br />
@@ -17,15 +19,18 @@ const Skills = () => {
         <hr />
         <br />
         <br />
-        <div className={classes.header}>Skills</div>
+        <div className={classes.header}>Technologies</div>
         <p>
           <ul>
-            <li>Basic SQL</li>
+            <li>MySQL</li>
+            <li>OCDB</li>
+            <li>MongoDB</li>
             <li>CSS3</li>
             <li>C++</li>
             <li>Java</li>
             <li>JavaScript (ES6)</li>
             <li>JQuery</li>
+            <li>JSP</li>
             <li>Python</li>
             <li>HTML5</li>
             <li>Ruby</li>

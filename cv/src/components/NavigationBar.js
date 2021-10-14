@@ -53,10 +53,12 @@ function NavigationBar() {
             <h1>Chan Wei Jie</h1>
           </Link>
           <p>
-            +65 9616 4636 <br />
+            Based in Singapore
             <br />
-            Front-end <br />
-            Back-end Developer
+            <br /> +65 9616 4636
+            <br />
+            <br />
+            Software Developer
           </p>
           <br></br>
         </div>
