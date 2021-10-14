@@ -11,6 +11,7 @@ import { GiSpectacles } from "@react-icons/all-files/gi/GiSpectacles";
 import { IoIosMenu } from "@react-icons/all-files/io/IoIosMenu";
 // import { TiTimesOutline } from "@react-icons/all-files/ti/TiTimesOutline";
 // import { BiMenuAltLeft } from "@react-icons/all-files/bi/BiMenuAltLeft";
+import { AiOutlineCalendar } from "@react-icons/all-files/ai/AiOutlineCalendar";
 
 const Sidebar = () => {
   const [arrow, setArrow] = useState(true);
@@ -26,6 +27,7 @@ const Sidebar = () => {
       document.getElementById("inventory").innerHTML = "";
       document.getElementById("scan").innerHTML = "";
       document.getElementById("checker").innerHTML = "";
+      document.getElementById("date").innerHTML = "";
       setArrow(!arrow);
     }
   };
@@ -39,6 +41,7 @@ const Sidebar = () => {
         document.getElementById("inventory").innerHTML = "Inventory";
         document.getElementById("scan").innerHTML = "Scan";
         document.getElementById("checker").innerHTML = "Checker";
+        document.getElementById("date").innerHTML = "Get Date";
       }, 200);
     } else {
       document.getElementById("sidenav").style.width = "50px";
@@ -47,6 +50,7 @@ const Sidebar = () => {
       document.getElementById("inventory").innerHTML = "";
       document.getElementById("scan").innerHTML = "";
       document.getElementById("checker").innerHTML = "";
+      document.getElementById("date").innerHTML = "";
     }
     setArrow(!arrow);
   };
@@ -66,6 +70,17 @@ const Sidebar = () => {
           <br />
           <br />
           <Link
+            to="/Scan"
+            exact="true"
+            style={{ textDecoration: "none" }}
+            onClick={closeNav}
+          >
+            <AiOutlineScan size="30px" id="iscan" />
+            <span id="scan" className={classes.hideText}></span>
+          </Link>
+          <br />
+          <br />
+          <Link
             to="/ViewInventory"
             exact="true"
             style={{ textDecoration: "none" }}
@@ -77,13 +92,13 @@ const Sidebar = () => {
           <br />
           <br />
           <Link
-            to="/Scan"
+            to="/DateChecker"
             exact="true"
             style={{ textDecoration: "none" }}
             onClick={closeNav}
           >
-            <AiOutlineScan size="30px" id="iscan" />
-            <span id="scan" className={classes.hideText}></span>
+            <AiOutlineCalendar size="30px" id="idate" />
+            <span id="date" className={classes.hideText}></span>
           </Link>
           <br />
           <br />
@@ -101,9 +116,9 @@ const Sidebar = () => {
       <div className={classes.pullButton} id="pullButton" onClick={openNav}>
         <div className={classes.icon} onClick={showHide}>
           {arrow ? (
-            <IoIosMenu size="30px" color="#383838" className={classes.fixed} />
+            <IoIosMenu size="30px" color="#164b66" className={classes.fixed} />
           ) : (
-            <IoIosMenu size="30px" color="#383838" className={classes.fixed} />
+            <IoIosMenu size="30px" color="#164b66" className={classes.fixed} />
           )}
           {/* <div className={classes.bar1}></div>
           <div className={classes.bar2}></div>

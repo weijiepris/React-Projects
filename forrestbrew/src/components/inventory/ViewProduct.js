@@ -4,6 +4,7 @@ import firebase from "firebase";
 import Modal from "../Reusables/Modal";
 import AuthContext from "../../store/auth-context";
 const ViewProduct = (props) => {
+  console.log(props.data);
   const ctx = useContext(AuthContext);
 
   const dataInputRef = useRef();

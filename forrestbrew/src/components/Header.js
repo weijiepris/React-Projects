@@ -22,9 +22,11 @@ const Header = (props) => {
       <header className={classes.header}>
         <Link to="/" style={{ textDecoration: "none" }} onClick={closeNav}>
           <h1>
-            Apricot
+            Aubercot
             {ctx.currentUser.userRole === "developer" ? (
-              <span>Developer Account</span>
+              <span>Developer</span>
+            ) : ctx.currentUser.userRole === "director" ? (
+              <span>Director</span>
             ) : (
               <span></span>
             )}

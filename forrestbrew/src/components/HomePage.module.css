@@ -33,7 +33,7 @@
 }
 .individual {
   padding: 10px;
-  width: 300px;
+  width: 200px;
   height: 70px;
   border-radius: 10px;
   background-color: #e1eaec;
@@ -46,7 +46,7 @@
 .quantity {
   position: relative;
   display: flex;
-  left: 130px;
+  left: 77px;
   margin: 0 auto;
 }
 .flex {

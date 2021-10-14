@@ -167,7 +167,6 @@ const ScanIn = () => {
             .collection("products")
             .doc(key)
             .set({
-              id: data.length + 1,
               prodName: d.prodName,
               prodID: d.prodID,
               batchNo: d.batchNo,

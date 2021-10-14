@@ -3,30 +3,32 @@ import classes from "./inventory.module.css";
 
 const ItemList = (props) => {
   const openHandler = () => {
-    props.open(props);
+    // props.open(props);
   };
 
   const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(0, 25);
+    return new Date(date * 1000).toString().substring(4, 15);
   };
 
   return (
     <React.Fragment>
-      <td onClick={openHandler}>{props.data.serialno}</td>
-      <td onClick={openHandler}>{props.data.id}</td>
-      <td onClick={openHandler}>{props.data.name}</td>
-      <td onClick={openHandler}>{props.data.description}</td>
-      <td
-        onClick={openHandler}
-        className={props.data.quantity < 10 ? classes.red : ""}
-      >
-        {props.data.quantity}
-      </td>
-      <td onClick={openHandler}>${props.data.salesPrice}</td>
-      <td onClick={openHandler}>${props.data.costPrice}</td>
-      <td onClick={openHandler}>
-        {getDate(props.data.datecreated["seconds"])}
-      </td>
+      {props.data.map((entry) => (
+        <tr key={entry.serialno} className={classes.trow}>
+          <td onClick={openHandler}>{entry.serialno}</td>
+          <td onClick={openHandler}>{entry.id}</td>
+          <td onClick={openHandler}>{entry.name}</td>
+          <td onClick={openHandler}>{entry.description}</td>
+          <td
+            onClick={openHandler}
+            className={entry.quantity < 10 ? classes.red : ""}
+          >
+            {entry.quantity}
+          </td>
+          <td onClick={openHandler}>${entry.salesPrice}</td>
+          <td onClick={openHandler}>${entry.costPrice}</td>
+          {/* <td onClick={openHandler}>{getDate(entry.datecreated["seconds"])}</td> */}
+        </tr>
+      ))}
     </React.Fragment>
   );
 };

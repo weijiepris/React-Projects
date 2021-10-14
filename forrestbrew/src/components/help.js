@@ -311,3 +311,269 @@ return () => {
 //       { merge: true }
 //     );
 // })
+
+// firebase
+//   .firestore()
+//   .collection("products")
+//   .doc(ctx.currentUser.companyName)
+//   .collection("products")
+//   .orderBy("serialno", "asc")
+//   .get()
+//   .then((snapshot) => {
+//     let tempQuantity = 0;
+//     if (snapshot.docs.length) {
+//       let temp2 = [];
+//       let c = 1;
+//       snapshot.forEach((doc) => {
+//         // console.log(doc.data());
+//         let tempQ = 0;
+//         firebase
+//           .firestore()
+//           .collection("batch")
+//           .doc(ctx.currentUser.companyName)
+//           .collection("prodID")
+//           .doc(doc.data().id)
+//           .collection("batchNo")
+//           .orderBy("quantity", "asc")
+//           .get()
+//           .then((snapshot) => {
+//             if (snapshot.docs.length) {
+//               snapshot.forEach((docs) => {
+//                 if (docs.data().quantity > 0) {
+//                   // console.log("t =>", docs.data());
+
+//                   let r = [];
+//                   r = {
+//                     prodID: doc.data().id,
+//                     quantity: docs.data().quantity,
+//                     batchNo: docs.data().batchNo,
+//                     prodName: docs.data().prodName,
+//                     dateAdded: docs.data().dateAdded,
+//                   };
+//                   addCurrentInventory(r);
+//                   tempQ += docs.data().quantity;
+//                 }
+//               });
+//             }
+//           })
+//           .then(function () {
+//             tempQuantity += tempQ;
+//           })
+//           .then(function () {
+//             temp2[0] = ["Element", "In stock", { role: "style" }];
+//             temp2[c] = [
+//               doc.data().name,
+//               tempQ,
+//               "stroke-color: black;stroke-width: 2; fill-color:" +
+//                 doc.data().color +
+//                 ";",
+//             ];
+//             setQuantity(snapshot.docs.length);
+//             setBargraph(temp2);
+//             c++;
+//           });
+//       });
+//     }
+//   });
+
+// firebase
+//   .firestore()
+//   .collection("batch")
+//   .doc(ctx.currentUser.companyName)
+//   .collection("products")
+//   .where("scanType", "==", "in")
+//   .orderBy("dateAdded", "asc")
+//   .get()
+//   .then((snapshot) => {
+//     let arr = [];
+//     let testing = [];
+//     let temp2 = [];
+//     snapshot.forEach((doc) => {
+//       const dt = doc.data().prodID;
+//       const dt2 = getDate(doc.data().dateAdded["seconds"]);
+//       if (!arr[dt]) {
+//         arr[dt] = 1;
+//       } else {
+//         arr[dt] += 1;
+//       }
+
+//       if (!testing[dt2]) {
+//         testing[dt2] = 1;
+//       } else {
+//         testing[dt2] += 1;
+//       }
+//     });
+
+//     let op = [];
+//     let c = 1;
+//     temp2[0] = ["Date", "Scan in"];
+//     temp2[1] = ["No Data Found", 0];
+//     for (const value in testing) {
+//       op = [
+//         ...op,
+//         {
+//           x: new Date(value),
+//           y: testing[value],
+//         },
+//       ];
+
+//       temp2[c] = [
+//         new Date(value).toString().substring(4, 15),
+//         testing[value],
+//       ];
+//       c++;
+//     }
+//     // console.log(temp2);
+//     setLinegraph(temp2);
+
+//     // console.log("testing => ", arr);
+//     for (const t in arr) {
+//       firebase
+//         .firestore()
+//         .collection("batch")
+//         .doc(ctx.currentUser.companyName)
+//         .collection("products")
+//         .where("prodID", "==", t)
+//         .orderBy("dateAdded", "desc")
+//         .get()
+//         .then((snapshot) => {
+//           let arr2 = [];
+//           let c = 0;
+//           snapshot.forEach((doc) => {
+//             // console.log("d = ", doc.data());
+//             const dt = getDate(doc.data().dateAdded["seconds"]);
+//             if (!arr2[c]) {
+//               arr2[c] = {
+//                 count: 1,
+//                 date: dt,
+//                 prodID: t,
+//                 prodName: doc.data().prodName,
+//               };
+//             } else {
+//               if (arr2.prodID === t) {
+//                 for (const d in arr2) {
+//                   if (arr2[d].count) {
+//                     arr2[d].count++;
+//                   }
+//                 }
+//               }
+//             }
+//             c++;
+//           });
+//           let v = {};
+//           v["data"] = arr2;
+//           addSummary(v);
+//         });
+//     }
+//   });
+
+// firebase
+//   .firestore()
+//   .collection("products")
+//   .doc(ctx.currentUser.companyName)
+//   .collection("products")
+//   .orderBy("serialno", "desc")
+//   .get()
+//   .then((snapshot) => {
+//     if (snapshot.docs.length) {
+//       snapshot.forEach((doc) => {
+//         let t = doc.data();
+//         let tempQ = 0;
+//         firebase
+//           .firestore()
+//           .collection("batch")
+//           .doc(ctx.currentUser.companyName)
+//           .collection("prodID")
+//           .doc(doc.data().id)
+//           .collection("batchNo")
+//           .orderBy("quantity", "asc")
+//           .get()
+//           .then((snapshot) => {
+//             if (snapshot.docs.length) {
+//               snapshot.forEach((docs) => {
+//                 if (docs.data().quantity > 0) {
+//                   tempQ += docs.data().quantity;
+//                 }
+//               });
+//             }
+//           })
+//           .then(function () {
+//             t.quantity = tempQ;
+//             console.log(t);
+//             addInventory(t);
+//           });
+//       });
+//     } else {
+//       console.log("no data found");
+//       setDataExists(false);
+//     }
+//     setIsLoaded(true);
+//   });
+
+// const retrieveList = () => {
+//   setIsLoaded(false);
+//   setInventory([]);
+//   firebase
+//     .firestore()
+//     .collection("products")
+//     .doc(ctx.currentUser.companyName)
+//     .collection("products")
+//     .orderBy("serialno", "desc")
+//     .get()
+//     .then((snapshot) => {
+//       // console.log("testing => ", snapshot.docs);
+//       if (snapshot.docs.length) {
+//         snapshot.forEach((doc) => {
+//           addInventory(doc.data());
+//           // console.log(doc.data());
+//         });
+//       } else {
+//         console.log("no data found");
+//         setDataExists(false);
+//       }
+//       setIsLoaded(true);
+//     });
+// };
+
+// firebase
+//   .firestore()
+//   .collection("products")
+//   .doc(ctx.currentUser.companyName)
+//   .collection("products")
+//   .orderBy("serialno", "asc")
+//   .get()
+//   .then((snapshot) => {
+//     snapshot.forEach((doc) => {
+//       products.push(doc.data());
+//       if (!prodArr[doc.data().id]) {
+//         prodArr[doc.data().id] = 0;
+//       }
+//       firebase
+//         .firestore()
+//         .collection("batch")
+//         .doc(ctx.currentUser.companyName)
+//         .collection("products")
+//         .where("prodID", "==", doc.data().id)
+//         .where("scanType", "==", "in")
+//         .get()
+//         .then((snapshot) => {
+//           snapshot.forEach((docs) => {
+//             prodArr[doc.data().id] += 1;
+//           });
+//         })
+//         .then(function () {
+//           for (let i in prodArr) {
+//             for (let k in products) {
+//               if (products[k].id == i) {
+//                 products[k].quantity = prodArr[i];
+//               }
+//             }
+//           }
+//         })
+//         .then(function () {});
+//     });
+//   })
+//   .then(function () {
+//     setInventory(products);
+//     setIsLoaded(true);
+//   });

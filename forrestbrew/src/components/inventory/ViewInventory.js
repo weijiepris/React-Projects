@@ -16,85 +16,63 @@ const ViewInventory = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [dataExists, setDataExists] = useState(true);
 
-  useEffect(() => {
-    firebase
-      .firestore()
-      .collection("products")
-      .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .orderBy("serialno", "desc")
-      .get()
-      .then((snapshot) => {
-        if (snapshot.docs.length) {
-          snapshot.forEach((doc) => {
-            let t = doc.data();
-            let tempQ = 0;
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("prodID")
-              .doc(doc.data().id)
-              .collection("batchNo")
-              .orderBy("quantity", "asc")
-              .get()
-              .then((snapshot) => {
-                if (snapshot.docs.length) {
-                  snapshot.forEach((docs) => {
-                    if (docs.data().quantity > 0) {
-                      tempQ += docs.data().quantity;
-                    }
-                  });
-                }
-              })
-              .then(function () {
-                t.quantity = tempQ;
-                addInventory(t);
-              });
-          });
-        } else {
-          console.log("no data found");
-          setDataExists(false);
-        }
-        setIsLoaded(true);
-      });
-  }, [ctx.currentUser.companyName]);
+  const fetchData = async () => {
+    console.log("fetching data for ViewInventory");
+    let prodArr = [];
+    let products = [];
 
-  const retrieveList = () => {
-    setIsLoaded(false);
-    setInventory([]);
-    firebase
+    const productsRef = firebase
       .firestore()
       .collection("products")
       .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .orderBy("serialno", "desc")
-      .get()
-      .then((snapshot) => {
-        // console.log("testing => ", snapshot.docs);
-        if (snapshot.docs.length) {
-          snapshot.forEach((doc) => {
-            addInventory(doc.data());
-            // console.log(doc.data());
-          });
-        } else {
-          console.log("no data found");
-          setDataExists(false);
-        }
-        setIsLoaded(true);
-      });
-  };
-  const addInventory = (list) => {
-    setInventory((prevList) => {
-      return [list, ...prevList];
+      .collection("products");
+
+    const batchRef = firebase
+      .firestore()
+      .collection("batch")
+      .doc(ctx.currentUser.companyName)
+      .collection("products");
+
+    const productsSnapshot = await productsRef.orderBy("id", "asc").get();
+    const batchSnapshot = await batchRef.where("scanType", "==", "in").get();
+
+    productsSnapshot.forEach(async (doc) => {
+      products.push(doc.data());
+      if (!prodArr[doc.data().id]) {
+        prodArr[doc.data().id] = 0;
+      }
     });
+
+    batchSnapshot.forEach((doc) => {
+      prodArr[doc.data().prodID] += 1;
+    });
+
+    for (let i in prodArr) {
+      for (let k in products) {
+        if (products[k].id === i) {
+          products[k].quantity = prodArr[i];
+        }
+      }
+    }
+    setInventory(products);
+    setDataExists(true);
+    setIsLoaded(true);
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // const addInventory = (list) => {
+  //   setInventory((prevList) => {
+  //     return [list, ...prevList];
+  //   });
+  // };
   const showOverlay = () => {
     setOverlay(true);
   };
 
   const hideOverlay = () => {
-    retrieveList();
+    // retrieveList();
     setOverlay(false);
   };
 
@@ -141,21 +119,16 @@ const ViewInventory = (props) => {
                     <th>ID</th>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Quantity on hand</th>
+                    <th>Quantity</th>
                     <th>Sales Price</th>
                     <th>Cost Price</th>
-                    <th>Date Created</th>
                   </tr>
                 )}
 
                 {!isLoaded ? (
                   <tr></tr>
                 ) : (
-                  inventory.map((entry) => (
-                    <tr key={entry.serialno} className={classes.trow}>
-                      <ItemList data={entry} open={openList} />
-                    </tr>
-                  ))
+                  <ItemList data={inventory} open={openList} />
                 )}
               </tbody>
             </table>

@@ -2,6 +2,10 @@
   font-family: "Darker Grotesque";
   src: url("../assets/DarkerGrotesque-Regular.ttf");
 }
+@font-face {
+  font-family: "Mirande";
+  src: url("../assets/Mirande.ttf");
+}
 
 .header {
   position: fixed;
@@ -21,12 +25,11 @@
 }
 
 .header h1 {
-  font-family: "Darker Grotesque";
-  color: #003f82;
+  font-family: "Mirande";
+  color: #164b66;
   position: relative;
   font-size: 300%;
   right: 40px;
-  bottom: 5px;
 }
 .header span {
   font-family: "Darker Grotesque";

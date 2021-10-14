@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Chart from "react-google-charts";
 
@@ -12,7 +12,7 @@ const TotalStockCount = (props) => {
         title: "Total Stock Count",
         width: props.width + 5,
         height: props.height - 50,
-        bar: { groupWidth: "70%" },
+        bar: { groupWidth: "50%" },
         chartArea: {
           backgroundColor: {
             fill: "white",

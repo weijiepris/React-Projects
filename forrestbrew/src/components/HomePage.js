@@ -23,6 +23,8 @@ const HomePage = () => {
   const [currentInventory, setCurrentInventory] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [stockQuantity, setStockQuantity] = useState(0);
+  const [stockOut, setStockOut] = useState(0);
+  const [totalStock, setTotalStock] = useState(0);
   const [bargraph, setBargraph] = useState([]);
   const [linegraph, setLinegraph] = useState([]);
   const [summary, setSummary] = useState([]);
@@ -32,84 +34,113 @@ const HomePage = () => {
   const getBargraph = () => {
     return bargraph;
   };
+
   const getLinegraph = () => {
     return linegraph;
   };
+
   const addCurrentInventory = (list) => {
     setCurrentInventory((prevList) => {
       return [list, ...prevList];
     });
   };
+
   const test = (event) => {
     setGraph(event.target.value);
   };
+
   const test2 = (event) => {
     setPanel(event.target.value);
   };
+
   useEffect(() => {
     firebase
       .firestore()
       .collection("products")
       .doc(ctx.currentUser.companyName)
       .collection("products")
-      .orderBy("serialno", "asc")
       .get()
       .then((snapshot) => {
-        let tempQuantity = 0;
-        if (snapshot.docs.length) {
-          let temp2 = [];
-          let c = 1;
-          snapshot.forEach((doc) => {
-            // console.log(doc.data());
-            let tempQ = 0;
-            firebase
-              .firestore()
-              .collection("batch")
-              .doc(ctx.currentUser.companyName)
-              .collection("prodID")
-              .doc(doc.data().id)
-              .collection("batchNo")
-              .orderBy("quantity", "asc")
-              .get()
-              .then((snapshot) => {
-                if (snapshot.docs.length) {
-                  snapshot.forEach((docs) => {
-                    if (docs.data().quantity > 0) {
-                      // console.log("t =>", docs.data());
-
-                      let r = [];
-                      r = {
-                        prodID: doc.data().id,
-                        quantity: docs.data().quantity,
-                        batchNo: docs.data().batchNo,
-                        prodName: docs.data().prodName,
-                        dateAdded: docs.data().dateAdded,
-                      };
-                      addCurrentInventory(r);
-                      tempQ += docs.data().quantity;
-                    }
-                  });
+        let prodArr = [];
+        let currentArr = [];
+        let barGraphArr = [];
+        let stockCount = 0;
+        let stockOutCount = 0;
+        setQuantity(snapshot.docs.length);
+        snapshot.forEach((docs) => {
+          // define array to store all the product names
+          if (
+            typeof prodArr[docs.data().name + "//" + docs.data().color] ==
+            "undefined"
+          ) {
+            prodArr[docs.data().name + "//" + docs.data().color] = 0;
+          }
+          firebase
+            .firestore()
+            .collection("batch")
+            .doc(ctx.currentUser.companyName)
+            .collection("products")
+            .orderBy("dateAdded", "asc")
+            .where("prodID", "==", docs.data().id)
+            .get()
+            .then((snapshot) => {
+              snapshot.forEach((doc) => {
+                if (doc.data().scanType === "in") {
+                  if (
+                    !currentArr[
+                      doc.data().prodID +
+                        "//" +
+                        doc.data().batchNo +
+                        "//" +
+                        doc.data().prodName
+                    ]
+                  ) {
+                    currentArr[
+                      doc.data().prodID +
+                        "//" +
+                        doc.data().batchNo +
+                        "//" +
+                        doc.data().prodName
+                    ] = 1;
+                  } else {
+                    currentArr[
+                      doc.data().prodID +
+                        "//" +
+                        doc.data().batchNo +
+                        "//" +
+                        doc.data().prodName
+                    ] += 1;
+                  }
+                  stockCount += 1;
+                  // find all available product name and count them into array
+                  prodArr[doc.data().prodName + "//" + docs.data().color] += 1;
+                } else {
+                  stockOutCount += 1;
                 }
-              })
-              .then(function () {
-                tempQuantity += tempQ;
-              })
-              .then(function () {
-                temp2[0] = ["Element", "In stock", { role: "style" }];
-                temp2[c] = [
-                  doc.data().name,
-                  tempQ,
-                  "stroke-color: black;stroke-width: 2; fill-color:" +
-                    doc.data().color +
-                    ";",
-                ];
-                setStockQuantity(tempQuantity);
-                setQuantity(snapshot.docs.length);
-                setBargraph(temp2);
-                c++;
               });
-          });
-        }
+            })
+            .then(function () {
+              setCurrentInv(currentArr);
+              setStockQuantity(stockCount);
+              setStockOut(stockOutCount);
+              // default if dataset is empty
+              barGraphArr[0] = ["Element", "In stock", { role: "style" }];
+              barGraphArr[1] = ["No Data Found", 0, "transparent"];
+              let c = 1;
+              for (let i in prodArr) {
+                let res = i.split("//");
+                barGraphArr[c] = [
+                  res[0],
+                  prodArr[i],
+                  "stroke-color: black; stroke-width: 2; fill-color:" +
+                    res[1] +
+                    "; opacity:0.8;",
+                ];
+                c++;
+              }
+            });
+        });
+        setBargraph(barGraphArr);
       });
 
     firebase
@@ -117,31 +148,35 @@ const HomePage = () => {
       .collection("batch")
       .doc(ctx.currentUser.companyName)
       .collection("products")
-      .where("scanType", "==", "in")
       .orderBy("dateAdded", "asc")
       .get()
       .then((snapshot) => {
+        setTotalStock(snapshot.docs.length);
         let arr = [];
         let testing = [];
         let temp2 = [];
         snapshot.forEach((doc) => {
           const dt = doc.data().prodID;
-          const dt2 = getDate(doc.data().dateAdded["seconds"]);
           if (!arr[dt]) {
             arr[dt] = 1;
           } else {
             arr[dt] += 1;
           }
-
-          if (!testing[dt2]) {
-            testing[dt2] = 1;
+          if (doc.data().scanType === "in") {
+            const dt2 = getDate(doc.data().dateAdded["seconds"]);
+            if (!testing[dt2]) {
+              testing[dt2] = 1;
+            } else {
+              testing[dt2] += 1;
+            }
           } else {
-            testing[dt2] += 1;
           }
         });
 
         let op = [];
         let c = 1;
+        temp2[0] = ["Date", "Scan in"];
+        temp2[1] = ["No Data Found", 0];
         for (const value in testing) {
           op = [
             ...op,
@@ -151,14 +186,13 @@ const HomePage = () => {
             },
           ];
 
-          temp2[0] = ["Date", "Scan in"];
           temp2[c] = [
             new Date(value).toString().substring(4, 15),
             testing[value],
           ];
           c++;
         }
-
+        // console.log(temp2);
         setLinegraph(temp2);
 
         // console.log("testing => ", arr);
@@ -169,7 +203,6 @@ const HomePage = () => {
             .doc(ctx.currentUser.companyName)
             .collection("products")
             .where("prodID", "==", t)
-            .where("scanType", "==", "in")
             .orderBy("dateAdded", "desc")
             .get()
             .then((snapshot) => {
@@ -203,26 +236,27 @@ const HomePage = () => {
         }
       });
 
-    firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .where("scanType", "==", "out")
-      .orderBy("dateAdded", "desc")
-      .get()
-      .then((snapshot) => {
-        let arr2 = [];
-        let c = 0;
-        snapshot.forEach((doc) => {});
-      });
-
-    return () => {
-      console.log("cleanup");
-    };
+    return () => {};
     // console.log(summary);
   }, [userid, ctx.currentUser.companyName]);
 
+  const setCurrentInv = (currentArr) => {
+    // console.log(currentArr);
+    let arr = [];
+    let c = 0;
+    for (let i in currentArr) {
+      let res = i.split("//");
+      // console.log(res[0], " - ", res[1], " - ", res[2], " - ", currentArr[i]);
+      arr[c] = {
+        prodID: res[0],
+        batchNo: res[1],
+        prodName: res[2],
+        quantity: currentArr[i],
+      };
+      c++;
+    }
+    setCurrentInventory(arr);
+  };
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(4, 15);
   };
@@ -284,7 +318,7 @@ const HomePage = () => {
               <th>Product ID</th>
               <th>Product Name</th>
               <th>Date produced</th>
-              <th>Amount</th>
+              <th>Total produced</th>
             </tr>
             {getSummary().map((list) => (
               <tr key={Math.random()}>
@@ -307,21 +341,21 @@ const HomePage = () => {
         <table className={classes.table}>
           <tbody>
             <tr>
-              <th>Product Name</th>
               <th>Product ID</th>
+              <th>Product Name</th>
               <th>Batch Number</th>
               <th>Quantity</th>
-              <th>Date Produced</th>
-              <th>Expiry Date</th>
+              {/* <th>Date Produced</th>
+              <th>Expiry Date</th> */}
             </tr>
             {currentInventory.map((list) => (
               <tr key={Math.random()}>
-                <td>{list.prodName}</td>
                 <td>{list.prodID}</td>
+                <td>{list.prodName}</td>
                 <td>{list.batchNo}</td>
                 <td>{list.quantity}</td>
-                <td>{getDate(list.dateAdded["seconds"])}</td>
-                <td>{getExpire(list.dateAdded["seconds"])}</td>
+                {/* <td>{getDate(list.dateAdded["seconds"])}</td>
+                <td>{getExpire(list.dateAdded["seconds"])}</td> */}
               </tr>
             ))}
           </tbody>
@@ -348,8 +382,16 @@ const HomePage = () => {
           <span className={classes.quantity}>{quantity}</span>
         </div>
         <div className={classes.individual}>
-          Total stock count
+          Current Stock Count
           <span className={classes.quantity}>{stockQuantity}</span>
+        </div>
+        <div className={classes.individual}>
+          Total Stock In
+          <span className={classes.quantity}>{totalStock}</span>
+        </div>
+        <div className={classes.individual}>
+          Total Stock Out
+          <span className={classes.quantity}>{stockOut}</span>
         </div>
       </div>
       <br />

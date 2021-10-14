@@ -144,12 +144,12 @@ const ScanOut = () => {
             dateAdded: { seconds: toTimestamp(date) },
             remarks: remarks,
           });
-          console.log(
-            "match, ID => ",
-            uniqueID,
-            " date in => ",
-            getDate(doc.data().dateAdded["seconds"])
-          );
+          // console.log(
+          //   "match, ID => ",
+          //   uniqueID,
+          //   " date in => ",
+          //   getDate(doc.data().dateAdded["seconds"])
+          // );
         });
       })
       .then(function () {
@@ -235,7 +235,7 @@ const ScanOut = () => {
             document.getElementById("errorMessage").style.color = "white";
           } else {
             obj.forEach((d) => {
-              console.log(d);
+              // console.log(d);
               for (let i = 0; i < d.amount; i++) {
                 firebase
                   .firestore()

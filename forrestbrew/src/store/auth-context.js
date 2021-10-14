@@ -6,13 +6,21 @@ const devMode = true;
 let firebaseConfig = {};
 if (devMode) {
   firebaseConfig = {
-    apiKey: "AIzaSyC1LNlojAnXPYhsCN54uNPrmQXEeoOmvJE",
-    authDomain: "development-6b127.firebaseapp.com",
-    projectId: "development-6b127",
-    storageBucket: "development-6b127.appspot.com",
-    messagingSenderId: "361276343360",
-    appId: "1:361276343360:web:e4468781cb62702c9c0ba5",
-    measurementId: "G-Q10GPV5LKN",
+    // apiKey: "AIzaSyC1LNlojAnXPYhsCN54uNPrmQXEeoOmvJE",
+    // authDomain: "development-6b127.firebaseapp.com",
+    // projectId: "development-6b127",
+    // storageBucket: "development-6b127.appspot.com",
+    // messagingSenderId: "361276343360",
+    // appId: "1:361276343360:web:e4468781cb62702c9c0ba5",
+    // measurementId: "G-Q10GPV5LKN",
+
+    apiKey: "AIzaSyAGCXsGDyn8nUy4Fd0omOQr72nCk7e5h_c",
+    authDomain: "developement2-d8702.firebaseapp.com",
+    projectId: "developement2-d8702",
+    storageBucket: "developement2-d8702.appspot.com",
+    messagingSenderId: "665419849716",
+    appId: "1:665419849716:web:14b2aa66c4fca7303de3a1",
+    measurementId: "G-NEHZ1BXFLK",
   };
 } else {
   firebaseConfig = {

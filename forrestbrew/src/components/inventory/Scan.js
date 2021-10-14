@@ -9,7 +9,7 @@ const Scan = (props) => {
   const [data, setData] = useState([]);
 
   const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(0, 25);
+    return new Date(date * 1000).toString().substring(4, 21);
   };
   useEffect(() => {
     firebase
@@ -71,18 +71,18 @@ const Scan = (props) => {
                 <th>Product ID</th>
                 <th>Batch No</th>
                 <th>Action</th>
-                <th>Action by</th>
                 <th>Date</th>
                 <th>Remarks</th>
+                <th>User</th>
               </tr>
               {data.map((entry) => (
                 <tr key={generateKey()} className={classes.trow}>
                   <td>{entry.prodID}</td>
                   <td>{entry.batchNo}</td>
                   <td>{entry.scanType}</td>
-                  <td>{entry.addedBy}</td>
                   <td>{getDate(entry.dateAdded["seconds"])}</td>
                   <td>{entry.remarks}</td>
+                  <td>{entry.addedBy}</td>
                 </tr>
               ))}
             </tbody>

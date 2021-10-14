@@ -16,6 +16,7 @@ import ScanOut from "./components/inventory/ScanOut";
 import ScanIn from "./components/inventory/ScanIn";
 import Checker from "./components/inventory/Checker";
 import Sidebar from "./components/Sidebar";
+import DateChecker from "./components/misc/DateChecker";
 
 function App() {
   const ctx = useContext(AuthContext);
@@ -55,6 +56,8 @@ function App() {
         <Route path="/ScanIn" component={ScanIn} />
 
         <Route path="/Checker" component={Checker} />
+
+        <Route path="/DateChecker" component={DateChecker} />
       </Switch>
     </React.Fragment>
   );
