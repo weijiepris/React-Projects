@@ -8,7 +8,6 @@ const DateChecker = () => {
   const getExpire = (date, day) => {
     let d = new Date(date);
     d.setDate(d.getDate() + parseInt(day));
-
     // return d.toString().substring(4, 15);
     return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
   };
@@ -17,7 +16,6 @@ const DateChecker = () => {
     event.preventDefault();
     const date = dateRef.current.value;
     const day = daysRef.current.value;
-    const d = new Date(date);
     setErrorMessage("Date: " + getExpire(date, day));
   };
 

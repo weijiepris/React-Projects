@@ -11,21 +11,56 @@ const Scan = (props) => {
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(4, 21);
   };
-  useEffect(() => {
-    firebase
+
+  const fetchData = async () => {
+    console.log("fetching data for scan history");
+
+    const batchRef = firebase
       .firestore()
       .collection("batch")
       .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .orderBy("dateAdded", "asc")
-      .get()
-      .then((snapshot) => {
-        if (snapshot.size) {
-          snapshot.forEach((doc) => {
-            addData(doc.data());
-          });
+      .collection("products");
+
+    const batchSnapshot = await batchRef.get();
+    let arr = [];
+    batchSnapshot.forEach((doc) => {
+      let inArr = [];
+      let outArr = [];
+      if (doc.data().dateRemoved === "") {
+        arr.push(doc.data());
+      } else {
+        inArr = doc.data();
+        inArr.scanType = "in";
+        outArr = doc.data();
+        outArr.dateAdded = outArr.dateRemoved;
+        if (outArr.removedBy === "" || !outArr.removedBy) {
+          outArr.addedBy = outArr.addedBy;
+        } else {
+          outArr.addedBy = outArr.removedBy;
         }
+        arr.push(inArr);
+        arr.push(outArr);
+      }
+
+      arr.sort(function (a, b) {
+        var textA = a.scanType.toUpperCase();
+        var textB = b.scanType.toUpperCase();
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
       });
+      arr.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return (
+          new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
+        );
+      });
+
+      addData(arr);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
     return () => {
       setData([]); // clean up
     };
@@ -75,16 +110,20 @@ const Scan = (props) => {
                 <th>Remarks</th>
                 <th>User</th>
               </tr>
-              {data.map((entry) => (
-                <tr key={generateKey()} className={classes.trow}>
-                  <td>{entry.prodID}</td>
-                  <td>{entry.batchNo}</td>
-                  <td>{entry.scanType}</td>
-                  <td>{getDate(entry.dateAdded["seconds"])}</td>
-                  <td>{entry.remarks}</td>
-                  <td>{entry.addedBy}</td>
-                </tr>
-              ))}
+              {data[0] ? (
+                data[0].map((entry) => (
+                  <tr key={generateKey()} className={classes.trow}>
+                    <td>{entry.prodID}</td>
+                    <td>{entry.batchNo}</td>
+                    <td>{entry.scanType}</td>
+                    <td>{getDate(entry.dateAdded["seconds"])}</td>
+                    <td>{entry.remarks}</td>
+                    <td>{entry.addedBy}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr></tr>
+              )}
             </tbody>
           </table>
         </div>

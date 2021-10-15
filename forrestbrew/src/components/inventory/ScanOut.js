@@ -259,6 +259,7 @@ const ScanOut = () => {
                           dateRemoved:
                             firebase.firestore.FieldValue.serverTimestamp(),
                           scanType: "out",
+                          removedBy: ctx.currentUser.name,
                         })
                         .then(function () {
                           setErrorMessage("data entered successfully");

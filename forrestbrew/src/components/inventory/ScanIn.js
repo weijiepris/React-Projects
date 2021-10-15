@@ -171,6 +171,7 @@ const ScanIn = () => {
               prodID: d.prodID,
               batchNo: d.batchNo,
               addedBy: ctx.currentUser.name,
+              removedBy: "",
               dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
               dateRemoved: "",
               remarks: d.remarks,
