@@ -365,14 +365,7 @@ const HomePage = () => {
   };
   return (
     <div className={classes.container} id="container">
-      <span className={classes.overview}>
-        Overview Dashboard
-        <select id="charts" name="charts">
-          <option value="default">All Time</option>
-          <option value="30">Last 30 Days</option>
-          <option value="7">Last 7 Days</option>
-        </select>
-      </span>
+      <span className={classes.overview}>Overview Dashboard</span>
       <br />
 
       <div className={classes.wrapper}>
