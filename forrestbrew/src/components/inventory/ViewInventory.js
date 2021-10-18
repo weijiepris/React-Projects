@@ -54,6 +54,13 @@ const ViewInventory = (props) => {
         }
       }
     }
+
+    products.sort(function (a, b) {
+      var textA = a.prodID.toUpperCase();
+      var textB = b.prodID.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+
     setInventory(products);
     setDataExists(true);
     setIsLoaded(true);

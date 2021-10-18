@@ -92,7 +92,9 @@ const HomePage = () => {
                         "//" +
                         doc.data().batchNo +
                         "//" +
-                        doc.data().prodName
+                        doc.data().prodName +
+                        "//" +
+                        getDate(doc.data().dateAdded["seconds"])
                     ]
                   ) {
                     currentArr[
@@ -100,7 +102,9 @@ const HomePage = () => {
                         "//" +
                         doc.data().batchNo +
                         "//" +
-                        doc.data().prodName
+                        doc.data().prodName +
+                        "//" +
+                        getDate(doc.data().dateAdded["seconds"])
                     ] = 1;
                   } else {
                     currentArr[
@@ -108,7 +112,9 @@ const HomePage = () => {
                         "//" +
                         doc.data().batchNo +
                         "//" +
-                        doc.data().prodName
+                        doc.data().prodName +
+                        "//" +
+                        getDate(doc.data().dateAdded["seconds"])
                     ] += 1;
                   }
                   stockCount += 1;
@@ -252,9 +258,21 @@ const HomePage = () => {
         batchNo: res[1],
         prodName: res[2],
         quantity: currentArr[i],
+        dateAdded: res[3],
       };
       c++;
     }
+
+    arr.sort(function (a, b) {
+      var textA = a.prodID.toUpperCase();
+      var textB = b.prodID.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    arr.sort(function (a, b) {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      return new Date(a.batchNo) - new Date(b.batchNo);
+    });
     setCurrentInventory(arr);
   };
   const getDate = (date) => {
@@ -345,8 +363,7 @@ const HomePage = () => {
               <th>Product Name</th>
               <th>Batch Number</th>
               <th>Quantity</th>
-              {/* <th>Date Produced</th>
-              <th>Expiry Date</th> */}
+              <th>Date Bottled</th>
             </tr>
             {currentInventory.map((list) => (
               <tr key={Math.random()}>
@@ -354,8 +371,7 @@ const HomePage = () => {
                 <td>{list.prodName}</td>
                 <td>{list.batchNo}</td>
                 <td>{list.quantity}</td>
-                {/* <td>{getDate(list.dateAdded["seconds"])}</td>
-                <td>{getExpire(list.dateAdded["seconds"])}</td> */}
+                <td>{list.dateAdded}</td>
               </tr>
             ))}
           </tbody>
