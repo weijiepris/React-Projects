@@ -17,6 +17,10 @@ const Header = (props) => {
     document.getElementById("scan").innerHTML = "";
     document.getElementById("checker").innerHTML = "";
   };
+
+  if (!ctx.isLoaded) {
+    return <header className={classes.header}></header>;
+  }
   return (
     <React.Fragment>
       <header className={classes.header}>

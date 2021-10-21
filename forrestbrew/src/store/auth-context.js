@@ -46,7 +46,8 @@ const AuthContext = React.createContext({
   loading: "",
   userID: "",
   currentUser: [],
-  test: (docID) => {},
+  product: "",
+  batch: "",
   onLogout: () => {},
   onLogin: (email, password) => {},
   getCurrentUser: () => {},
@@ -60,30 +61,8 @@ export const AuthContextProvider = (props) => {
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState([]);
-  const [list, setList] = useState([]);
-
-  const testFunction = async (docID) => {};
-
-  const getProductListByID = async (docID) => {
-    const currentCompanyRef = firebase.firestore().collection("companies");
-
-    const snapshot = await currentCompanyRef
-      .doc(currentUser.companyName)
-      .collection("product")
-      .doc(docID)
-      .collection("data")
-      .get();
-
-    snapshot.forEach((doc) => {
-      addList(doc.data());
-    });
-  };
-
-  const addList = (list) => {
-    setList((prevList) => {
-      return [list, ...prevList];
-    });
-  };
+  const [product, setProduct] = useState([]);
+  const [batch, setBatch] = useState([]);
 
   useEffect(() => {
     console.log("inventory web app version 1.2");
@@ -94,8 +73,9 @@ export const AuthContextProvider = (props) => {
         console.log("not logged in");
         setCompanyName("");
       } else {
-        const currentUserRef = firebase.firestore().collection("users");
-        currentUserRef
+        firebase
+          .firestore()
+          .collection("users")
           .doc(user.uid)
           .get()
           .then((userObject) => {
@@ -105,7 +85,61 @@ export const AuthContextProvider = (props) => {
               setCurrentUser(userObject.data());
               setIsLoggedIn(true);
               setIsLoaded(true);
-              // console.log("user logged in as, " + userObject.data().name);
+
+              // firebase
+              //   .firestore()
+              //   .collection("products")
+              //   .doc(userObject.data().companyName)
+              //   .collection("products")
+              //   .get()
+              //   .then((snapshot) => {
+              //     console.log(
+              //       "number of document reads for products",
+              //       snapshot.size
+              //     );
+              //     snapshot.forEach((doc) => {
+              //       product.push(doc.data());
+              //     });
+              //   })
+              //   .then(function () {
+              //     setProduct(product);
+              //   });
+
+              firebase
+                .firestore()
+                .collection("products")
+                .doc(userObject.data().companyName)
+                .collection("products")
+                .onSnapshot((querySnapshot) => {
+                  let prodArr = [];
+                  console.log(
+                    "total number of document reads for products",
+                    querySnapshot.size
+                  );
+                  querySnapshot.forEach((data) => {
+                    prodArr.push(data.data());
+                  });
+
+                  setProduct(prodArr);
+                });
+
+              firebase
+                .firestore()
+                .collection("batch")
+                .doc(userObject.data().companyName)
+                .collection("products")
+                .onSnapshot((querySnapshot) => {
+                  let batchArr = [];
+                  console.log(
+                    "total number of document reads for batch",
+                    querySnapshot.size
+                  );
+                  querySnapshot.forEach((data) => {
+                    batchArr.push(data.data());
+                  });
+
+                  setBatch(batchArr);
+                });
             }
           });
       }
@@ -168,12 +202,11 @@ export const AuthContextProvider = (props) => {
         errorMessage: errorMessage,
         loading: loading,
         currentUser: currentUser,
-        list: list,
+        product: product,
+        batch: batch,
         onLogout: logoutHandler,
         onLogin: loginHandler,
         setLoggedIn: loggedInHandler,
-        test: testFunction,
-        getProductListByID: getProductListByID,
       }}
     >
       {props.children}

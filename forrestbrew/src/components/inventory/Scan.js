@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import firebase from "firebase";
 import classes from "./inventory.module.css";
 import { Link } from "react-router-dom";
 
@@ -7,14 +6,13 @@ import AuthContext from "../../store/auth-context";
 const Scan = (props) => {
   const ctx = useContext(AuthContext);
   const [data, setData] = useState([]);
-  const [filter, setFilter] = useState(0);
   const [filterData, setFilterData] = useState([]);
 
-  const getExpire = (day) => {
-    let d = new Date();
-    d.setDate(d.getDate() - parseInt(day));
-    return d.toString().substring(4, 15);
-  };
+  // const getExpire = (day) => {
+  //   let d = new Date();
+  //   d.setDate(d.getDate() - parseInt(day));
+  //   return d.toString().substring(4, 15);
+  // };
 
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(4, 21);
@@ -41,39 +39,95 @@ const Scan = (props) => {
       addData(arr);
     }
   };
+  const filterInfo = (event) => {
+    console.log("initial data", data[0]);
+    // let filter = event.target.value;
+    console.log(new Date().toString().substring(4, 15));
+    let arr = [];
+    data[0].forEach((d) => {
+      if (
+        !arr[
+          d.prodID +
+            "//" +
+            d.prodName +
+            "//" +
+            d.batchNo +
+            "//" +
+            d.scanType +
+            "//" +
+            getDate2(d.dateAdded["seconds"]) +
+            "//" +
+            d.remarks +
+            "//" +
+            d.addedBy
+        ]
+      ) {
+        arr[
+          d.prodID +
+            "//" +
+            d.prodName +
+            "//" +
+            d.batchNo +
+            "//" +
+            d.scanType +
+            "//" +
+            getDate2(d.dateAdded["seconds"]) +
+            "//" +
+            d.remarks +
+            "//" +
+            d.addedBy
+        ] = 1;
+      } else {
+        arr[
+          d.prodID +
+            "//" +
+            d.prodName +
+            "//" +
+            d.batchNo +
+            "//" +
+            d.scanType +
+            "//" +
+            getDate2(d.dateAdded["seconds"]) +
+            "//" +
+            d.remarks +
+            "//" +
+            d.addedBy
+        ] += 1;
+      }
+    });
 
-  const fetchData = async () => {
-    console.log("fetching data for scan history");
-
-    const batchRef = firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("products");
-
-    const batchSnapshot = await batchRef.get();
+    for (let i in arr) {
+      console.log(i);
+    }
+  };
+  useEffect(() => {
     let arr = [];
     let arr2 = [];
-    batchSnapshot.forEach((doc) => {
+    ctx.batch.forEach((bdoc) => {
       let inArr = [];
       let outArr = [];
-      if (doc.data().dateRemoved === "") {
+      if (bdoc.dateRemoved === "") {
         if (
-          getDate2(doc.data().dateAdded["seconds"]) ===
+          getDate2(bdoc.dateAdded["seconds"]) ===
           new Date().toString().substring(4, 15)
         ) {
-          arr2.push(doc.data());
+          arr2.push(JSON.parse(JSON.stringify(bdoc)));
         }
-        arr.push(doc.data());
+        arr.push(JSON.parse(JSON.stringify(bdoc)));
       } else {
-        inArr = doc.data();
+        inArr = JSON.parse(JSON.stringify(bdoc));
         inArr.scanType = "in";
-        outArr = doc.data();
+        outArr = JSON.parse(JSON.stringify(bdoc));
         outArr.dateAdded = outArr.dateRemoved;
+
         if (outArr.removedBy === "" || !outArr.removedBy) {
-          outArr.addedBy = outArr.addedBy;
         } else {
           outArr.addedBy = outArr.removedBy;
+        }
+
+        if (outArr.remarksOut === "" || !outArr.remarksOut) {
+        } else {
+          outArr.remarks = outArr.remarksOut;
         }
 
         if (
@@ -121,14 +175,10 @@ const Scan = (props) => {
       addData(arr2);
       addFilter(arr);
     });
-  };
-
-  useEffect(() => {
-    fetchData();
     return () => {
       setData([]); // clean up
     };
-  }, [ctx.currentUser.companyName]);
+  }, [ctx.product, ctx.batch]);
 
   const addData = (data) => {
     setData((prevData) => {
@@ -150,10 +200,11 @@ const Scan = (props) => {
     }
     return autoId;
   };
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
-        Scan In/Out <tab />
+        Scan In/Out &nbsp;
         <select id="charts" name="charts" onChange={filterDate}>
           <option value="0">Today</option>
           <option value="7">Last 7 Days</option>
@@ -175,12 +226,19 @@ const Scan = (props) => {
       </div>
 
       <div className={classes.wrapper}>
-        <h1>Transaction History</h1>
+        <h1>
+          Transaction History &nbsp;
+          <select id="charts" name="charts" onChange={filterInfo}>
+            <option value="s">Summarised</option>
+            <option value="d">Detailed</option>
+          </select>
+        </h1>
         <div className={classes.content}>
           <table className={classes.table}>
             <tbody>
               <tr>
                 <th>Product ID</th>
+                <th>Product Name</th>
                 <th>Batch No</th>
                 <th>Action</th>
                 <th>Date</th>
@@ -191,6 +249,7 @@ const Scan = (props) => {
                 data[0].map((entry) => (
                   <tr key={generateKey()} className={classes.trow}>
                     <td>{entry.prodID}</td>
+                    <td>{entry.prodName}</td>
                     <td>{entry.batchNo}</td>
                     <td>{entry.scanType}</td>
                     <td>{getDate(entry.dateAdded["seconds"])}</td>

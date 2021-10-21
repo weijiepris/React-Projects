@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import classes from "./Sidebar.module.css";
 import { Link } from "react-router-dom";
+import AuthContext from "../store/auth-context";
 
 // import { FaTimes } from "@react-icons/all-files/fa/FaTimes";
 // import { FaBars } from "@react-icons/all-files/fa/FaBars";
@@ -12,8 +13,10 @@ import { IoIosMenu } from "@react-icons/all-files/io/IoIosMenu";
 // import { TiTimesOutline } from "@react-icons/all-files/ti/TiTimesOutline";
 // import { BiMenuAltLeft } from "@react-icons/all-files/bi/BiMenuAltLeft";
 import { AiOutlineCalendar } from "@react-icons/all-files/ai/AiOutlineCalendar";
+import { AiFillWindows } from "@react-icons/all-files/ai/AiFillWindows";
 
 const Sidebar = () => {
+  const ctx = useContext(AuthContext);
   const [arrow, setArrow] = useState(true);
   const showHide = () => {
     // setToggle(!toggle);
@@ -111,6 +114,22 @@ const Sidebar = () => {
             <GiSpectacles size="30px" id="ichecker" />
             <span id="checker" className={classes.hideText}></span>
           </Link>
+          <br />
+          <br />
+
+          {ctx.currentUser.userRole === "developer" ? (
+            <Link
+              to="/Dev"
+              exact="true"
+              style={{ textDecoration: "none" }}
+              onClick={closeNav}
+            >
+              <AiFillWindows size="30px" id="idev" />
+              <span id="dev" className={classes.hideText}></span>
+            </Link>
+          ) : (
+            <span id="dev"></span>
+          )}
         </div>
       </div>
       <div className={classes.pullButton} id="pullButton" onClick={openNav}>

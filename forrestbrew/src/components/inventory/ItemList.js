@@ -6,15 +6,11 @@ const ItemList = (props) => {
     // props.open(props);
   };
 
-  const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(4, 15);
-  };
-
   return (
     <React.Fragment>
-      {props.data.map((entry) => (
+      {props.data.map((entry, index) => (
         <tr key={entry.serialno} className={classes.trow}>
-          <td onClick={openHandler}>{entry.serialno}</td>
+          <td onClick={openHandler}>{index + 1}</td>
           <td onClick={openHandler}>{entry.id}</td>
           <td onClick={openHandler}>{entry.name}</td>
           <td onClick={openHandler}>{entry.description}</td>

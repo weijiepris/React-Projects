@@ -577,3 +577,448 @@ return () => {
 //     setInventory(products);
 //     setIsLoaded(true);
 //   });
+
+// const fetchData = async () => {
+//   console.log("fetching data for ViewInventory");
+//   let prodArr = [];
+//   let products = [];
+
+//   const productsRef = firebase
+//     .firestore()
+//     .collection("products")
+//     .doc(ctx.currentUser.companyName)
+//     .collection("products");
+
+//   const batchRef = firebase
+//     .firestore()
+//     .collection("batch")
+//     .doc(ctx.currentUser.companyName)
+//     .collection("products");
+
+//   const productsSnapshot = await productsRef
+//     .orderBy("id", "asc")
+//     .get({ source: "cache" });
+//   const batchSnapshot = await batchRef
+//     .where("scanType", "==", "in")
+//     .get({ source: "cache" });
+
+//   productsSnapshot.forEach(async (doc) => {
+//     products.push(doc.data());
+//     if (!prodArr[doc.data().id]) {
+//       prodArr[doc.data().id] = 0;
+//     }
+//   });
+
+//   batchSnapshot.forEach((doc) => {
+//     prodArr[doc.data().prodID] += 1;
+//   });
+
+//   for (let i in prodArr) {
+//     for (let k in products) {
+//       if (products[k].id === i) {
+//         products[k].quantity = prodArr[i];
+//       }
+//     }
+//   }
+
+//   products.sort(function (a, b) {
+//     var textA = a.prodID.toUpperCase();
+//     var textB = b.prodID.toUpperCase();
+//     return textA < textB ? -1 : textA > textB ? 1 : 0;
+//   });
+
+//   setInventory(products);
+//   setDataExists(true);
+//   setIsLoaded(true);
+// };
+
+// firebase
+//   .firestore()
+//   .collection("products")
+//   .doc(ctx.currentUser.companyName)
+//   .collection("products")
+//   .get()
+//   .then((snapshot) => {
+//     let prodArr = [];
+//     let currentArr = [];
+//     let barGraphArr = [];
+//     let stockCount = 0;
+//     let stockOutCount = 0;
+//     setQuantity(snapshot.docs.length);
+//     snapshot.forEach((docs) => {
+//       // define array to store all the product names
+//       if (
+//         typeof prodArr[docs.data().name + "//" + docs.data().color] ==
+//         "undefined"
+//       ) {
+//         prodArr[docs.data().name + "//" + docs.data().color] = 0;
+//       }
+//       firebase
+//         .firestore()
+//         .collection("batch")
+//         .doc(ctx.currentUser.companyName)
+//         .collection("products")
+//         .orderBy("dateAdded", "asc")
+//         .where("prodID", "==", docs.data().id)
+//         .get()
+//         .then((snapshot) => {
+//           snapshot.forEach((doc) => {
+//             if (doc.data().scanType === "in") {
+//               if (
+//                 !currentArr[
+//                   doc.data().prodID +
+//                     "//" +
+//                     doc.data().batchNo +
+//                     "//" +
+//                     doc.data().prodName +
+//                     "//" +
+//                     getDate(doc.data().dateAdded["seconds"])
+//                 ]
+//               ) {
+//                 currentArr[
+//                   doc.data().prodID +
+//                     "//" +
+//                     doc.data().batchNo +
+//                     "//" +
+//                     doc.data().prodName +
+//                     "//" +
+//                     getDate(doc.data().dateAdded["seconds"])
+//                 ] = 1;
+//               } else {
+//                 currentArr[
+//                   doc.data().prodID +
+//                     "//" +
+//                     doc.data().batchNo +
+//                     "//" +
+//                     doc.data().prodName +
+//                     "//" +
+//                     getDate(doc.data().dateAdded["seconds"])
+//                 ] += 1;
+//               }
+//               stockCount += 1;
+//               // find all available product name and count them into array
+//               prodArr[doc.data().prodName + "//" + docs.data().color] += 1;
+//             } else {
+//               stockOutCount += 1;
+//             }
+//           });
+//         })
+//         .then(function () {
+//           setCurrentInv(currentArr);
+//           setStockQuantity(stockCount);
+//           setStockOut(stockOutCount);
+//           // default if dataset is empty
+//           barGraphArr[0] = ["Element", "In stock", { role: "style" }];
+//           barGraphArr[1] = ["No Data Found", 0, "transparent"];
+//           let c = 1;
+//           for (let i in prodArr) {
+//             let res = i.split("//");
+//             barGraphArr[c] = [
+//               res[0],
+//               prodArr[i],
+//               "stroke-color: black; stroke-width: 2; fill-color:" +
+//                 res[1] +
+//                 "; opacity:0.8;",
+//             ];
+//             c++;
+//           }
+//         });
+//     });
+//     setBargraph(barGraphArr);
+//   });
+
+// firebase
+//   .firestore()
+//   .collection("batch")
+//   .doc(ctx.currentUser.companyName)
+//   .collection("products")
+//   .orderBy("dateAdded", "asc")
+//   .get()
+//   .then((snapshot) => {
+//     setTotalStock(snapshot.docs.length);
+//     let arr = [];
+//     let testing = [];
+//     let temp2 = [];
+//     snapshot.forEach((doc) => {
+//       const dt = doc.data().prodID;
+//       if (!arr[dt]) {
+//         arr[dt] = 1;
+//       } else {
+//         arr[dt] += 1;
+//       }
+//       if (doc.data().scanType === "in") {
+//         const dt2 = getDate(doc.data().dateAdded["seconds"]);
+//         if (!testing[dt2]) {
+//           testing[dt2] = 1;
+//         } else {
+//           testing[dt2] += 1;
+//         }
+//       } else {
+//       }
+//     });
+
+//     let op = [];
+//     let c = 1;
+//     temp2[0] = ["Date", "Scan in"];
+//     temp2[1] = ["No Data Found", 0];
+//     for (const value in testing) {
+//       op = [
+//         ...op,
+//         {
+//           x: new Date(value),
+//           y: testing[value],
+//         },
+//       ];
+
+//       temp2[c] = [
+//         new Date(value).toString().substring(4, 15),
+//         testing[value],
+//       ];
+//       c++;
+//     }
+//     // console.log(temp2);
+//     setLinegraph(temp2);
+
+// console.log("testing => ", arr);
+for (const t in arr) {
+  firebase
+    .firestore()
+    .collection("batch")
+    .doc(ctx.currentUser.companyName)
+    .collection("products")
+    .where("prodID", "==", t)
+    .orderBy("dateAdded", "desc")
+    .get()
+    .then((snapshot) => {
+      let arr2 = [];
+      let c = 0;
+      snapshot.forEach((doc) => {
+        // console.log("d = ", doc.data());
+        const dt = getDate(doc.data().dateAdded["seconds"]);
+        if (!arr2[c]) {
+          arr2[c] = {
+            count: 1,
+            date: dt,
+            prodID: t,
+            prodName: doc.data().prodName,
+            batchNo: doc.data().batchNo,
+          };
+        } else {
+          if (arr2.prodID === t) {
+            for (const d in arr2) {
+              if (arr2[d].count) {
+                arr2[d].count++;
+              }
+            }
+          }
+        }
+        c++;
+      });
+      let v = {};
+      v["data"] = arr2;
+      addSummary(v);
+    });
+}
+
+const fetchData = async () => {
+  console.log("fetching data for scan history");
+
+  const batchRef = firebase
+    .firestore()
+    .collection("batch")
+    .doc(ctx.currentUser.companyName)
+    .collection("products");
+
+  const batchSnapshot = await batchRef.get();
+  let arr = [];
+  let arr2 = [];
+  batchSnapshot.forEach((doc) => {
+    let inArr = [];
+    let outArr = [];
+    if (doc.data().dateRemoved === "") {
+      if (
+        getDate2(doc.data().dateAdded["seconds"]) ===
+        new Date().toString().substring(4, 15)
+      ) {
+        arr2.push(doc.data());
+      }
+      arr.push(doc.data());
+    } else {
+      inArr = doc.data();
+      inArr.scanType = "in";
+      outArr = doc.data();
+      outArr.dateAdded = outArr.dateRemoved;
+
+      if (outArr.removedBy === "" || !outArr.removedBy) {
+        outArr.addedBy = outArr.addedBy;
+      } else {
+        outArr.addedBy = outArr.removedBy;
+      }
+
+      if (outArr.remarksOut === "" || !outArr.remarksOut) {
+        outArr.remarks = outArr.remarks;
+      } else {
+        outArr.remarks = outArr.remarksOut;
+      }
+
+      if (
+        getDate2(inArr.dateAdded["seconds"]) ===
+        new Date().toString().substring(4, 15)
+      ) {
+        arr2.push(inArr);
+      }
+
+      if (
+        getDate2(outArr.dateAdded["seconds"]) ===
+        new Date().toString().substring(4, 15)
+      ) {
+        arr2.push(outArr);
+      }
+      arr.push(inArr);
+      arr.push(outArr);
+    }
+
+    arr.sort(function (a, b) {
+      var textA = a.scanType.toUpperCase();
+      var textB = b.scanType.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    arr.sort(function (a, b) {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      return (
+        new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
+      );
+    });
+    arr2.sort(function (a, b) {
+      var textA = a.scanType.toUpperCase();
+      var textB = b.scanType.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    arr2.sort(function (a, b) {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      return (
+        new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
+      );
+    });
+
+    addData(arr2);
+    addFilter(arr);
+  });
+};
+
+const fetchData = async () => {
+  let arr = [];
+  let arr2 = [];
+  ctx.batch.forEach((doc) => {
+    let inArr = [];
+    let outArr = [];
+    if (doc.dateRemoved === "") {
+      if (
+        getDate2(doc.dateAdded["seconds"]) ===
+        new Date().toString().substring(4, 15)
+      ) {
+        arr2.push(doc);
+      }
+      arr.push(doc);
+    } else {
+      inArr = doc;
+      inArr.scanType = "in";
+      outArr = doc;
+      outArr.dateAdded = outArr.dateRemoved;
+
+      if (outArr.removedBy === "" || !outArr.removedBy) {
+        outArr.addedBy = outArr.addedBy;
+      } else {
+        outArr.addedBy = outArr.removedBy;
+      }
+
+      if (outArr.remarksOut === "" || !outArr.remarksOut) {
+        outArr.remarks = outArr.remarks;
+      } else {
+        outArr.remarks = outArr.remarksOut;
+      }
+
+      if (
+        getDate2(inArr.dateAdded["seconds"]) ===
+        new Date().toString().substring(4, 15)
+      ) {
+        arr2.push(inArr);
+      }
+
+      if (
+        getDate2(outArr.dateAdded["seconds"]) ===
+        new Date().toString().substring(4, 15)
+      ) {
+        arr2.push(outArr);
+      }
+      arr.push(inArr);
+      arr.push(outArr);
+    }
+
+    arr.sort(function (a, b) {
+      var textA = a.scanType.toUpperCase();
+      var textB = b.scanType.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    arr.sort(function (a, b) {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      return (
+        new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
+      );
+    });
+    arr2.sort(function (a, b) {
+      var textA = a.scanType.toUpperCase();
+      var textB = b.scanType.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+    arr2.sort(function (a, b) {
+      // Turn your strings into dates, and then subtract them
+      // to get a value that is either negative, positive, or zero.
+      return (
+        new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
+      );
+    });
+
+    addData(arr2);
+    addFilter(arr);
+  });
+};
+
+const checkValid = () => {
+  let arrayCheck = [];
+  for (let i in obj) {
+    if (typeof arrayCheck[obj[i].prodID] == "undefined") {
+      arrayCheck[obj[i].prodID] = 0;
+    }
+    arrayCheck[obj[i].prodID] += obj[i].amount;
+  }
+  console.log(arrayCheck);
+
+  for (let i in arrayCheck) {
+    firebase
+      .firestore()
+      .collection("batch")
+      .doc(ctx.currentUser.companyName)
+      .collection("products")
+      .where("prodID", "==", i)
+      .where("scanType", "==", "in")
+      .get()
+      .then((snapshot) => {
+        console.log(snapshot.docs.length);
+        if (arrayCheck[i] > snapshot.docs.length) {
+          setErrorMessage(
+            "Exceeded amount for " +
+              i +
+              " (Remaining amount: " +
+              snapshot.docs.length +
+              ")"
+          );
+          document.getElementById("errorMessage").style.backgroundColor = "red";
+          document.getElementById("errorMessage").style.color = "white";
+        }
+      });
+  }
+};

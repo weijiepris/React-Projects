@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 
-export default (myRef) => {
-  const getDimensions = () => ({
-    width: myRef.current.offsetWidth,
-    height: myRef.current.offsetHeight,
-  });
-
+const useContainerDimensions = (myRef) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const handleResize = () => {
-      setDimensions(getDimensions());
+      setDimensions({
+        width: myRef.current.offsetWidth,
+        height: myRef.current.offsetHeight,
+      });
     };
 
     if (myRef.current) {
-      setDimensions(getDimensions());
+      setDimensions({
+        width: myRef.current.offsetWidth,
+        height: myRef.current.offsetHeight,
+      });
     }
 
     window.addEventListener("resize", handleResize);
@@ -26,3 +27,5 @@ export default (myRef) => {
 
   return dimensions;
 };
+
+export default useContainerDimensions;

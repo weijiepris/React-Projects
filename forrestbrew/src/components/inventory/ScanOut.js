@@ -48,53 +48,13 @@ const ScanOut = () => {
         obj[i].amount = event.target.value;
     }
   };
-  const checkValid = () => {
-    let arrayCheck = [];
-    for (let i in obj) {
-      if (typeof arrayCheck[obj[i].prodID] == "undefined") {
-        arrayCheck[obj[i].prodID] = 0;
-      }
-      arrayCheck[obj[i].prodID] += obj[i].amount;
-    }
-    console.log(arrayCheck);
-
-    for (let i in arrayCheck) {
-      firebase
-        .firestore()
-        .collection("batch")
-        .doc(ctx.currentUser.companyName)
-        .collection("products")
-        .where("prodID", "==", i)
-        .where("scanType", "==", "in")
-        .get()
-        .then((snapshot) => {
-          console.log(snapshot.docs.length);
-          if (arrayCheck[i] > snapshot.docs.length) {
-            setErrorMessage(
-              "Exceeded amount for " +
-                i +
-                " (Remaining amount: " +
-                snapshot.docs.length +
-                ")"
-            );
-            document.getElementById("errorMessage").style.backgroundColor =
-              "red";
-            document.getElementById("errorMessage").style.color = "white";
-          }
-        });
-    }
-  };
   const onChange = () => {
     setErrorMessage("");
   };
 
-  const updateData = (data) => {
-    setData(data);
-  };
-
-  const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(0, 25);
-  };
+  // const getDate = (date) => {
+  //   return new Date(date * 1000).toString().substring(0, 25);
+  // };
 
   function toTimestamp(strDate) {
     var datum = Date.parse(strDate);
@@ -117,7 +77,6 @@ const ScanOut = () => {
   };
   const insertData = (batchNo, prodID, remarks) => {
     let t = false;
-    let uniqueID = "";
     batchNo = batchNo.replaceAll("/", "");
     // to check if the prodID,batchNo is available, then get first doc
     firebase
@@ -132,7 +91,6 @@ const ScanOut = () => {
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
-          uniqueID = doc.id;
           t = true;
           var date = new Date();
           addData({
@@ -248,8 +206,8 @@ const ScanOut = () => {
                   .limit(d.amount)
                   .get()
                   .then((snapshot) => {
-                    snapshot.forEach((doc) => {
-                      firebase
+                    snapshot.forEach(async (doc) => {
+                      await firebase
                         .firestore()
                         .collection("batch")
                         .doc(ctx.currentUser.companyName)
@@ -260,6 +218,7 @@ const ScanOut = () => {
                             firebase.firestore.FieldValue.serverTimestamp(),
                           scanType: "out",
                           removedBy: ctx.currentUser.name,
+                          remarksOut: d.remarks,
                         })
                         .then(function () {
                           setErrorMessage("data entered successfully");

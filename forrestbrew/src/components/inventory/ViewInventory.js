@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import firebase from "firebase";
 import classes from "./inventory.module.css";
 import { Link } from "react-router-dom";
 import ItemList from "./ItemList";
@@ -16,35 +15,17 @@ const ViewInventory = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [dataExists, setDataExists] = useState(true);
 
-  const fetchData = async () => {
-    console.log("fetching data for ViewInventory");
+  useEffect(() => {
     let prodArr = [];
     let products = [];
-
-    const productsRef = firebase
-      .firestore()
-      .collection("products")
-      .doc(ctx.currentUser.companyName)
-      .collection("products");
-
-    const batchRef = firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("products");
-
-    const productsSnapshot = await productsRef.orderBy("id", "asc").get();
-    const batchSnapshot = await batchRef.where("scanType", "==", "in").get();
-
-    productsSnapshot.forEach(async (doc) => {
-      products.push(doc.data());
-      if (!prodArr[doc.data().id]) {
-        prodArr[doc.data().id] = 0;
+    ctx.product.forEach((product) => {
+      products.push(product);
+      if (!prodArr[product.id]) {
+        prodArr[product.id] = 0;
       }
     });
-
-    batchSnapshot.forEach((doc) => {
-      prodArr[doc.data().prodID] += 1;
+    ctx.batch.forEach((batch) => {
+      prodArr[batch.prodID] += 1;
     });
 
     for (let i in prodArr) {
@@ -64,22 +45,13 @@ const ViewInventory = (props) => {
     setInventory(products);
     setDataExists(true);
     setIsLoaded(true);
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  }, [ctx.product, ctx.batch]);
 
-  // const addInventory = (list) => {
-  //   setInventory((prevList) => {
-  //     return [list, ...prevList];
-  //   });
-  // };
   const showOverlay = () => {
     setOverlay(true);
   };
 
   const hideOverlay = () => {
-    // retrieveList();
     setOverlay(false);
   };
 
@@ -97,7 +69,7 @@ const ViewInventory = (props) => {
           onClose={hideOverlay}
         />
       )}
-      <span className={classes.overview}>Inventory</span>
+      <span className={classes.overview}>Overview</span>
       <br />
       <div className={classes.wrapper}>
         <div className={classes.actions}>

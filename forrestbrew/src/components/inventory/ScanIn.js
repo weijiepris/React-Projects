@@ -40,9 +40,9 @@ const ScanIn = () => {
     setErrorMessage("");
   };
 
-  const getDateToday = () => {
-    return new Date().toString().substring(0, 15).replaceAll(" ", "");
-  };
+  // const getDateToday = () => {
+  //   return new Date().toString().substring(0, 15).replaceAll(" ", "");
+  // };
 
   // const getDate = (date) => {
   //   return new Date(date * 1000).toString().substring(0, 25);
@@ -175,6 +175,7 @@ const ScanIn = () => {
               dateAdded: firebase.firestore.FieldValue.serverTimestamp(),
               dateRemoved: "",
               remarks: d.remarks,
+              remarksOut: "",
               companyName: ctx.currentUser.companyName,
               companyID: ctx.currentUser.companyID,
               scanType: "in",

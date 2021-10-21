@@ -23,6 +23,7 @@ const DateChecker = () => {
     let d = new Date();
     return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
   };
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Date Checker</span>
@@ -52,6 +53,9 @@ const DateChecker = () => {
           <br />
           <br />
           <span>{errorMessage}</span>
+          {/* {data.map((e) => (
+            <div>{e.name}</div>
+          ))} */}
         </div>
       </div>
     </div>
