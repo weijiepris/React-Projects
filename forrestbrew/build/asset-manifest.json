@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/static/css/main.cc9c0570.chunk.css",
-    "main.js": "/static/js/main.fcdb09bd.chunk.js",
-    "main.js.map": "/static/js/main.fcdb09bd.chunk.js.map",
+    "main.js": "/static/js/main.bce5819d.chunk.js",
+    "main.js.map": "/static/js/main.bce5819d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d5263075.js",
     "runtime-main.js.map": "/static/js/runtime-main.d5263075.js.map",
-    "static/js/2.d8725c32.chunk.js": "/static/js/2.d8725c32.chunk.js",
-    "static/js/2.d8725c32.chunk.js.map": "/static/js/2.d8725c32.chunk.js.map",
+    "static/js/2.79c100d5.chunk.js": "/static/js/2.79c100d5.chunk.js",
+    "static/js/2.79c100d5.chunk.js.map": "/static/js/2.79c100d5.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.cc9c0570.chunk.css.map": "/static/css/main.cc9c0570.chunk.css.map",
-    "static/js/2.d8725c32.chunk.js.LICENSE.txt": "/static/js/2.d8725c32.chunk.js.LICENSE.txt",
+    "static/js/2.79c100d5.chunk.js.LICENSE.txt": "/static/js/2.79c100d5.chunk.js.LICENSE.txt",
     "static/media/Header.module.css": "/static/media/Mirande.96bff701.ttf"
   },
   "entrypoints": [
     "static/js/runtime-main.d5263075.js",
-    "static/js/2.d8725c32.chunk.js",
+    "static/js/2.79c100d5.chunk.js",
     "static/css/main.cc9c0570.chunk.css",
-    "static/js/main.fcdb09bd.chunk.js"
+    "static/js/main.bce5819d.chunk.js"
   ]
 }

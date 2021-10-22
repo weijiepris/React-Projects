@@ -7,6 +7,7 @@ const Scan = (props) => {
   const ctx = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [dataF, setDataF] = useState([]);
 
   // const getExpire = (day) => {
   //   let d = new Date();
@@ -24,6 +25,7 @@ const Scan = (props) => {
 
   const filterDate = (event) => {
     let filterDay = event.target.value;
+    document.getElementById("detail").value = "d";
     setData([]);
     let arr = [];
     let today = new Date().toString().substring(4, 15);
@@ -40,64 +42,84 @@ const Scan = (props) => {
     }
   };
   const filterInfo = (event) => {
-    console.log("initial data", data[0]);
-    // let filter = event.target.value;
-    console.log(new Date().toString().substring(4, 15));
-    let arr = [];
-    data[0].forEach((d) => {
-      if (
-        !arr[
-          d.prodID +
-            "//" +
-            d.prodName +
-            "//" +
-            d.batchNo +
-            "//" +
-            d.scanType +
-            "//" +
-            getDate2(d.dateAdded["seconds"]) +
-            "//" +
-            d.remarks +
-            "//" +
-            d.addedBy
-        ]
-      ) {
-        arr[
-          d.prodID +
-            "//" +
-            d.prodName +
-            "//" +
-            d.batchNo +
-            "//" +
-            d.scanType +
-            "//" +
-            getDate2(d.dateAdded["seconds"]) +
-            "//" +
-            d.remarks +
-            "//" +
-            d.addedBy
-        ] = 1;
-      } else {
-        arr[
-          d.prodID +
-            "//" +
-            d.prodName +
-            "//" +
-            d.batchNo +
-            "//" +
-            d.scanType +
-            "//" +
-            getDate2(d.dateAdded["seconds"]) +
-            "//" +
-            d.remarks +
-            "//" +
-            d.addedBy
-        ] += 1;
-      }
-    });
+    let filter = event.target.value;
 
-    for (let i in arr) {
-      console.log(i);
+    console.log(filter);
+    if (filter === "s") {
+      setDataF([]);
+    } else {
+      let dataset = JSON.parse(JSON.stringify(data));
+      console.log(new Date().toString().substring(4, 15));
+      let arr = [];
+      dataset[0].forEach((d) => {
+        if (
+          !arr[
+            d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              getDate2(d.dateAdded["seconds"]) +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
+          ]
+        ) {
+          arr[
+            d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              getDate2(d.dateAdded["seconds"]) +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
+          ] = 1;
+        } else {
+          arr[
+            d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              getDate2(d.dateAdded["seconds"]) +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
+          ] += 1;
+        }
+      });
+
+      let tempArr = [];
+      for (let i in arr) {
+        let res = i.split("//");
+        tempArr.push({
+          prodID: res[0],
+          prodName: res[1],
+          batchNo: res[2],
+          scanType: res[3],
+          dateAdded: res[4],
+          remarks: res[5],
+          addedBy: res[6],
+          count: arr[i],
+        });
+      }
+      let r = [];
+      r.push(tempArr);
+      setDataF(r);
     }
   };
   useEffect(() => {
@@ -228,31 +250,70 @@ const Scan = (props) => {
       <div className={classes.wrapper}>
         <h1>
           Transaction History &nbsp;
-          <select id="charts" name="charts" onChange={filterInfo}>
-            <option value="s">Summarised</option>
-            <option value="d">Detailed</option>
+          <select id="detail" name="charts" onChange={filterInfo}>
+            <option value="s">Detailed</option>
+            <option value="d">Summarised</option>
           </select>
         </h1>
         <div className={classes.content}>
           <table className={classes.table}>
             <tbody>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Batch No</th>
-                <th>Action</th>
-                <th>Date</th>
-                <th>Remarks</th>
-                <th>User</th>
-              </tr>
-              {data[0] ? (
+              {dataF.length !== 0 ? (
+                <tr>
+                  <th>Product ID</th>
+                  <th>Product Name</th>
+                  <th>Batch No</th>
+                  <th>Action</th>
+                  <th>Date</th>
+                  <th>Remarks</th>
+                  <th>User</th>
+                  <th>Amount</th>
+                </tr>
+              ) : (
+                <tr>
+                  <th>Product ID</th>
+                  <th>Product Name</th>
+                  <th>Batch No</th>
+                  <th>Action</th>
+                  <th>Date</th>
+                  <th>Remarks</th>
+                  <th>User</th>
+                </tr>
+              )}
+
+              {dataF.length !== 0 ? (
+                dataF[0] ? (
+                  dataF[0].map((entry) => (
+                    <tr key={generateKey()} className={classes.trow}>
+                      <td>{entry.prodID}</td>
+                      <td>{entry.prodName}</td>
+                      <td>{entry.batchNo}</td>
+                      <td>{entry.scanType}</td>
+                      <td>
+                        {entry.dateAdded.length !== 11
+                          ? getDate(entry.dateAdded["seconds"])
+                          : entry.dateAdded}
+                      </td>
+                      <td>{entry.remarks}</td>
+                      <td>{entry.addedBy}</td>
+                      <td>{entry.count}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr></tr>
+                )
+              ) : data[0] ? (
                 data[0].map((entry) => (
                   <tr key={generateKey()} className={classes.trow}>
                     <td>{entry.prodID}</td>
                     <td>{entry.prodName}</td>
                     <td>{entry.batchNo}</td>
                     <td>{entry.scanType}</td>
-                    <td>{getDate(entry.dateAdded["seconds"])}</td>
+                    <td>
+                      {entry.dateAdded.length !== 11
+                        ? getDate(entry.dateAdded["seconds"])
+                        : entry.dateAdded}
+                    </td>
                     <td>{entry.remarks}</td>
                     <td>{entry.addedBy}</td>
                   </tr>
