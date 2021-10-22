@@ -25,7 +25,7 @@ const Scan = (props) => {
 
   const filterDate = (event) => {
     let filterDay = event.target.value;
-    document.getElementById("detail").value = "d";
+    document.getElementById("detail").value = "s";
     setData([]);
     let arr = [];
     let today = new Date().toString().substring(4, 15);
