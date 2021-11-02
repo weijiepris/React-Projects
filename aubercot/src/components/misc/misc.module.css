@@ -45,18 +45,18 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 /* .container {
-  margin: 3rem auto;
-  width: 95%;
-  background-color: #e3e3e3;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  padding: 2rem;
-  text-align: center;
-  color: black;
-  height: 500px;
-  animation: login-appear 0.8s ease-out forwards;
-  overflow-y: auto;
-  overflow-x: none;
-} */
+    margin: 3rem auto;
+    width: 95%;
+    background-color: #e3e3e3;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    text-align: center;
+    color: black;
+    height: 500px;
+    animation: login-appear 0.8s ease-out forwards;
+    overflow-y: auto;
+    overflow-x: none;
+  } */
 
 ul {
   list-style-type: none;
@@ -120,22 +120,4 @@ li {
 
 .red {
   color: red;
-}
-
-.hover:hover {
-  cursor: pointer;
-}
-
-.scanIn:nth-child(even) {
-  background-color: #dce8d0;
-}
-.scanIn:nth-child(odd) {
-  background-color: #d1dcc6;
-}
-
-.scanOut:nth-child(even) {
-  background-color: #dcc6c6;
-}
-.scanOut:nth-child(odd) {
-  background-color: #eebfbf;
 }

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react";
 // import firebase from "firebase";
-import classes from "./misc.module.css";
+import classes from "./custom.module.css";
 import AuthContext from "../../store/auth-context";
-const Dev = () => {
+const Fermentation = () => {
   const ctx = useContext(AuthContext);
   const batchNoRef = useRef();
   const amountRef = useRef();
@@ -41,4 +41,4 @@ const Dev = () => {
   );
 };
 
-export default Dev;
+export default Fermentation;
