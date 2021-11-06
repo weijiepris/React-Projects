@@ -13,7 +13,6 @@ const ScanOut = () => {
 
   useEffect(() => {
     const result = [];
-    var date = new Date();
     data.forEach((x) => {
       // console.log("test => ", x.prodID);
       result[
@@ -32,7 +31,6 @@ const ScanOut = () => {
         prodID: res[0],
         batchNo: res[1],
         prodName: res[2],
-        dateAdded: { seconds: toTimestamp(date) },
         amount: result[i],
         remarks: res[3],
       });
@@ -41,11 +39,14 @@ const ScanOut = () => {
   }, [data]);
 
   const onChangeUpdateObj = (event) => {
-    setErrorMessage("");
     let res = event.target.id.split("//");
     for (let i in obj) {
-      if (res[0] === obj[i].prodID && res[1] === obj[i].batchNo)
-        obj[i].amount = event.target.value;
+      if (
+        res[0] === obj[i].prodID &&
+        res[1] === obj[i].batchNo &&
+        res[2] === obj[i].remarks
+      )
+        obj[i].amount = parseInt(event.target.value);
     }
   };
   const onChange = () => {
@@ -56,10 +57,6 @@ const ScanOut = () => {
   //   return new Date(date * 1000).toString().substring(0, 25);
   // };
 
-  function toTimestamp(strDate) {
-    var datum = Date.parse(strDate);
-    return datum / 1000;
-  }
   const addData = (data) => {
     setData((prevData) => {
       return [data, ...prevData];
@@ -79,46 +76,33 @@ const ScanOut = () => {
     let t = false;
     batchNo = batchNo.replaceAll("/", "");
     // to check if the prodID,batchNo is available, then get first doc
-    firebase
-      .firestore()
-      .collection("batch")
-      .doc(ctx.currentUser.companyName)
-      .collection("products")
-      .where("prodID", "==", prodID)
-      .where("batchNo", "==", batchNo)
-      .where("scanType", "==", "in")
-      .limit(1)
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          t = true;
-          var date = new Date();
+
+    ctx.batch.forEach((bdoc) => {
+      if (
+        bdoc.prodID === prodID &&
+        bdoc.batchNo === batchNo &&
+        bdoc.scanType === "in"
+      ) {
+        if (!t) {
           addData({
             id: data.length + 1,
             prodID: prodID,
             batchNo: batchNo,
-            prodName: doc.data().prodName,
+            prodName: bdoc.prodName,
             addedBy: ctx.currentUser.name,
-            dateAdded: { seconds: toTimestamp(date) },
             remarks: remarks,
           });
-          // console.log(
-          //   "match, ID => ",
-          //   uniqueID,
-          //   " date in => ",
-          //   getDate(doc.data().dateAdded["seconds"])
-          // );
-        });
-      })
-      .then(function () {
-        if (!t) {
-          setErrorMessage(
-            "Product ID or Batch No does not exists or has not been created yet."
-          );
-          document.getElementById("errorMessage").style.backgroundColor = "red";
-          document.getElementById("errorMessage").style.color = "white";
         }
-      });
+        t = true;
+      }
+    });
+    if (!t) {
+      setErrorMessage(
+        "Product ID or Batch No does not exists or has not been created yet. HOL"
+      );
+      document.getElementById("errorMessage").style.backgroundColor = "red";
+      document.getElementById("errorMessage").style.color = "white";
+    }
   };
   const scanIn = (event) => {
     event.preventDefault();
@@ -162,81 +146,239 @@ const ScanOut = () => {
   };
 
   const saveInput = () => {
+    setErrorMessage("");
     let arrayCheck = [];
+    console.log(obj);
     for (let i in obj) {
-      if (typeof arrayCheck[obj[i].prodID] == "undefined") {
-        arrayCheck[obj[i].prodID] = 0;
+      if (
+        !arrayCheck[
+          obj[i].prodID + "//" + obj[i].batchNo + "//" + obj[i].remarks
+        ]
+      ) {
+        arrayCheck[
+          obj[i].prodID + "//" + obj[i].batchNo + "//" + obj[i].remarks
+        ] = 0;
       }
-      arrayCheck[obj[i].prodID] += obj[i].amount;
+      arrayCheck[
+        obj[i].prodID + "//" + obj[i].batchNo + "//" + obj[i].remarks
+      ] += obj[i].amount;
     }
+    console.log(arrayCheck);
 
     for (let i in arrayCheck) {
-      firebase
-        .firestore()
-        .collection("batch")
-        .doc(ctx.currentUser.companyName)
-        .collection("products")
-        .where("prodID", "==", i)
-        .where("scanType", "==", "in")
-        .get()
-        .then((snapshot) => {
-          if (arrayCheck[i] > snapshot.docs.length) {
-            setErrorMessage(
-              "Exceeded amount for " +
-                i +
-                " (Remaining amount: " +
-                snapshot.docs.length +
-                ")"
-            );
-            document.getElementById("errorMessage").style.backgroundColor =
-              "red";
-            document.getElementById("errorMessage").style.color = "white";
-          } else {
-            obj.forEach((d) => {
-              // console.log(d);
-              for (let i = 0; i < d.amount; i++) {
-                firebase
-                  .firestore()
-                  .collection("batch")
-                  .doc(ctx.currentUser.companyName)
-                  .collection("products")
-                  .where("prodID", "==", d.prodID)
-                  .where("batchNo", "==", d.batchNo)
-                  .where("scanType", "==", "in")
-                  .limit(d.amount)
-                  .get()
-                  .then((snapshot) => {
-                    snapshot.forEach(async (doc) => {
-                      await firebase
-                        .firestore()
-                        .collection("batch")
-                        .doc(ctx.currentUser.companyName)
-                        .collection("products")
-                        .doc(doc.id)
-                        .update({
-                          dateRemoved:
-                            firebase.firestore.FieldValue.serverTimestamp(),
-                          scanType: "out",
-                          removedBy: ctx.currentUser.name,
-                          remarksOut: d.remarks,
-                        })
-                        .then(function () {
-                          setErrorMessage("data entered successfully");
-                          setObj([]);
-                          setData([]);
-                        });
-                    });
-                  });
-              }
-            });
+      let res = i.split("//");
 
-            setErrorMessage("data entered successfully");
-            document.getElementById("errorMessage").style.backgroundColor =
-              "white";
-            document.getElementById("errorMessage").style.color = "black";
+      let prodID = res[0];
+      let batchNo = res[1];
+      let remarks = res[2];
+      let count = 0;
+      ctx.batch.forEach((bdoc) => {
+        if (
+          bdoc.prodID === prodID &&
+          bdoc.batchNo === batchNo &&
+          bdoc.scanType === "in"
+        ) {
+          count++;
+        }
+      });
+      console.log(count, "bottles of", prodID, batchNo);
+      if (arrayCheck[i] > count) {
+        setErrorMessage(
+          "Exceeded amount for " + prodID + " (Remaining amount: " + count + ")"
+        );
+        document.getElementById("errorMessage").style.backgroundColor = "red";
+        document.getElementById("errorMessage").style.color = "white";
+      } else {
+        console.log("scanning out");
+        let counter = 0;
+        ctx.batch.forEach((bdoc) => {
+          if (
+            counter < arrayCheck[i] &&
+            bdoc.prodID === prodID &&
+            bdoc.batchNo === batchNo &&
+            bdoc.scanType === "in"
+          ) {
+            firebase
+              .firestore()
+              .collection("batch")
+              .doc(ctx.currentUser.companyName)
+              .collection("products")
+              .doc(bdoc.uniqueID)
+              .update({
+                dateRemoved: firebase.firestore.FieldValue.serverTimestamp(),
+                scanType: "out",
+                removedBy: ctx.currentUser.name,
+                remarksOut: remarks,
+              })
+              .then(function () {
+                setErrorMessage("data entered successfully");
+                setObj([]);
+                setData([]);
+              });
+            counter += 1;
           }
         });
+        // for (let j = 0; j < arrayCheck[i]; j++) {
+        //   let curKey = ctx.batch.forEach((bdoc) => {
+        //     if (
+        //       bdoc.prodID === prodID &&
+        //       bdoc.batchNo === batchNo &&
+        //       bdoc.scanType === "in"
+        //     ) {
+        //       return bdoc.uniqueID;
+        //     }
+        //   });
+        //   console.log("for", prodID, batchNo, remarks);
+        //   console.log(curKey);
+        //   firebase
+        //     .firestore()
+        //     .collection("batch")
+        //     .doc(ctx.currentUser.companyName)
+        //     .collection("products")
+        //     .doc(curKey)
+        //     .update({
+        //       dateRemoved: firebase.firestore.FieldValue.serverTimestamp(),
+        //       scanType: "out",
+        //       removedBy: ctx.currentUser.name,
+        //       remarksOut: remarks,
+        //     })
+        //     .then(function () {
+        //       setErrorMessage("data entered successfully");
+        //       document.getElementById("errorMessage").style.backgroundColor =
+        //         "white";
+        //       document.getElementById("errorMessage").style.color = "black";
+        //       setObj([]);
+        //       setData([]);
+        //     });
+
+        // ctx.batch.forEach((bdoc) => {
+        //   if (
+        //     bdoc.prodID === d.prodID &&
+        //     bdoc.batchNo === d.batchNo &&
+        //     bdoc.scanType === "in"
+        //   ) {
+        //     firebase
+        //       .firestore()
+        //       .collection("batch")
+        //       .doc(ctx.currentUser.companyName)
+        //       .collection("products")
+        //       .doc(bdoc.uniqueID)
+        //       .update({
+        //         dateRemoved:
+        //           firebase.firestore.FieldValue.serverTimestamp(),
+        //         scanType: "out",
+        //         removedBy: ctx.currentUser.name,
+        //         remarksOut: d.remarks,
+        //       })
+        //       .then(function () {
+        //         setErrorMessage("data entered successfully");
+        //         setObj([]);
+        //         setData([]);
+        //       });
+        //   }
+        // });
+        // firebase
+        //   .firestore()
+        //   .collection("batch")
+        //   .doc(ctx.currentUser.companyName)
+        //   .collection("products")
+        //   .where("prodID", "==", d.prodID)
+        //   .where("batchNo", "==", d.batchNo)
+        //   .where("scanType", "==", "in")
+        //   .limit(d.amount)
+        //   .get()
+        //   .then((snapshot) => {
+        // snapshot.forEach( (doc) => {
+        //    firebase
+        //     .firestore()
+        //     .collection("batch")
+        //     .doc(ctx.currentUser.companyName)
+        //     .collection("products")
+        //     .doc(doc.id)
+        //     .update({
+        //       dateRemoved:
+        //         firebase.firestore.FieldValue.serverTimestamp(),
+        //       scanType: "out",
+        //       removedBy: ctx.currentUser.name,
+        //       remarksOut: d.remarks,
+        //     })
+        //     .then(function () {
+        //       setErrorMessage("data entered successfully");
+        //       setObj([]);
+        //       setData([]);
+        //     });
+        // });
+        // });
+        // }
+      }
     }
+    // for (let i in arrayCheck) {
+    //   firebase
+    //     .firestore()
+    //     .collection("batch")
+    //     .doc(ctx.currentUser.companyName)
+    //     .collection("products")
+    //     .where("prodID", "==", i)
+    //     .where("scanType", "==", "in")
+    //     .get()
+    //     .then((snapshot) => {
+    //       if (arrayCheck[i] > snapshot.docs.length) {
+    //         setErrorMessage(
+    //           "Exceeded amount for " +
+    //             i +
+    //             " (Remaining amount: " +
+    //             snapshot.docs.length +
+    //             ")"
+    //         );
+    //         document.getElementById("errorMessage").style.backgroundColor =
+    //           "red";
+    //         document.getElementById("errorMessage").style.color = "white";
+    //       } else {
+    //         obj.forEach((d) => {
+    //           // console.log(d);
+    //           for (let i = 0; i < d.amount; i++) {
+    //             firebase
+    //               .firestore()
+    //               .collection("batch")
+    //               .doc(ctx.currentUser.companyName)
+    //               .collection("products")
+    //               .where("prodID", "==", d.prodID)
+    //               .where("batchNo", "==", d.batchNo)
+    //               .where("scanType", "==", "in")
+    //               .limit(d.amount)
+    //               .get()
+    //               .then((snapshot) => {
+    //                 snapshot.forEach(async (doc) => {
+    //                   await firebase
+    //                     .firestore()
+    //                     .collection("batch")
+    //                     .doc(ctx.currentUser.companyName)
+    //                     .collection("products")
+    //                     .doc(doc.id)
+    //                     .update({
+    //                       dateRemoved:
+    //                         firebase.firestore.FieldValue.serverTimestamp(),
+    //                       scanType: "out",
+    //                       removedBy: ctx.currentUser.name,
+    //                       remarksOut: d.remarks,
+    //                     })
+    //                     .then(function () {
+    //                       setErrorMessage("data entered successfully");
+    //                       setObj([]);
+    //                       setData([]);
+    //                     });
+    //                 });
+    //               });
+    //           }
+    //         });
+
+    //         setErrorMessage("data entered successfully");
+    //         document.getElementById("errorMessage").style.backgroundColor =
+    //           "white";
+    //         document.getElementById("errorMessage").style.color = "black";
+    //       }
+    //     });
+    // }
   };
 
   return (
@@ -286,8 +428,14 @@ const ScanOut = () => {
                   <td>{entry.prodName}</td>
                   <td>
                     <input
-                      type="text"
-                      id={entry.prodID + "//" + entry.batchNo}
+                      type="number"
+                      id={
+                        entry.prodID +
+                        "//" +
+                        entry.batchNo +
+                        "//" +
+                        entry.remarks
+                      }
                       onChange={onChangeUpdateObj}
                       defaultValue={entry.amount}
                     />

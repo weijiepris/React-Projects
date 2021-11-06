@@ -16,11 +16,19 @@ const Scan = (props) => {
   // };
 
   const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(4, 21);
+    if (date === null) {
+      return 0;
+    } else {
+      return new Date(date["seconds"] * 1000).toString().substring(4, 24);
+    }
   };
 
   const getDate2 = (date) => {
-    return new Date(date * 1000).toString().substring(4, 15);
+    if (date === null) {
+      return 0;
+    } else {
+      return new Date(date["seconds"] * 1000).toString().substring(4, 15);
+    }
   };
 
   const filterDate = (event) => {
@@ -29,7 +37,7 @@ const Scan = (props) => {
     let arr = [];
     let today = new Date().toString().substring(4, 15);
     for (let i in filterData[0]) {
-      let date = getDate2(filterData[0][i].dateAdded["seconds"]);
+      let date = getDate2(filterData[0][i].dateAdded);
       if (
         Math.floor(
           (new Date(today) - new Date(date)) / (1000 * 60 * 60 * 24)
@@ -61,7 +69,7 @@ const Scan = (props) => {
               "//" +
               d.scanType +
               "//" +
-              getDate2(d.dateAdded["seconds"]) +
+              getDate2(d.dateAdded) +
               "//" +
               d.remarks +
               "//" +
@@ -77,7 +85,7 @@ const Scan = (props) => {
               "//" +
               d.scanType +
               "//" +
-              getDate2(d.dateAdded["seconds"]) +
+              getDate2(d.dateAdded) +
               "//" +
               d.remarks +
               "//" +
@@ -93,7 +101,7 @@ const Scan = (props) => {
               "//" +
               d.scanType +
               "//" +
-              getDate2(d.dateAdded["seconds"]) +
+              getDate2(d.dateAdded) +
               "//" +
               d.remarks +
               "//" +
@@ -129,8 +137,7 @@ const Scan = (props) => {
       let outArr = [];
       if (bdoc.dateRemoved === "") {
         if (
-          getDate2(bdoc.dateAdded["seconds"]) ===
-          new Date().toString().substring(4, 15)
+          getDate2(bdoc.dateAdded) === new Date().toString().substring(4, 15)
         ) {
           arr2.push(JSON.parse(JSON.stringify(bdoc)));
         }
@@ -152,15 +159,13 @@ const Scan = (props) => {
         }
 
         if (
-          getDate2(inArr.dateAdded["seconds"]) ===
-          new Date().toString().substring(4, 15)
+          getDate2(inArr.dateAdded) === new Date().toString().substring(4, 15)
         ) {
           arr2.push(inArr);
         }
 
         if (
-          getDate2(outArr.dateAdded["seconds"]) ===
-          new Date().toString().substring(4, 15)
+          getDate2(outArr.dateAdded) === new Date().toString().substring(4, 15)
         ) {
           arr2.push(outArr);
         }
@@ -176,9 +181,7 @@ const Scan = (props) => {
       arr.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
-        return (
-          new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
-        );
+        return new Date(b.dateAdded) - new Date(a.dateAdded);
       });
       arr2.sort(function (a, b) {
         var textA = a.scanType.toUpperCase();
@@ -188,9 +191,7 @@ const Scan = (props) => {
       arr2.sort(function (a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
-        return (
-          new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
-        );
+        return new Date(getDate(b.dateAdded)) - new Date(getDate(a.dateAdded));
       });
 
       addData(arr2);
@@ -259,22 +260,22 @@ const Scan = (props) => {
             <tbody>
               {dataF.length !== 0 ? (
                 <tr>
+                  <th>Date</th>
                   <th>Product ID</th>
                   <th>Product Name</th>
                   <th>Batch No</th>
+                  <th>Amount</th>
                   <th>Action</th>
-                  <th>Date</th>
                   <th>Remarks</th>
                   <th>User</th>
-                  <th>Amount</th>
                 </tr>
               ) : (
                 <tr>
+                  <th>Date</th>
                   <th>Product ID</th>
                   <th>Product Name</th>
                   <th>Batch No</th>
                   <th>Action</th>
-                  <th>Date</th>
                   <th>Remarks</th>
                   <th>User</th>
                 </tr>
@@ -284,18 +285,18 @@ const Scan = (props) => {
                 dataF[0] ? (
                   dataF[0].map((entry) => (
                     <tr key={generateKey()} className={classes.trow}>
+                      <td>
+                        {entry.dateAdded.length !== 11
+                          ? getDate(entry.dateAdded)
+                          : entry.dateAdded}
+                      </td>
                       <td>{entry.prodID}</td>
                       <td>{entry.prodName}</td>
                       <td>{entry.batchNo}</td>
+                      <td>{entry.count}</td>
                       <td>{entry.scanType}</td>
-                      <td>
-                        {entry.dateAdded.length !== 11
-                          ? getDate(entry.dateAdded["seconds"])
-                          : entry.dateAdded}
-                      </td>
                       <td>{entry.remarks}</td>
                       <td>{entry.addedBy}</td>
-                      <td>{entry.count}</td>
                     </tr>
                   ))
                 ) : (
@@ -304,15 +305,15 @@ const Scan = (props) => {
               ) : data[0] ? (
                 data[0].map((entry) => (
                   <tr key={generateKey()} className={classes.trow}>
+                    <td>
+                      {entry.dateAdded.length !== 11
+                        ? getDate(entry.dateAdded)
+                        : entry.dateAdded}
+                    </td>
                     <td>{entry.prodID}</td>
                     <td>{entry.prodName}</td>
                     <td>{entry.batchNo}</td>
                     <td>{entry.scanType}</td>
-                    <td>
-                      {entry.dateAdded.length !== 11
-                        ? getDate(entry.dateAdded["seconds"])
-                        : entry.dateAdded}
-                    </td>
                     <td>{entry.remarks}</td>
                     <td>{entry.addedBy}</td>
                   </tr>

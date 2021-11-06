@@ -34,6 +34,10 @@ const ScanIn = () => {
       });
     }
     setObj(r);
+
+    return () => {
+      setObj([]);
+    };
   }, [data]);
 
   const onChange = (event) => {

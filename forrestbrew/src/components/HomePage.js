@@ -89,7 +89,7 @@ const HomePage = () => {
                 "//" +
                 bdoc.prodName +
                 "//" +
-                getDate(bdoc.dateAdded["seconds"])
+                getDate(bdoc.dateAdded)
             ]
           ) {
             currentArr[
@@ -99,7 +99,7 @@ const HomePage = () => {
                 "//" +
                 bdoc.prodName +
                 "//" +
-                getDate(bdoc.dateAdded["seconds"])
+                getDate(bdoc.dateAdded)
             ] = 1;
           } else {
             currentArr[
@@ -109,7 +109,7 @@ const HomePage = () => {
                 "//" +
                 bdoc.prodName +
                 "//" +
-                getDate(bdoc.dateAdded["seconds"])
+                getDate(bdoc.dateAdded)
             ] += 1;
           }
 
@@ -156,7 +156,7 @@ const HomePage = () => {
         arr[dt] += 1;
       }
       if (bdoc.scanType === "in") {
-        const dt2 = getDate(bdoc.dateAdded["seconds"]);
+        const dt2 = getDate(bdoc.dateAdded);
         if (!testing[dt2]) {
           testing[dt2] = 1;
         } else {
@@ -182,10 +182,9 @@ const HomePage = () => {
       c++;
     }
     temp2.sort(function (a, b) {
-      var textA = a[0].toUpperCase();
-      var textB = b[0].toUpperCase();
-      return textA < textB ? -1 : textA > textB ? 1 : 0;
+      return new Date(a[0]) - new Date(b[0]);
     });
+
     setLinegraph(temp2);
 
     // console.log("testing => ", arr);
@@ -200,7 +199,7 @@ const HomePage = () => {
             "//" +
             bdoc.prodName +
             "//" +
-            getDate(bdoc.dateAdded["seconds"])
+            getDate(bdoc.dateAdded)
         ]
       ) {
         productSummaryArr[
@@ -210,7 +209,7 @@ const HomePage = () => {
             "//" +
             bdoc.prodName +
             "//" +
-            getDate(bdoc.dateAdded["seconds"])
+            getDate(bdoc.dateAdded)
         ] = 1;
       } else {
         productSummaryArr[
@@ -220,7 +219,7 @@ const HomePage = () => {
             "//" +
             bdoc.prodName +
             "//" +
-            getDate(bdoc.dateAdded["seconds"])
+            getDate(bdoc.dateAdded)
         ] += 1;
       }
     });
@@ -321,7 +320,11 @@ const HomePage = () => {
   };
 
   const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(4, 15);
+    if (date === null) {
+      return 0;
+    } else {
+      return new Date(date["seconds"] * 1000).toString().substring(4, 15);
+    }
   };
 
   // const getExpire = (date) => {
