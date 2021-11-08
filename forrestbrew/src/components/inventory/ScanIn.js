@@ -195,6 +195,11 @@ const ScanIn = () => {
     }
   };
 
+  const resetInput = () => {
+    setObj([]);
+    
+    setData([]);
+  };
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In</span>
@@ -209,13 +214,18 @@ const ScanIn = () => {
             ref={outRef}
             onChange={onChange}
           />
+          <br />
+          <input
+            type="text"
+            placeholder="REMARKS"
+            id="remarks"
+            ref={remarksRef}
+          />
+          <br />
+          <button>Enter</button>
+          <br />
+          <br />
         </form>
-        <input
-          type="text"
-          placeholder="REMARKS"
-          id="remarks"
-          ref={remarksRef}
-        />
         <div id="errorMessage">{errorMessage}</div>
       </div>
       <br />
@@ -249,6 +259,9 @@ const ScanIn = () => {
           </table>
           <br />
           <button onClick={saveInput}>Save input</button>
+          <br />
+          <br />
+          <button onClick={resetInput}>Reset all input</button>
         </div>
       </div>
     </div>

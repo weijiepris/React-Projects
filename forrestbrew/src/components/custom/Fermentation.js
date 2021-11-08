@@ -15,7 +15,7 @@ const Fermentation = () => {
   const createHotelHandler = () => {};
   return (
     <div className={classes.container} id="container">
-      <span className={classes.overview}>Hotel Creation - Dev</span>
+      <span className={classes.overview}>Fermentation Creation - Dev</span>
       <br />
       <div className={classes.wrapper}>
         <form onSubmit={createHotelHandler}>

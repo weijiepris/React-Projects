@@ -25,7 +25,9 @@ const ViewInventory = (props) => {
       }
     });
     ctx.batch.forEach((batch) => {
-      prodArr[batch.prodID] += 1;
+      if (batch.scanType === "in") {
+        prodArr[batch.prodID] += 1;
+      }
     });
 
     for (let i in prodArr) {

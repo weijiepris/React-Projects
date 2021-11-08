@@ -133,15 +133,17 @@ const HomePage = () => {
     barGraphArr[1] = ["No Data Found", 0, "transparent"];
     let c = 1;
     for (let i in prodArr) {
-      let res = i.split("//");
-      barGraphArr[c] = [
-        res[0],
-        prodArr[i],
-        "stroke-color: black; stroke-width: 2; fill-color:" +
-          res[1] +
-          "; opacity:0.8;",
-      ];
-      c++;
+      if (prodArr[i] > 0) {
+        let res = i.split("//");
+        barGraphArr[c] = [
+          res[0],
+          prodArr[i],
+          "stroke-color: black; stroke-width: 2; fill-color:" +
+            res[1] +
+            "; opacity:0.8;",
+        ];
+        c++;
+      }
     }
     setBargraph(barGraphArr);
 
@@ -377,16 +379,8 @@ const HomePage = () => {
   const ProdSummary = () => {
     return (
       <React.Fragment>
-        <h1>Production Summary</h1>
         <table className={classes.table}>
           <tbody>
-            <tr>
-              <th>Date produced</th>
-              <th>Batch No</th>
-              <th>Product ID</th>
-              <th>Product Name</th>
-              <th>Total produced</th>
-            </tr>
             {productSummary.map((list) => (
               <tr key={Math.random()}>
                 <td>{list.dateAdded}</td>
@@ -408,35 +402,9 @@ const HomePage = () => {
   const CurrentInventory = () => {
     return (
       <React.Fragment>
-        <h1>
-          Current Inventory{" "}
-          {!cic ? (
-            <RiFilterOffLine
-              value={true}
-              onClick={currInvHandler}
-              size={30}
-              className={classes.hover}
-            />
-          ) : (
-            <RiFilterLine
-              value={true}
-              onClick={currInvHandler}
-              size={30}
-              className={classes.hover}
-            />
-          )}
-        </h1>
         <table className={classes.table}>
-          {!cic ? (
-            <tbody>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Batch Number</th>
-                <th>Quantity</th>
-                <th>Date Bottled</th>
-              </tr>
-              {currentInventory.map((list) => (
+          {!cic
+            ? currentInventory.map((list) => (
                 <tr key={Math.random()}>
                   <td>{list.prodID}</td>
                   <td>{list.prodName}</td>
@@ -444,24 +412,14 @@ const HomePage = () => {
                   <td>{list.quantity}</td>
                   <td>{list.dateAdded}</td>
                 </tr>
-              ))}
-            </tbody>
-          ) : (
-            <tbody>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-              </tr>
-              {collapsedCurrentInventory.map((list) => (
+              ))
+            : collapsedCurrentInventory.map((list) => (
                 <tr key={Math.random()}>
                   <td>{list.prodID}</td>
                   <td>{list.prodName}</td>
                   <td>{list.quantity}</td>
                 </tr>
               ))}
-            </tbody>
-          )}
         </table>
       </React.Fragment>
     );
@@ -506,9 +464,64 @@ const HomePage = () => {
             </select>
 
             {panel === "prodSummary" ? (
-              <ProdSummary />
+              <React.Fragment>
+                <h1>Production Summary</h1>
+                <table className={classes.tableMain}>
+                  <tbody>
+                    <tr>
+                      <th>Date produced</th>
+                      <th>Batch No</th>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Total produced</th>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className={classes.overflowBox}>
+                  <ProdSummary />
+                </div>
+              </React.Fragment>
             ) : panel === "currentInventory" ? (
-              <CurrentInventory />
+              <React.Fragment>
+                <h1>
+                  Current Inventory{" "}
+                  {!cic ? (
+                    <RiFilterOffLine
+                      value={true}
+                      onClick={currInvHandler}
+                      size={30}
+                      className={classes.hover}
+                    />
+                  ) : (
+                    <RiFilterLine
+                      value={true}
+                      onClick={currInvHandler}
+                      size={30}
+                      className={classes.hover}
+                    />
+                  )}
+                </h1>
+                <table className={classes.tableMain}>
+                  {!cic ? (
+                    <tr>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Batch Number</th>
+                      <th>Quantity</th>
+                      <th>Date Bottled</th>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                  )}
+                </table>
+                <div className={classes.overflowBox}>
+                  <CurrentInventory />
+                </div>
+              </React.Fragment>
             ) : (
               <div>test</div>
             )}

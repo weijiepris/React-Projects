@@ -125,6 +125,11 @@ const Scan = (props) => {
         });
       }
       let r = [];
+      tempArr.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b.dateAdded) - new Date(a.dateAdded);
+      });
       r.push(tempArr);
       setDataF(r);
     }
@@ -255,32 +260,123 @@ const Scan = (props) => {
             <option value={true}>Summarised</option>
           </select>
         </h1>
+        <table
+          className={classes.table}
+          style={{
+            left: "-8px",
+            position: "relative",
+          }}
+        >
+          <tbody>
+            {dataF.length !== 0 ? (
+              <tr>
+                <th
+                  style={{
+                    width: "150px",
+                  }}
+                >
+                  Date
+                </th>
+                <th
+                  style={{
+                    width: "185px",
+                  }}
+                >
+                  Product ID
+                </th>
+                <th
+                  style={{
+                    width: "120px",
+                  }}
+                >
+                  Product Name
+                </th>
+                <th
+                  style={{
+                    width: "190px",
+                  }}
+                >
+                  Batch No
+                </th>
+                <th
+                  style={{
+                    position: "relative",
+                    left: "-50px",
+                  }}
+                >
+                  Amount
+                </th>
+                <th
+                  style={{
+                    position: "relative",
+                    left: "-70px",
+                  }}
+                >
+                  Action
+                </th>
+                <th
+                  style={{
+                    position: "relative",
+                    left: "-60px",
+                  }}
+                >
+                  Remarks
+                </th>
+                <th
+                  style={{
+                    position: "relative",
+                    left: "-20px",
+                  }}
+                >
+                  User
+                </th>
+              </tr>
+            ) : (
+              <tr>
+                <th
+                  style={{
+                    width: "250px",
+                  }}
+                >
+                  Date
+                </th>
+                <th
+                  style={{
+                    width: "170px",
+                  }}
+                >
+                  Product ID
+                </th>
+                <th
+                  style={{
+                    width: "130px",
+                  }}
+                >
+                  Product Name
+                </th>
+                <th
+                  style={{
+                    width: "155px",
+                  }}
+                >
+                  Batch No
+                </th>
+                <th
+                  style={{
+                    width: "10px",
+                  }}
+                >
+                  Action
+                </th>
+                <th>Remarks</th>
+                <th>User</th>
+              </tr>
+            )}
+          </tbody>
+        </table>
         <div className={classes.content}>
           <table className={classes.table}>
             <tbody>
-              {dataF.length !== 0 ? (
-                <tr>
-                  <th>Date</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Batch No</th>
-                  <th>Amount</th>
-                  <th>Action</th>
-                  <th>Remarks</th>
-                  <th>User</th>
-                </tr>
-              ) : (
-                <tr>
-                  <th>Date</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Batch No</th>
-                  <th>Action</th>
-                  <th>Remarks</th>
-                  <th>User</th>
-                </tr>
-              )}
-
               {dataF.length !== 0 ? (
                 dataF[0] ? (
                   dataF[0].map((entry) => (

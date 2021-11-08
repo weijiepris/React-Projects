@@ -1,8 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import classes from "./inventory.module.css";
 
 // import Chart from "react-google-charts";
+import AuthContext from "../../store/auth-context";
 const Checker = () => {
+  const ctx = useContext(AuthContext);
   const outRef = useRef();
   const [errorMessage, setErrorMessage] = useState("");
   const onChange = (event) => {
@@ -26,7 +28,12 @@ const Checker = () => {
         ) {
           let prodID = res[0];
           let batchNo = res[1];
-          let prodName = res[2];
+          let prodName = "";
+          ctx.product.forEach((pdoc) => {
+            if (prodID.toUpperCase() === pdoc.id) {
+              prodName = pdoc.name;
+            }
+          });
           document.getElementById("label").innerHTML =
             "Prod ID = " +
             prodID +

@@ -148,7 +148,8 @@ const ScanOut = () => {
   const saveInput = () => {
     setErrorMessage("");
     let arrayCheck = [];
-    console.log(obj);
+    // console.log(obj);
+    let ignoreKeys = [];
     for (let i in obj) {
       if (
         !arrayCheck[
@@ -163,7 +164,7 @@ const ScanOut = () => {
         obj[i].prodID + "//" + obj[i].batchNo + "//" + obj[i].remarks
       ] += obj[i].amount;
     }
-    console.log(arrayCheck);
+    // console.log(arrayCheck);
 
     for (let i in arrayCheck) {
       let res = i.split("//");
@@ -172,6 +173,7 @@ const ScanOut = () => {
       let batchNo = res[1];
       let remarks = res[2];
       let count = 0;
+      console.log("----------", i, arrayCheck[i], remarks, "----------");
       ctx.batch.forEach((bdoc) => {
         if (
           bdoc.prodID === prodID &&
@@ -181,7 +183,7 @@ const ScanOut = () => {
           count++;
         }
       });
-      console.log(count, "bottles of", prodID, batchNo);
+      // console.log(count, "bottles of", prodID, batchNo);
       if (arrayCheck[i] > count) {
         setErrorMessage(
           "Exceeded amount for " + prodID + " (Remaining amount: " + count + ")"
@@ -189,15 +191,18 @@ const ScanOut = () => {
         document.getElementById("errorMessage").style.backgroundColor = "red";
         document.getElementById("errorMessage").style.color = "white";
       } else {
-        console.log("scanning out");
+        // console.log("scanning out");
         let counter = 0;
         ctx.batch.forEach((bdoc) => {
           if (
             counter < arrayCheck[i] &&
             bdoc.prodID === prodID &&
             bdoc.batchNo === batchNo &&
-            bdoc.scanType === "in"
+            bdoc.scanType === "in" &&
+            !ignoreKeys.includes(bdoc.uniqueID)
           ) {
+            ignoreKeys.push(bdoc.uniqueID);
+            console.log(bdoc.uniqueID, remarks);
             firebase
               .firestore()
               .collection("batch")
@@ -381,6 +386,11 @@ const ScanOut = () => {
     // }
   };
 
+  const resetInput = () => {
+    setObj([]);
+
+    setData([]);
+  };
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan Out</span>
@@ -447,6 +457,9 @@ const ScanOut = () => {
           </table>
           <br />
           <button onClick={saveInput}>Save input</button>
+          <br />
+          <br />
+          <button onClick={resetInput}>Reset all input</button>
         </div>
       </div>
     </div>

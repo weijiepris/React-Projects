@@ -121,3 +121,21 @@ li {
 .red {
   color: red;
 }
+
+.inputS {
+  height: 40px;
+  width: 100px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.gridBox {
+  display: grid;
+  grid-template-columns: 10% 20% 20% 20%;
+  grid-gap: 5.4em;
+}
+
+.gridBox div {
+  height: 200px;
+  border: 1px solid black;
+}
