@@ -15,7 +15,7 @@ const ScanIn = () => {
     const result = [];
     var date = new Date();
     data.forEach((x) => {
-      // console.log("test => ", x.prodID);
+      console.log("test => ", x);
       result[x.prodID + "//" + x.batchNo + "//" + x.prodName] =
         (result[x.prodID + "//" + x.batchNo + "//" + x.prodName] || 0) + 1;
     });
@@ -197,7 +197,7 @@ const ScanIn = () => {
 
   const resetInput = () => {
     setObj([]);
-    
+
     setData([]);
   };
   return (

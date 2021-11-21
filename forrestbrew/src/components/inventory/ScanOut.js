@@ -14,7 +14,7 @@ const ScanOut = () => {
   useEffect(() => {
     const result = [];
     data.forEach((x) => {
-      // console.log("test => ", x.prodID);
+      console.log("test => ", x);
       result[
         x.prodID + "//" + x.batchNo + "//" + x.prodName + "//" + x.remarks
       ] =
@@ -98,7 +98,7 @@ const ScanOut = () => {
     });
     if (!t) {
       setErrorMessage(
-        "Product ID or Batch No does not exists or has not been created yet. HOL"
+        "Product ID or Batch No does not exists or has not been created yet."
       );
       document.getElementById("errorMessage").style.backgroundColor = "red";
       document.getElementById("errorMessage").style.color = "white";

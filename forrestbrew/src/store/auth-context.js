@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 
-const devMode = true;
+const devMode = false;
 
 let firebaseConfig = {};
 if (devMode) {
@@ -48,6 +48,7 @@ const AuthContext = React.createContext({
   currentUser: [],
   product: "",
   batch: "",
+  copyData: [],
   onLogout: () => {},
   onLogin: (email, password) => {},
   getCurrentUser: () => {},
@@ -63,6 +64,7 @@ export const AuthContextProvider = (props) => {
   const [currentUser, setCurrentUser] = useState([]);
   const [product, setProduct] = useState([]);
   const [batch, setBatch] = useState([]);
+  const [copyData, setCopyData] = useState([]);
 
   useEffect(() => {
     console.log("inventory web app version 1.2");
@@ -130,15 +132,17 @@ export const AuthContextProvider = (props) => {
                 .collection("products")
                 .onSnapshot((querySnapshot) => {
                   let batchArr = [];
+                  let copyArr = [];
                   console.log(
                     "total number of document reads for batch",
                     querySnapshot.size
                   );
                   querySnapshot.forEach((data) => {
                     batchArr.push(data.data());
+                    copyArr.push(JSON.parse(JSON.stringify(data.data())));
                   });
-
                   setBatch(batchArr);
+                  setCopyData(copyArr);
                 });
             }
           });
@@ -204,6 +208,7 @@ export const AuthContextProvider = (props) => {
         currentUser: currentUser,
         product: product,
         batch: batch,
+        copyData: copyData,
         onLogout: logoutHandler,
         onLogin: loginHandler,
         setLoggedIn: loggedInHandler,

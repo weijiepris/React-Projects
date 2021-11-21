@@ -255,14 +255,14 @@ const HomePage = () => {
     }
 
     arr.sort(function (a, b) {
-      var textA = a.prodID.toUpperCase();
-      var textB = b.prodID.toUpperCase();
+      var textA = a.batchNo;
+      var textB = b.batchNo;
       return textA < textB ? -1 : textA > textB ? 1 : 0;
     });
     arr.sort(function (a, b) {
       // Turn your strings into dates, and then subtract them
       // to get a value that is either negative, positive, or zero.
-      return new Date(a.batchNo) - new Date(b.batchNo);
+      return new Date(b.dateAdded) - new Date(a.dateAdded);
     });
     setProductSummary(arr);
   };
@@ -297,6 +297,7 @@ const HomePage = () => {
 
     setCurrentInventory(arr);
   };
+
   const setCollapsedCurrentInv = (collapsedCurrentArr) => {
     // console.log(collapsedCurrentArr);
     let arr = [];
@@ -328,53 +329,6 @@ const HomePage = () => {
       return new Date(date["seconds"] * 1000).toString().substring(4, 15);
     }
   };
-
-  // const getExpire = (date) => {
-  //   let d = new Date(date * 1000);
-
-  //   d.setDate(d.getDate() + 60);
-
-  //   return d.toString().substring(4, 15);
-  // };
-
-  // const addSummary = (list) => {
-  //   setSummary((prevList) => {
-  //     return [list, ...prevList];
-  //   });
-  // };
-
-  // const getSummary = () => {
-  //   const result = [];
-  //   summary.forEach((d) => {
-  //     // console.log(d);
-  //     let dates = new Set(d.data.map((prod) => prod.date));
-  //     dates.forEach((date) => {
-  //       result.push({
-  //         date: date,
-  //         prodID: d.data[0].prodID,
-  //         count: d.data.filter((prod) => prod.date === date).length,
-  //         prodName: d.data[0].prodName,
-  //         batchNo: d.data[0].batchNo,
-  //       });
-  //     });
-  //   });
-  //   // console.log(result);
-
-  //   // setOverall(result);.
-  //   result.sort(function (a, b) {
-  //     var textA = a.prodID.toUpperCase();
-  //     var textB = b.prodID.toUpperCase();
-  //     return textA < textB ? -1 : textA > textB ? 1 : 0;
-  //   });
-
-  //   result.sort(function (a, b) {
-  //     // Turn your strings into dates, and then subtract them
-  //     // to get a value that is either negative, positive, or zero.
-  //     return new Date(b.date) - new Date(a.date);
-  //   });
-
-  //   return result;
-  // };
 
   const ProdSummary = () => {
     return (

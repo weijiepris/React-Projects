@@ -139,3 +139,9 @@ li {
 .scanOut:nth-child(odd) {
   background-color: #eebfbf;
 }
+
+.smallText {
+  font-size: 50%;
+  margin-right: 4px;
+  margin-left: 7px;
+}
