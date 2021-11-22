@@ -41,7 +41,6 @@ const Scan = (props) => {
 
   useEffect(() => {
     setTempData([]);
-    console.log("ctx", ctx.copyData);
     ctx.copyData.forEach((cdoc) => {
       addTempData(cdoc);
     });
@@ -83,9 +82,15 @@ const Scan = (props) => {
     let outArr = [];
     data = JSON.parse(JSON.stringify(data));
     data.forEach((d) => {
-      inArr.push(JSON.parse(JSON.stringify(d)));
+      if (
+        Math.floor(
+          (new Date(today) - new Date(getDate2(d.dateAdded))) /
+            (1000 * 60 * 60 * 24)
+        ) <= filter
+      ) {
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
       if (d.scanType === "out") {
-        d.scanType = "out";
         d.remarks = d.remarksOut;
         d.addedBy = d.removedBy;
         d.dateAdded = d.dateRemoved;
@@ -93,9 +98,9 @@ const Scan = (props) => {
       }
     });
     console.log("o", outArr);
-    inArr.forEach((d) => {
-      if (d.scanType === "out") d.scanType = "in";
-    });
+    // inArr.forEach((d) => {
+    //   if (d.scanType === "out") d.scanType = "in";
+    // });
     data = [];
     data = data.concat(inArr, outArr);
     data.forEach((d) => {
@@ -134,14 +139,20 @@ const Scan = (props) => {
   };
   const summarisedData = (data, filter) => {
     console.log("summarised", filter);
-    console.log("data", data);
     let arr = [];
     let today = new Date().toString().substring(4, 15);
     let inArr = [];
     let outArr = [];
     data = JSON.parse(JSON.stringify(data));
     data.forEach((d) => {
-      inArr.push(JSON.parse(JSON.stringify(d)));
+      if (
+        Math.floor(
+          (new Date(today) - new Date(getDate2(d.dateAdded))) /
+            (1000 * 60 * 60 * 24)
+        ) <= filter
+      ) {
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
       if (d.scanType === "out") {
         if (d.remarksOut === undefined) {
           d.remarksOut = d.remarks;
@@ -156,7 +167,6 @@ const Scan = (props) => {
         outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
-    console.log("o", outArr);
     inArr.forEach((d) => {
       if (d.scanType === "out") d.scanType = "in";
     });
@@ -472,7 +482,12 @@ const Scan = (props) => {
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (d.addedBy.toLowerCase().includes(userID.toLowerCase())) {
+        if (
+          d.addedBy
+            .toString()
+            .toLowerCase()
+            .includes(userID.toString().toLowerCase())
+        ) {
           dArr.push(d);
         }
       }
@@ -560,7 +575,12 @@ const Scan = (props) => {
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (d.remarks.toLowerCase().includes(remarks.toLowerCase())) {
+        if (
+          d.remarks
+            .toString()
+            .toLowerCase()
+            .includes(remarks.toString().toLowerCase())
+        ) {
           dArr.push(d);
         }
       }

@@ -200,6 +200,22 @@ const ScanIn = () => {
 
     setData([]);
   };
+
+  const today = () => {
+    let d = new Date();
+    console.log(d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());
+    return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  };
+
+  const getExpire = (date, day) => {
+    console.log(date);
+    let d = new Date(date);
+    console.log(d);
+    d.setDate(d.getDate() + parseInt(day));
+    // return d.toString().substring(4, 15);
+    return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+  };
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Scan In</span>
@@ -207,6 +223,12 @@ const ScanIn = () => {
       <div className={classes.wrapper}>
         <br />
         <br />
+        <span className={classes.scanChecker}>
+          30 Days later:{getExpire(today(), 30)}
+        </span>
+        <span className={classes.scanChecker}>
+          60 Days later:{getExpire(today(), 60)}
+        </span>
         <form onSubmit={scanIn}>
           <input
             type="text"
