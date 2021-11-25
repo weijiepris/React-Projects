@@ -112,6 +112,8 @@ const ScanIn = () => {
 
   const scanIn = (event) => {
     event.preventDefault();
+
+    document.getElementById("save").disabled = false;
     const outValue = outRef.current.value;
     const remarks = remarksRef.current.value;
     // console.log(outValue);
@@ -151,7 +153,9 @@ const ScanIn = () => {
     outRef.current.value = "";
   };
 
-  const saveInput = () => {
+  const saveInput = (event) => {
+    console.log(event);
+    document.getElementById("save").disabled = true;
     // console.log(getDateToday());
     if (obj.length === 0) {
       setErrorMessage("Please scan in first");
@@ -280,7 +284,9 @@ const ScanIn = () => {
             </tbody>
           </table>
           <br />
-          <button onClick={saveInput}>Save input</button>
+          <button onClick={saveInput} id="save">
+            Save input
+          </button>
           <br />
           <br />
           <button onClick={resetInput}>Reset all input</button>

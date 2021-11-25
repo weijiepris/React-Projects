@@ -6,13 +6,14 @@ import AuthContext from "../../store/auth-context";
 const Scan = (props) => {
   const ctx = useContext(AuthContext);
   const [data, setData] = useState([]);
-  const [filterData, setFilterData] = useState([]);
+  const [filterData, setFilterData] = useState("");
   const [dataF, setDataF] = useState([]);
   const [filterDay, setFilterDay] = useState("0");
   const [filterBy, setFilterBy] = useState("true");
   const [tempData, setTempData] = useState([]);
   const [custom, setCustom] = useState(false);
   const [customData, setCustomData] = useState([]);
+
   const getDate = (date) => {
     if (date === null) {
       return 0;
@@ -72,164 +73,249 @@ const Scan = (props) => {
     return () => {
       setData([]); // clean up
     };
-  }, [filterDay, filterBy, ctx.copyData, tempData]);
+  }, [filterDay, filterBy, ctx.copyData, tempData, filterData]);
 
   const detailedData = (data, filter) => {
-    console.log("filter", filter);
-    let dArr = [];
-    let today = new Date().toString().substring(4, 15);
-    let inArr = [];
-    let outArr = [];
     data = JSON.parse(JSON.stringify(data));
-    data.forEach((d) => {
-      if (
-        Math.floor(
-          (new Date(today) - new Date(getDate2(d.dateAdded))) /
-            (1000 * 60 * 60 * 24)
-        ) <= filter
-      ) {
-        inArr.push(JSON.parse(JSON.stringify(d)));
-      }
-      if (d.scanType === "out") {
-        d.remarks = d.remarksOut;
-        d.addedBy = d.removedBy;
-        d.dateAdded = d.dateRemoved;
-        outArr.push(JSON.parse(JSON.stringify(d)));
-      }
-    });
-    console.log("o", outArr);
-    // inArr.forEach((d) => {
-    //   if (d.scanType === "out") d.scanType = "in";
-    // });
-    data = [];
-    data = data.concat(inArr, outArr);
-    data.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-      }
 
-      if (filter === null) {
-        dArr.push(d);
+    if (filter === null) {
+      if (filterData === "") {
+        setData([]);
       } else {
+        data.sort(function (a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return (
+            new Date(a.dateAdded["seconds"]) - new Date(b.dateAdded["seconds"])
+          );
+        });
+        data.forEach((d) => {
+          addData(d);
+        });
+      }
+    } else {
+      // console.log("detailed data", data);
+      let inArr = [];
+      let outArr = [];
+      let newData = [];
+      let today = new Date().toString().substring(4, 15);
+
+      data.forEach((d) => {
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateAdded))) /
               (1000 * 60 * 60 * 24)
           ) <= filter
         ) {
-          dArr.push(d);
+          inArr.push(JSON.parse(JSON.stringify(d)));
         }
-      }
-    });
 
-    dArr.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
-      return (
-        new Date(a.dateAdded["seconds"]) - new Date(b.dateAdded["seconds"])
-      );
-    });
+        if (
+          Math.floor(
+            (new Date(today) - new Date(getDate2(d.dateRemoved))) /
+              (1000 * 60 * 60 * 24)
+          ) <= filter
+        ) {
+          outArr.push(JSON.parse(JSON.stringify(d)));
+        }
+      });
 
-    dArr.forEach((d) => {
-      addData(d);
-    });
+      inArr.forEach((d) => {
+        d.scanType = "in";
+      });
+      outArr.forEach((d) => {
+        d.remarks = d.remarksOut;
+        d.addedBy = d.removedBy;
+        d.dateAdded = d.dateRemoved;
+      });
+      newData = newData.concat(inArr, outArr);
+
+      newData.sort(function (a, b) {
+        return (
+          new Date(b.dateAdded["seconds"]) - new Date(a.dateAdded["seconds"])
+        );
+      });
+      setData(newData);
+    }
   };
+
   const summarisedData = (data, filter) => {
-    console.log("summarised", filter);
+    data = JSON.parse(JSON.stringify(data));
+
     let arr = [];
-    let today = new Date().toString().substring(4, 15);
     let inArr = [];
     let outArr = [];
-    data = JSON.parse(JSON.stringify(data));
-    data.forEach((d) => {
-      if (
-        Math.floor(
-          (new Date(today) - new Date(getDate2(d.dateAdded))) /
-            (1000 * 60 * 60 * 24)
-        ) <= filter
-      ) {
-        inArr.push(JSON.parse(JSON.stringify(d)));
-      }
-      if (d.scanType === "out") {
-        if (d.remarksOut === undefined) {
-          d.remarksOut = d.remarks;
-        }
-        if (d.removedBy === undefined) {
-          d.removedBy = d.addedBy;
-        }
-        d.scanType = "out";
-        d.remarks = d.remarksOut;
-        d.addedBy = d.removedBy;
-        d.dateAdded = d.dateRemoved;
-        outArr.push(JSON.parse(JSON.stringify(d)));
-      }
-    });
-    inArr.forEach((d) => {
-      if (d.scanType === "out") d.scanType = "in";
-    });
-    data = [];
-    data = data.concat(inArr, outArr);
-    data.forEach((d) => {
-      if (filter === null) {
-        if (
-          !arr[
-            getDate2(d.dateAdded) +
-              "//" +
-              d.prodID +
-              "//" +
-              d.prodName +
-              "//" +
-              d.batchNo +
-              "//" +
-              d.scanType +
-              "//" +
-              d.remarks +
-              "//" +
-              d.addedBy
-          ]
-        ) {
-          arr[
-            getDate2(d.dateAdded) +
-              "//" +
-              d.prodID +
-              "//" +
-              d.prodName +
-              "//" +
-              d.batchNo +
-              "//" +
-              d.scanType +
-              "//" +
-              d.remarks +
-              "//" +
-              d.addedBy
-          ] = 1;
-        } else {
-          arr[
-            getDate2(d.dateAdded) +
-              "//" +
-              d.prodID +
-              "//" +
-              d.prodName +
-              "//" +
-              d.batchNo +
-              "//" +
-              d.scanType +
-              "//" +
-              d.remarks +
-              "//" +
-              d.addedBy
-          ] += 1;
-        }
+    let newData = [];
+    let today = new Date().toString().substring(4, 15);
+
+    if (filter === null) {
+      if (filterData === "") {
+        setData([]);
       } else {
+        data.forEach((d) => {
+          if (filter === null) {
+            if (
+              !arr[
+                getDate2(d.dateAdded) +
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
+              ]
+            ) {
+              arr[
+                getDate2(d.dateAdded) +
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
+              ] = 1;
+            } else {
+              arr[
+                getDate2(d.dateAdded) +
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
+              ] += 1;
+            }
+          } else {
+            if (
+              Math.floor(
+                (new Date(today) - new Date(getDate2(d.dateAdded))) /
+                  (1000 * 60 * 60 * 24)
+              ) <= filter
+            ) {
+              if (
+                !arr[
+                  getDate2(d.dateAdded) +
+                    "//" +
+                    d.prodID +
+                    "//" +
+                    d.prodName +
+                    "//" +
+                    d.batchNo +
+                    "//" +
+                    d.scanType +
+                    "//" +
+                    d.remarks +
+                    "//" +
+                    d.addedBy
+                ]
+              ) {
+                arr[
+                  getDate2(d.dateAdded) +
+                    "//" +
+                    d.prodID +
+                    "//" +
+                    d.prodName +
+                    "//" +
+                    d.batchNo +
+                    "//" +
+                    d.scanType +
+                    "//" +
+                    d.remarks +
+                    "//" +
+                    d.addedBy
+                ] = 1;
+              } else {
+                arr[
+                  getDate2(d.dateAdded) +
+                    "//" +
+                    d.prodID +
+                    "//" +
+                    d.prodName +
+                    "//" +
+                    d.batchNo +
+                    "//" +
+                    d.scanType +
+                    "//" +
+                    d.remarks +
+                    "//" +
+                    d.addedBy
+                ] += 1;
+              }
+            }
+          }
+        });
+        let decodeArr = [];
+        for (let i in arr) {
+          let res = i.split("//");
+          decodeArr.push({
+            dateAdded: res[0],
+            prodID: res[1],
+            prodName: res[2],
+            batchNo: res[3],
+            scanType: res[4],
+            remarks: res[5],
+            addedBy: res[6],
+            count: arr[i],
+          });
+        }
+
+        decodeArr.sort(function (a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b.dateAdded) - new Date(a.dateAdded);
+        });
+
+        setData(decodeArr);
+      }
+    } else {
+      data.forEach((d) => {
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateAdded))) /
               (1000 * 60 * 60 * 24)
           ) <= filter
         ) {
+          inArr.push(JSON.parse(JSON.stringify(d)));
+        }
+
+        if (
+          Math.floor(
+            (new Date(today) - new Date(getDate2(d.dateRemoved))) /
+              (1000 * 60 * 60 * 24)
+          ) <= filter
+        ) {
+          outArr.push(JSON.parse(JSON.stringify(d)));
+        }
+      });
+      inArr.forEach((d) => {
+        d.scanType = "in";
+      });
+      outArr.forEach((d) => {
+        d.remarks = d.remarksOut;
+        d.addedBy = d.removedBy;
+        d.dateAdded = d.dateRemoved;
+      });
+      newData = newData.concat(inArr, outArr);
+      newData.forEach((d) => {
+        if (filter === null) {
           if (
             !arr[
               getDate2(d.dateAdded) +
@@ -279,31 +365,88 @@ const Scan = (props) => {
                 d.addedBy
             ] += 1;
           }
+        } else {
+          if (
+            Math.floor(
+              (new Date(today) - new Date(getDate2(d.dateAdded))) /
+                (1000 * 60 * 60 * 24)
+            ) <= filter
+          ) {
+            if (
+              !arr[
+                getDate2(d.dateAdded) +
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
+              ]
+            ) {
+              arr[
+                getDate2(d.dateAdded) +
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
+              ] = 1;
+            } else {
+              arr[
+                getDate2(d.dateAdded) +
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
+              ] += 1;
+            }
+          }
         }
-      }
-    });
-    let decodeArr = [];
-    for (let i in arr) {
-      let res = i.split("//");
-      decodeArr.push({
-        dateAdded: res[0],
-        prodID: res[1],
-        prodName: res[2],
-        batchNo: res[3],
-        scanType: res[4],
-        remarks: res[5],
-        addedBy: res[6],
-        count: arr[i],
       });
+      let decodeArr = [];
+      for (let i in arr) {
+        let res = i.split("//");
+        decodeArr.push({
+          dateAdded: res[0],
+          prodID: res[1],
+          prodName: res[2],
+          batchNo: res[3],
+          scanType: res[4],
+          remarks: res[5],
+          addedBy: res[6],
+          count: arr[i],
+        });
+      }
+
+      decodeArr.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b.dateAdded) - new Date(a.dateAdded);
+      });
+
+      setData(decodeArr);
     }
-
-    decodeArr.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
-      return new Date(b.dateAdded) - new Date(a.dateAdded);
-    });
-
-    setData(decodeArr);
   };
   const addData = (data) => {
     setData((prevData) => {
@@ -327,8 +470,11 @@ const Scan = (props) => {
   };
 
   const searchDate = () => {
-    console.log("in 1");
     let dArr = [];
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
     let fromDate = new Date(document.getElementById("dateFrom").value)
       .toString()
       .substring(4, 15);
@@ -342,262 +488,518 @@ const Scan = (props) => {
     if (toDate === "lid Date") {
       toDate = new Date().toString().substring(4, 15);
     }
-    tempData.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-      }
+
+    data.forEach((d) => {
       if (
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        dArr.push(d);
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
 
-    dArr.sort(function (a, b) {
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    newArr.sort(function (a, b) {
       return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
     });
     document.getElementById("detail").value = "false";
     setFilterBy(false);
-    setCustomData(dArr);
-    setData(dArr);
+    setCustomData(newArr);
+    setData(newArr);
   };
+
   const actionSearchDate = () => {
-    console.log("in 2");
-    let dArr = [];
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
     let fromDate = new Date(document.getElementById("dateFrom").value)
       .toString()
       .substring(4, 15);
     let toDate = new Date(document.getElementById("dateTo").value)
       .toString()
       .substring(4, 15);
-
     let actionType = document.getElementById("actionSelect").value;
+
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
     if (toDate === "lid Date") {
       toDate = new Date().toString().substring(4, 15);
     }
-    tempData.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-      }
+
+    data.forEach((d) => {
       if (
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (d.scanType === actionType) {
-          dArr.push(d);
-        }
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
 
-    dArr.sort(function (a, b) {
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (d.scanType === actionType) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
       return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
     });
     document.getElementById("detail").value = "false";
     setFilterBy(false);
-    setCustomData(dArr);
-    setData(dArr);
+    setCustomData(arr);
+    setData(arr);
   };
 
   const prodIDSearchDate = () => {
-    console.log("in 3");
-    let dArr = [];
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
     let fromDate = new Date(document.getElementById("dateFrom").value)
       .toString()
       .substring(4, 15);
     let toDate = new Date(document.getElementById("dateTo").value)
       .toString()
       .substring(4, 15);
-
     let prodID = document.getElementById("actionSelect").value;
-    console.log(prodID);
+
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
     if (toDate === "lid Date") {
       toDate = new Date().toString().substring(4, 15);
     }
-    tempData.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-      }
+
+    data.forEach((d) => {
       if (
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (d.prodID === prodID) {
-          dArr.push(d);
-        }
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
 
-    dArr.sort(function (a, b) {
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (d.prodID === prodID) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
       return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
     });
     document.getElementById("detail").value = "false";
     setFilterBy(false);
-    setCustomData(dArr);
-    setData(dArr);
+    setCustomData(arr);
+    setData(arr);
   };
 
   const userSearchDate = () => {
-    console.log("in 4");
-    let dArr = [];
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
     let fromDate = new Date(document.getElementById("dateFrom").value)
       .toString()
       .substring(4, 15);
     let toDate = new Date(document.getElementById("dateTo").value)
       .toString()
       .substring(4, 15);
-
     let userID = document.getElementById("userInput").value;
-    console.log(userID);
+
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
     if (toDate === "lid Date") {
       toDate = new Date().toString().substring(4, 15);
     }
-    tempData.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-        d.addedBy = d.removedBy;
-      }
+
+    data.forEach((d) => {
       if (
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (
-          d.addedBy
-            .toString()
-            .toLowerCase()
-            .includes(userID.toString().toLowerCase())
-        ) {
-          dArr.push(d);
-        }
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
 
-    dArr.sort(function (a, b) {
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (
+        d.addedBy
+          .toString()
+          .toLowerCase()
+          .includes(userID.toString().toLowerCase())
+      ) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
       return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
     });
     document.getElementById("detail").value = "false";
     setFilterBy(false);
-    setCustomData(dArr);
-    setData(dArr);
+    setCustomData(arr);
+    setData(arr);
   };
 
   const batchSearchDate = () => {
-    console.log("in 5");
-    let dArr = [];
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
     let fromDate = new Date(document.getElementById("dateFrom").value)
       .toString()
       .substring(4, 15);
     let toDate = new Date(document.getElementById("dateTo").value)
       .toString()
       .substring(4, 15);
-
     let batchNo = document.getElementById("batchInput").value;
-    console.log(batchNo);
+
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
     if (toDate === "lid Date") {
       toDate = new Date().toString().substring(4, 15);
     }
-    tempData.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-      }
+
+    data.forEach((d) => {
       if (
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (d.batchNo.includes(batchNo)) {
-          dArr.push(d);
-        }
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
 
-    dArr.sort(function (a, b) {
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (d.batchNo.includes(batchNo)) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
       return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
     });
     document.getElementById("detail").value = "false";
     setFilterBy(false);
-    setCustomData(dArr);
-    setData(dArr);
+    setCustomData(arr);
+    setData(arr);
   };
 
   const remarksSearchDate = () => {
-    console.log("in 6");
-    let dArr = [];
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
     let fromDate = new Date(document.getElementById("dateFrom").value)
       .toString()
       .substring(4, 15);
     let toDate = new Date(document.getElementById("dateTo").value)
       .toString()
       .substring(4, 15);
-
     let remarks = document.getElementById("remarksInput").value;
-    console.log(remarks);
+
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
     if (toDate === "lid Date") {
       toDate = new Date().toString().substring(4, 15);
     }
-    tempData.forEach((d) => {
-      if (d.dateRemoved !== "") {
-        d.dateAdded = d.dateRemoved;
-      }
-      if (d.scanType === "out" && d.remarksOut) {
-        d.remarks = d.remarksOut;
-      }
+
+    data.forEach((d) => {
       if (
         new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
         new Date(getDate2(d.dateAdded)) <= new Date(toDate)
       ) {
-        if (
-          d.remarks
-            .toString()
-            .toLowerCase()
-            .includes(remarks.toString().toLowerCase())
-        ) {
-          dArr.push(d);
-        }
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
       }
     });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
 
-    dArr.sort(function (a, b) {
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (
+        d.remarks
+          .toString()
+          .toLowerCase()
+          .includes(remarks.toString().toLowerCase())
+      ) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
       return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
     });
     document.getElementById("detail").value = "false";
     setFilterBy(false);
-    setCustomData(dArr);
-    setData(dArr);
+    setCustomData(arr);
+    setData(arr);
+  };
+
+  const prodIDActionSearchDate = () => {
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
+    let fromDate = new Date(document.getElementById("dateFrom").value)
+      .toString()
+      .substring(4, 15);
+    let toDate = new Date(document.getElementById("dateTo").value)
+      .toString()
+      .substring(4, 15);
+    let prodID = document.getElementById("productSelect").value;
+    let actionType = document.getElementById("actionSelect").value;
+
+    console.log("prodID", prodID);
+    console.log("actionType", actionType);
+    if (fromDate === "lid Date") {
+      fromDate = new Date("2000/01/01");
+    }
+    if (toDate === "lid Date") {
+      toDate = new Date().toString().substring(4, 15);
+    }
+
+    data.forEach((d) => {
+      if (
+        new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateAdded)) <= new Date(toDate)
+      ) {
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
+      }
+    });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
+
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (d.prodID === prodID && d.scanType === actionType) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
+      return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
+    });
+    document.getElementById("detail").value = "false";
+    setFilterBy(false);
+    setCustomData(arr);
+    setData(arr);
+  };
+
+  const batchNoActionSearchDate = () => {
+    let inArr = [];
+    let outArr = [];
+    let newArr = [];
+    let data = JSON.parse(JSON.stringify(tempData));
+    let fromDate = new Date(document.getElementById("dateFrom").value)
+      .toString()
+      .substring(4, 15);
+    let toDate = new Date(document.getElementById("dateTo").value)
+      .toString()
+      .substring(4, 15);
+    let batchNo = document.getElementById("batchInput").value;
+    let actionType = document.getElementById("actionSelect").value;
+
+    console.log("batchNo", batchNo);
+    console.log("actionType", actionType);
+    if (fromDate === "lid Date") {
+      fromDate = new Date("2000/01/01");
+    }
+    if (toDate === "lid Date") {
+      toDate = new Date().toString().substring(4, 15);
+    }
+
+    data.forEach((d) => {
+      if (
+        new Date(getDate2(d.dateAdded)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateAdded)) <= new Date(toDate)
+      ) {
+        inArr.push(JSON.parse(JSON.stringify(d)));
+      }
+      if (
+        new Date(getDate2(d.dateRemoved)) >= new Date(fromDate) &&
+        new Date(getDate2(d.dateRemoved)) <= new Date(toDate)
+      ) {
+        outArr.push(JSON.parse(JSON.stringify(d)));
+      }
+    });
+    inArr.forEach((d) => {
+      d.scanType = "in";
+    });
+
+    outArr.forEach((d) => {
+      if (d.remarksOut !== undefined) {
+        d.remarks = d.remarksOut;
+      }
+      if (d.removedBy !== undefined) {
+        d.addedBy = d.removedBy;
+      }
+      d.dateAdded = d.dateRemoved;
+    });
+
+    newArr = newArr.concat(inArr, outArr);
+    let arr = [];
+    newArr.forEach((d) => {
+      if (
+        d.batchNo
+          .toString()
+          .toLowerCase()
+          .includes(batchNo.toString().toLowerCase()) &&
+        d.scanType === actionType
+      ) {
+        arr.push(d);
+      }
+    });
+    arr.sort(function (a, b) {
+      return new Date(getDate2(b.dateAdded)) - new Date(getDate2(a.dateAdded));
+    });
+    document.getElementById("detail").value = "false";
+    setFilterBy(false);
+    setCustomData(arr);
+    setData(arr);
   };
 
   const customFilter = (event) => {
     let filterBy = event.target.value;
-    console.log(filterBy);
+    setFilterData(filterBy);
     document.getElementById("customInputs").innerHTML = "";
     const div = document.getElementById("customInputs");
     const searchBtn = document.createElement("button");
@@ -616,12 +1018,16 @@ const Scan = (props) => {
     labelTo.innerHTML = "To";
 
     if (filterBy === "date") {
-      searchBtn.onclick = () => searchDate();
+      // searchBtn.onclick = () => searchDate();
       t.appendChild(labelFrom);
       t.appendChild(dateFrom);
       t.appendChild(labelTo);
       t.appendChild(dateTo);
       searchBtn.innerHTML = "Search";
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        searchDate();
+      };
       div.append(t);
       div.append(searchBtn);
     } else if (filterBy === "action") {
@@ -639,7 +1045,12 @@ const Scan = (props) => {
       actionValueOut.innerHTML = "Out";
       actionSelect.appendChild(actionValueIn);
       actionSelect.appendChild(actionValueOut);
-      searchBtn.onclick = () => actionSearchDate();
+      // searchBtn.onclick = () => actionSearchDate();
+
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        actionSearchDate();
+      };
 
       t.appendChild(labelAction);
       t.appendChild(actionSelect);
@@ -665,8 +1076,12 @@ const Scan = (props) => {
         actionSelect.appendChild(actionValue);
       });
 
-      searchBtn.onclick = () => prodIDSearchDate();
+      // searchBtn.onclick = () => prodIDSearchDate();
 
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        prodIDSearchDate();
+      };
       t.appendChild(labelAction);
       t.appendChild(actionSelect);
       t.appendChild(labelFrom);
@@ -684,8 +1099,12 @@ const Scan = (props) => {
       labelAction.innerHTML = "User";
       labelAction.className = classes.smallText;
 
-      searchBtn.onclick = () => userSearchDate();
+      // searchBtn.onclick = () => userSearchDate();
 
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        userSearchDate();
+      };
       t.appendChild(labelAction);
       t.appendChild(userInput);
       t.appendChild(labelFrom);
@@ -703,8 +1122,12 @@ const Scan = (props) => {
       labelAction.innerHTML = "Batch No";
       labelAction.className = classes.smallText;
 
-      searchBtn.onclick = () => batchSearchDate();
+      // searchBtn.onclick = () => batchSearchDate();
 
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        batchSearchDate();
+      };
       t.appendChild(labelAction);
       t.appendChild(batchInput);
       t.appendChild(labelFrom);
@@ -722,10 +1145,102 @@ const Scan = (props) => {
       labelAction.innerHTML = "Remarks";
       labelAction.className = classes.smallText;
 
-      searchBtn.onclick = () => remarksSearchDate();
+      // searchBtn.onclick = () => remarksSearchDate();
 
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        remarksSearchDate();
+      };
       t.appendChild(labelAction);
       t.appendChild(remarksInput);
+      t.appendChild(labelFrom);
+      t.appendChild(dateFrom);
+      t.appendChild(labelTo);
+      t.appendChild(dateTo);
+      searchBtn.innerHTML = "Search";
+      div.append(t);
+      div.append(searchBtn);
+    } else if (filterBy === "prodIDAction") {
+      const productSelect = document.createElement("select");
+      const labelProduct = document.createElement("span");
+      productSelect.id = "productSelect";
+      productSelect.name = "productSelect";
+      labelProduct.innerHTML = "Product ID";
+      labelProduct.className = classes.smallText;
+
+      ctx.product.forEach((pdoc) => {
+        const productValue = document.createElement("option");
+        productValue.value = pdoc.prodID;
+        productValue.innerHTML = pdoc.prodID;
+        productSelect.appendChild(productValue);
+      });
+
+      const actionSelect = document.createElement("select");
+      const actionValueIn = document.createElement("option");
+      const actionValueOut = document.createElement("option");
+      const labelAction = document.createElement("span");
+      actionSelect.id = "actionSelect";
+      actionSelect.name = "actionSelect";
+      labelAction.innerHTML = "Action";
+      labelAction.className = classes.smallText;
+      actionValueIn.value = "in";
+      actionValueIn.innerHTML = "In";
+      actionValueOut.value = "out";
+      actionValueOut.innerHTML = "Out";
+      actionSelect.appendChild(actionValueIn);
+      actionSelect.appendChild(actionValueOut);
+
+      // searchBtn.onclick = () => prodIDSearchDate();
+
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        prodIDActionSearchDate();
+      };
+      t.appendChild(labelProduct);
+      t.appendChild(productSelect);
+      t.appendChild(labelAction);
+      t.appendChild(actionSelect);
+      t.appendChild(labelFrom);
+      t.appendChild(dateFrom);
+      t.appendChild(labelTo);
+      t.appendChild(dateTo);
+      searchBtn.innerHTML = "Search";
+      div.append(t);
+      div.append(searchBtn);
+    } else if (filterBy === "batchNoAction") {
+      const batchInput = document.createElement("input");
+      const labelBatch = document.createElement("span");
+      batchInput.id = "batchInput";
+      batchInput.name = "batchInput";
+      labelBatch.innerHTML = "Batch No";
+      labelBatch.className = classes.smallText;
+
+      const actionSelect = document.createElement("select");
+      const actionValueIn = document.createElement("option");
+      const actionValueOut = document.createElement("option");
+      const labelAction = document.createElement("span");
+      actionSelect.id = "actionSelect";
+      actionSelect.name = "actionSelect";
+      labelAction.innerHTML = "Action";
+      labelAction.className = classes.smallText;
+      actionValueIn.value = "in";
+      actionValueIn.innerHTML = "In";
+      actionValueOut.value = "out";
+      actionValueOut.innerHTML = "Out";
+      actionSelect.appendChild(actionValueIn);
+      actionSelect.appendChild(actionValueOut);
+
+      // searchBtn.onclick = () => prodIDSearchDate();
+
+      div.onsubmit = (event) => {
+        event.preventDefault();
+        batchNoActionSearchDate();
+      };
+
+      t.appendChild(labelBatch);
+      t.appendChild(batchInput);
+      t.appendChild(labelAction);
+      t.appendChild(actionSelect);
       t.appendChild(labelFrom);
       t.appendChild(dateFrom);
       t.appendChild(labelTo);
@@ -758,9 +1273,11 @@ const Scan = (props) => {
               <option value="action">Action</option>
               <option value="user">User</option>
               <option value="remarks">Remarks</option>
+              <option value="prodIDAction">Product ID &amp; Action</option>
+              <option value="batchNoAction">Batch No &amp; Action</option>
             </select>
             &nbsp; &nbsp;
-            <span id="customInputs"></span>
+            <form id="customInputs" className={classes.formInput}></form>
           </React.Fragment>
         ) : (
           <div></div>
