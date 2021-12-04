@@ -88,8 +88,6 @@
   width: 300px;
 }
 
-.flexContent {
-}
 .overflowBox {
   overflow-x: hidden;
   overflow-y: auto;
@@ -114,7 +112,7 @@
 @media only screen and (max-width: 1366px) {
   .flex {
     display: grid;
-    grid-template-columns: 99%;
+    overflow-x: hidden;
   }
   .individual {
     padding: 10px;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 
-const devMode = false;
+const devMode = true;
 
 let firebaseConfig = {};
 if (devMode) {
@@ -48,6 +48,8 @@ const AuthContext = React.createContext({
   currentUser: [],
   product: "",
   batch: "",
+  hotel: "",
+  fermentation: "",
   copyData: [],
   onLogout: () => {},
   onLogin: (email, password) => {},
@@ -65,6 +67,8 @@ export const AuthContextProvider = (props) => {
   const [product, setProduct] = useState([]);
   const [batch, setBatch] = useState([]);
   const [copyData, setCopyData] = useState([]);
+  const [fermentation, setFermentation] = useState([]);
+  const [hotel, setHotel] = useState([]);
 
   useEffect(() => {
     console.log("inventory web app version 1.2");
@@ -87,25 +91,6 @@ export const AuthContextProvider = (props) => {
               setCurrentUser(userObject.data());
               setIsLoggedIn(true);
               setIsLoaded(true);
-
-              // firebase
-              //   .firestore()
-              //   .collection("products")
-              //   .doc(userObject.data().companyName)
-              //   .collection("products")
-              //   .get()
-              //   .then((snapshot) => {
-              //     console.log(
-              //       "number of document reads for products",
-              //       snapshot.size
-              //     );
-              //     snapshot.forEach((doc) => {
-              //       product.push(doc.data());
-              //     });
-              //   })
-              //   .then(function () {
-              //     setProduct(product);
-              //   });
 
               firebase
                 .firestore()
@@ -143,6 +128,35 @@ export const AuthContextProvider = (props) => {
                   });
                   setBatch(batchArr);
                   setCopyData(copyArr);
+                });
+
+              firebase
+                .firestore()
+                .collection("fermentation")
+                .onSnapshot((querySnapshot) => {
+                  let batchArr = [];
+                  console.log(
+                    "total number of document reads for fermentation",
+                    querySnapshot.size
+                  );
+                  querySnapshot.forEach((data) => {
+                    batchArr.push(data.data());
+                  });
+                  setFermentation(batchArr);
+                });
+              firebase
+                .firestore()
+                .collection("hotel")
+                .onSnapshot((querySnapshot) => {
+                  let batchArr = [];
+                  console.log(
+                    "total number of document reads for Hotel",
+                    querySnapshot.size
+                  );
+                  querySnapshot.forEach((data) => {
+                    batchArr.push(data.data());
+                  });
+                  setHotel(batchArr);
                 });
             }
           });
@@ -208,6 +222,8 @@ export const AuthContextProvider = (props) => {
         currentUser: currentUser,
         product: product,
         batch: batch,
+        hotel: hotel,
+        fermentation: fermentation,
         copyData: copyData,
         onLogout: logoutHandler,
         onLogin: loginHandler,

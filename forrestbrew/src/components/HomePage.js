@@ -235,15 +235,6 @@ const HomePage = () => {
     let c = 0;
     for (let i in productSummaryArr) {
       let res = i.split("//");
-      // console.log(
-      //   res[0],
-      //   " - ",
-      //   res[1],
-      //   " - ",
-      //   res[2],
-      //   " - ",
-      //   productSummaryArr[i]
-      // );
       arr[c] = {
         prodID: res[0],
         batchNo: res[1],
@@ -260,8 +251,6 @@ const HomePage = () => {
       return textA < textB ? -1 : textA > textB ? 1 : 0;
     });
     arr.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
       return new Date(b.dateAdded) - new Date(a.dateAdded);
     });
     setProductSummary(arr);
@@ -273,7 +262,6 @@ const HomePage = () => {
     let c = 0;
     for (let i in currentArr) {
       let res = i.split("//");
-      // console.log(res[0], " - ", res[1], " - ", res[2], " - ", currentArr[i]);
       arr[c] = {
         prodID: res[0],
         batchNo: res[1],
@@ -407,6 +395,7 @@ const HomePage = () => {
       <div className={classes.wrapper}>
         <div className={classes.flex}>
           <div className={classes.flexContent}>
+            <br />
             <select
               id="leftPanel"
               name="leftPanel"
@@ -481,6 +470,7 @@ const HomePage = () => {
             )}
           </div>
           <div className={classes.flexContent} ref={flexContent}>
+            <br />
             <select
               id="charts"
               name="charts"

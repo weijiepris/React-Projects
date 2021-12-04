@@ -22,21 +22,32 @@ const Hotel = () => {
     createHotel(batchNo, amount, dateCreated);
   };
 
+  const generateKey = () => {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let autoId = "";
+    for (let i = 0; i < 30; i++) {
+      autoId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return autoId;
+  };
+
   const createHotel = (batchNo, amount, dateCreated) => {
     console.log(batchNo, amount, dateCreated);
-
+    const key = generateKey();
     firebase
       .firestore()
       .collection("hotel")
-      .doc(ctx.currentUser.companyName)
-      .collection(batchNo)
-      .add({
+      .doc(key)
+      .set({
+        type: "hotel",
         batchNo: batchNo,
         amount: amount,
         dateCreated: dateCreated,
         createdBy: ctx.currentUser.name,
         lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
         status: "",
+        key: key,
       })
       .then(function () {
         console.log("success");
@@ -59,14 +70,28 @@ const Hotel = () => {
             type="text"
             placeholder="Hotel Batch Number"
             ref={batchNoRef}
+            className={classes.input}
+            required
           />
           <br />
-          <input type="text" placeholder="Amount in Litres" ref={amountRef} />
+          <input
+            type="text"
+            placeholder="Amount in Litres"
+            ref={amountRef}
+            className={classes.input}
+            required
+          />
           <br />
-          <input type="date" placeholder="Date Created" ref={dateCreatedRef} />
+          <input
+            type="date"
+            placeholder="Date Created"
+            ref={dateCreatedRef}
+            className={classes.input}
+            required
+          />
           <br />
           <br />
-          <input type="submit" value="Create" />
+          <input type="submit" value="Create" className={classes.input} />
           <br />
           <br />
         </form>
