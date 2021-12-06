@@ -4,13 +4,14 @@ import AuthContext from "../../store/auth-context";
 import { Link } from "react-router-dom";
 const Overview = () => {
   const ctx = useContext(AuthContext);
-
   const [filter, setFilter] = useState("hotel");
   const [details, setDetails] = useState([]);
   const [temp, setTemp] = useState("");
+
   useEffect(() => {
     // console.log(ctx);
   });
+
   const getDate = (date) => {
     if (date === null) {
       return 0;
@@ -18,6 +19,7 @@ const Overview = () => {
       return new Date(date["seconds"] * 1000).toString().substring(4, 15);
     }
   };
+
   const convertDate = (date) => {
     if (date === null) {
       return 0;
@@ -71,6 +73,7 @@ const Overview = () => {
       </table>
     );
   };
+
   const Fermentation = () => {
     return (
       <table>
@@ -95,22 +98,44 @@ const Overview = () => {
   };
 
   const setFilterHandler = (event) => {
+    setDetails([]);
     setFilter(event.target.value);
   };
 
   const ShowDetails = () => {
     return (
-      <div>
-        <tr>
-          <td>{details.batchNo}</td>
-          <td>{details.amount}</td>
-          <td>{details.amount}</td>
-          <td>{getDate(details.lastUpdate)}</td>
-          <td>{convertDate(details.dateCreated)}</td>
-        </tr>
-      </div>
+      <React.Fragment>
+        <table>
+          <tr>
+            <td>Batch No</td>
+            <td>Litres</td>
+            <td>Last Updated</td>
+            <td>Date Created</td>
+          </tr>
+          <tr>
+            <td>{details.batchNo}</td>
+            <td>{details.amount}</td>
+            <td>{getDate(details.lastUpdate)}</td>
+            <td>{convertDate(details.dateCreated)}</td>
+          </tr>
+        </table>
+
+        <div>
+          <h2>History</h2>
+          {filter === "hotel" ? <HotelHistory /> : <FermentationHistory />}
+        </div>
+      </React.Fragment>
     );
   };
+
+  const HotelHistory = () => {
+    return <div>hotel hist</div>;
+  };
+
+  const FermentationHistory = () => {
+    return <div>fermentation hist</div>;
+  };
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>Overview</span>
@@ -120,6 +145,9 @@ const Overview = () => {
           <br />
           <Link to="/Hotel">
             <button>Create New Hotel</button>
+          </Link>
+          <Link to="/Hotel">
+            <button>Update Hotel</button>
           </Link>
           <br />
           <br />
@@ -151,7 +179,11 @@ const Overview = () => {
             </div>
           </div>
           <div className={classes.gridContent}>
-            {details.length !== 0 ? <ShowDetails /> : <div>Please select an item</div>}
+            {details.length !== 0 ? (
+              <ShowDetails />
+            ) : (
+              <div>Please select an item</div>
+            )}
           </div>
         </div>
       </div>
