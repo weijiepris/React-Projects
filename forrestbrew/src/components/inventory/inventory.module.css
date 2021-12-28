@@ -82,7 +82,7 @@ th {
 .trow:hover {
   background-color: #cfcfcf;
   color: black;
-  cursor: pointer;
+  /* cursor: pointer; */
   transition: 0.1s ease;
 }
 
@@ -96,6 +96,17 @@ li {
   width: 300px;
   padding: 10px;
   border-radius: 5px;
+}
+.input2 {
+  height: 40px;
+  width: 100px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.input2:hover {
+  cursor: pointer;
+  background-color: #d5d5d5;
 }
 
 .button {
@@ -162,4 +173,10 @@ li {
 
 .formInput {
   display: inline;
+}
+
+.checkboxHidden {
+  display: none;
+  font-size: 50%;
+  margin-left: 10px;
 }

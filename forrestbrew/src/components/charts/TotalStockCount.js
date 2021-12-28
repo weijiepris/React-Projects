@@ -26,11 +26,12 @@ const TotalStockCount = (props) => {
         // Colors the entire chart area, with opacity
         backgroundColor: {
           fill: "gray",
-          fillOpacity: 0.1,
+          fillOpacity: 0.05,
         },
         vAxis: {
           gridlines: {
-            color: "transparent",
+            count: 4,
+            color: "gray",
           },
         },
         // backgroundColor: {

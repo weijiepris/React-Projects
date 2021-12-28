@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import classes from "./inventory.module.css";
+import firebase from "firebase";
 import { Link } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
@@ -26,6 +27,7 @@ const Scan = (props) => {
     if (date === null) {
       return 0;
     } else {
+      // console.log(date);
       return new Date(date["seconds"] * 1000).toString().substring(4, 15);
     }
   };
@@ -38,6 +40,22 @@ const Scan = (props) => {
   const filterInfo = (event) => {
     let filterBy = event.target.value;
     setFilterBy(filterBy);
+    if (filterBy === "true") {
+      document.getElementById("lblCheckbox").style.display = "none";
+      document.getElementById("checkbox").style.display = "none";
+    } else {
+      document.getElementById("lblCheckbox").style.display = "inline-block";
+      document.getElementById("checkbox").style.display = "inline-block";
+      document.getElementById("checkbox").checked = false;
+
+      setTimeout(() => {
+        let x = document.querySelectorAll("#resetDefault");
+        // console.log(x);
+        for (let i = 0; i < x.length; i++) {
+          x[i].disabled = true;
+        }
+      }, 50);
+    }
   };
 
   useEffect(() => {
@@ -295,7 +313,7 @@ const Scan = (props) => {
         ) {
           inArr.push(JSON.parse(JSON.stringify(d)));
         }
-
+        // console.log(d.uniqueID);
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateRemoved))) /
@@ -1251,6 +1269,36 @@ const Scan = (props) => {
     }
   };
 
+  const resetDefault = (uniqueID) => {
+    console.log(uniqueID);
+
+    firebase
+      .firestore()
+      .collection("batch")
+      .doc(ctx.companyName)
+      .collection("products")
+      .doc(uniqueID)
+      .update({
+        dateRemoved: "",
+        scanType: "in",
+        removedBy: "",
+        remarksOut: "",
+      });
+  };
+
+  const enableResetButton = (event) => {
+    let checked = document.getElementById("checkbox").checked;
+    let x = document.querySelectorAll("#resetDefault");
+    if (checked) {
+      for (let i = 0; i < x.length; i++) {
+        x[i].disabled = false;
+      }
+    } else {
+      for (let i = 0; i < x.length; i++) {
+        x[i].disabled = true;
+      }
+    }
+  };
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
@@ -1303,6 +1351,21 @@ const Scan = (props) => {
             <option value={true}>Summarised</option>
             <option value={false}>Detailed</option>
           </select>
+          <label
+            className={classes.resetText}
+            for="checkbox"
+            id="lblCheckbox"
+            className={classes.checkboxHidden}
+          >
+            Activate Reset Button?
+          </label>
+          <input
+            type="checkbox"
+            name="checkbox"
+            id="checkbox"
+            className={classes.checkboxHidden}
+            onClick={enableResetButton}
+          />
         </h1>
         <div className={classes.content}>
           <table className={classes.table}>
@@ -1316,6 +1379,7 @@ const Scan = (props) => {
                   <th>Action</th>
                   <th>Remarks</th>
                   <th>User</th>
+                  <th>Reset to default</th>
                 </tr>
               ) : (
                 <tr>
@@ -1344,6 +1408,21 @@ const Scan = (props) => {
                     <td>{entry.scanType}</td>
                     <td>{entry.remarks}</td>
                     <td>{entry.addedBy}</td>
+                    <td>
+                      {entry.scanType === "out" ? (
+                        <div>
+                          <button
+                            className={classes.input2}
+                            id="resetDefault"
+                            onClick={() => resetDefault(entry.uniqueID)}
+                          >
+                            Reset
+                          </button>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </td>
                   </tr>
                 ) : (
                   <tr key={generateKey()} className={classes.trow}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 
-const devMode = true;
+const devMode = false;
 
 let firebaseConfig = {};
 if (devMode) {
