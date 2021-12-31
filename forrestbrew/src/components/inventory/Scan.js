@@ -50,9 +50,13 @@ const Scan = (props) => {
 
       setTimeout(() => {
         let x = document.querySelectorAll("#resetDefault");
-        // console.log(x);
+        let y = document.querySelectorAll("#deleteEntry");
+        console.log(x);
         for (let i = 0; i < x.length; i++) {
           x[i].disabled = true;
+        }
+        for (let i = 0; i < y.length; i++) {
+          y[i].disabled = true;
         }
       }, 50);
     }
@@ -1289,16 +1293,45 @@ const Scan = (props) => {
   const enableResetButton = (event) => {
     let checked = document.getElementById("checkbox").checked;
     let x = document.querySelectorAll("#resetDefault");
+    let y = document.querySelectorAll("#deleteEntry");
     if (checked) {
       for (let i = 0; i < x.length; i++) {
         x[i].disabled = false;
+      }
+      for (let i = 0; i < y.length; i++) {
+        y[i].disabled = false;
       }
     } else {
       for (let i = 0; i < x.length; i++) {
         x[i].disabled = true;
       }
+      for (let i = 0; i < y.length; i++) {
+        y[i].disabled = true;
+      }
     }
   };
+
+  const deleteEntry = (uniqueID, dateAdded) => {
+    // console.log(uniqueID);
+    // console.log(getDate2(dateAdded));
+
+    ctx.batch.forEach((bdoc) => {
+      if (bdoc.uniqueID === uniqueID) {
+        if (bdoc.scanType === "in") {
+          firebase
+            .firestore()
+            .collection("batch")
+            .doc(ctx.companyName)
+            .collection("products")
+            .doc(uniqueID)
+            .delete();
+        } else {
+          alert("This entry has been scanned out!");
+        }
+      }
+    });
+  };
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
@@ -1357,7 +1390,7 @@ const Scan = (props) => {
             id="lblCheckbox"
             className={classes.checkboxHidden}
           >
-            Activate Reset Button?
+            Activate Delete/Reset Button?
           </label>
           <input
             type="checkbox"
@@ -1409,16 +1442,36 @@ const Scan = (props) => {
                     <td>{entry.remarks}</td>
                     <td>{entry.addedBy}</td>
                     <td>
-                      {entry.scanType === "out" ? (
-                        <div>
-                          <button
-                            className={classes.input2}
-                            id="resetDefault"
-                            onClick={() => resetDefault(entry.uniqueID)}
-                          >
-                            Reset
-                          </button>
-                        </div>
+                      {Math.floor(
+                        (new Date(new Date().toString().substring(4, 15)) -
+                          new Date(getDate2(entry.dateAdded))) /
+                          (1000 * 60 * 60 * 24)
+                      ) < 7 ? (
+                        entry.scanType === "out" ? (
+                          <div>
+                            <button
+                              className={classes.input2}
+                              id="resetDefault"
+                              onClick={() => resetDefault(entry.uniqueID)}
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        ) : entry.scanType === "in" ? (
+                          <div>
+                            <button
+                              className={classes.input2}
+                              id="deleteEntry"
+                              onClick={() =>
+                                deleteEntry(entry.uniqueID, entry.dateAdded)
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        ) : (
+                          ""
+                        )
                       ) : (
                         ""
                       )}
