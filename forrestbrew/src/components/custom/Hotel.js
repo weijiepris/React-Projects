@@ -8,6 +8,7 @@ const Hotel = () => {
   const batchNoRef = useRef();
   const amountRef = useRef();
   const dateCreatedRef = useRef();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [redirect, setRedirect] = useState(false);
   useEffect(() => {
@@ -33,26 +34,38 @@ const Hotel = () => {
   };
 
   const createHotel = (batchNo, amount, dateCreated) => {
-    console.log(batchNo, amount, dateCreated);
-    const key = generateKey();
-    firebase
-      .firestore()
-      .collection("hotel")
-      .doc(key)
-      .set({
-        type: "hotel",
-        batchNo: batchNo,
-        amount: amount,
-        dateCreated: dateCreated,
-        createdBy: ctx.currentUser.name,
-        lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
-        status: "",
-        key: key,
-      })
-      .then(function () {
-        console.log("success");
-        setRedirect(true);
-      });
+    let exists = false;
+    ctx.hotel.forEach((d) => {
+      if (d.batchNo === batchNo) {
+        exists = true;
+      }
+    });
+
+    if (!exists) {
+      console.log(batchNo, amount, dateCreated);
+      const key = generateKey();
+      firebase
+        .firestore()
+        .collection("hotel")
+        .doc(key)
+        .set({
+          type: "hotel",
+          batchNo: batchNo,
+          amount: amount,
+          dateCreated: dateCreated,
+          createdBy: ctx.currentUser.name,
+          lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
+          status: "",
+          key: key,
+        })
+        .then(function () {
+          console.log("success");
+          setRedirect(true);
+        });
+    } else {
+      setErrorMessage("Hotel number already exists");
+      document.getElementById("errorMessage").style.color = "red";
+    }
   };
 
   if (redirect) {
@@ -89,6 +102,8 @@ const Hotel = () => {
             className={classes.input}
             required
           />
+          <br />
+          <span id="errorMessage">{errorMessage}</span>
           <br />
           <br />
           <input type="submit" value="Create" className={classes.input} />

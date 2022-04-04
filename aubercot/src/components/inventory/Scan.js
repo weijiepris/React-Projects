@@ -4,16 +4,11 @@ import { Link } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
 const Scan = (props) => {
+  const _ = require("lodash");
   const ctx = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [dataF, setDataF] = useState([]);
-
-  // const getExpire = (day) => {
-  //   let d = new Date();
-  //   d.setDate(d.getDate() - parseInt(day));
-  //   return d.toString().substring(4, 15);
-  // };
 
   const getDate = (date) => {
     return new Date(date * 1000).toString().substring(4, 21);
@@ -41,6 +36,7 @@ const Scan = (props) => {
     }
     filterInfo();
   };
+
   const filterInfo = () => {
     let summarized = document.getElementById("detail").value === "true";
 
@@ -121,9 +117,12 @@ const Scan = (props) => {
       setDataF(r);
     }
   };
+
   useEffect(() => {
     let arr = [];
     let arr2 = [];
+    console.log(ctx.batch);
+
     ctx.batch.forEach((bdoc) => {
       let inArr = [];
       let outArr = [];
@@ -132,7 +131,7 @@ const Scan = (props) => {
           getDate2(bdoc.dateAdded["seconds"]) ===
           new Date().toString().substring(4, 15)
         ) {
-          arr2.push(JSON.parse(JSON.stringify(bdoc)));
+          arr2.push(_.deepClone(bdoc));
         }
         arr.push(JSON.parse(JSON.stringify(bdoc)));
       } else {
@@ -222,6 +221,24 @@ const Scan = (props) => {
     return autoId;
   };
 
+  const sortBy = (col) => {
+    console.log("sorting by", col);
+
+    let testSort = _.cloneDeep(data[0]);
+    console.log(testSort);
+    testSort.sort(function (a, b) {
+      var textA = a.prodName.toUpperCase();
+      var textB = b.prodName.toUpperCase();
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+
+    testSort.forEach((d) => {
+      console.log(d.prodName);
+    });
+    console.log(data)
+
+  };
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
@@ -259,24 +276,25 @@ const Scan = (props) => {
             <tbody>
               {dataF.length !== 0 ? (
                 <tr>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Batch No</th>
-                  <th>Action</th>
-                  <th>Date</th>
-                  <th>Remarks</th>
-                  <th>User</th>
-                  <th>Amount</th>
+                  <th onClick={() => sortBy("productId")}>Product ID</th>
+                  <th onClick={() => sortBy("productName")}>Product Name</th>
+                  <th onClick={() => sortBy("batch")}>Batch No</th>
+                  <th onClick={() => sortBy("action")}>Action</th>
+                  <th onClick={() => sortBy("date")}>Date</th>
+                  <th onClick={() => sortBy("date")}>Date</th>
+                  <th onClick={() => sortBy("remarks")}>Remarks</th>
+                  <th onClick={() => sortBy("user")}>User</th>
+                  <th onClick={() => sortBy("amount")}>Amount</th>
                 </tr>
               ) : (
                 <tr>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Batch No</th>
-                  <th>Action</th>
-                  <th>Date</th>
-                  <th>Remarks</th>
-                  <th>User</th>
+                  <th onClick={() => sortBy("productId")}>Product ID</th>
+                  <th onClick={() => sortBy("productName")}>Product Name</th>
+                  <th onClick={() => sortBy("batch")}>Batch No</th>
+                  <th onClick={() => sortBy("action")}>Action</th>
+                  <th onClick={() => sortBy("date")}>Date</th>
+                  <th onClick={() => sortBy("remarks")}>Remarks</th>
+                  <th onClick={() => sortBy("user")}>User</th>
                 </tr>
               )}
 

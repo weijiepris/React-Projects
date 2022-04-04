@@ -4,7 +4,9 @@ import firebase from "firebase";
 import { Link } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
+import BootstrapTable from "react-bootstrap-table-next";
 const Scan = (props) => {
+  const _ = require("lodash");
   const ctx = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState("");
@@ -14,6 +16,10 @@ const Scan = (props) => {
   const [tempData, setTempData] = useState([]);
   const [custom, setCustom] = useState(false);
   const [customData, setCustomData] = useState([]);
+  const [scanIn, setScanIn] = useState(0);
+  const [scanOut, setScanOut] = useState(0);
+  const [sortByCol, setSortByCol] = useState("");
+  const [sortCounter, setSortCounter] = useState(0);
 
   const getDate = (date) => {
     if (date === null) {
@@ -51,7 +57,6 @@ const Scan = (props) => {
       setTimeout(() => {
         let x = document.querySelectorAll("#resetDefault");
         let y = document.querySelectorAll("#deleteEntry");
-        console.log(x);
         for (let i = 0; i < x.length; i++) {
           x[i].disabled = true;
         }
@@ -97,6 +102,30 @@ const Scan = (props) => {
     };
   }, [filterDay, filterBy, ctx.copyData, tempData, filterData]);
 
+  useEffect(() => {
+    let sin = 0;
+    let sout = 0;
+
+    if (filterBy === "true") {
+      data.forEach((d) => {
+        if (d.scanType === "in") {
+          sin += d.count;
+        } else {
+          sout += d.count;
+        }
+      });
+    } else {
+      data.forEach((d) => {
+        if (d.scanType === "in") {
+          sin++;
+        } else {
+          sout++;
+        }
+      });
+    }
+    setScanIn(sin);
+    setScanOut(sout);
+  }, [data]);
   const detailedData = (data, filter) => {
     data = JSON.parse(JSON.stringify(data));
 
@@ -893,8 +922,6 @@ const Scan = (props) => {
     let prodID = document.getElementById("productSelect").value;
     let actionType = document.getElementById("actionSelect").value;
 
-    console.log("prodID", prodID);
-    console.log("actionType", actionType);
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
@@ -960,8 +987,6 @@ const Scan = (props) => {
     let batchNo = document.getElementById("batchInput").value;
     let actionType = document.getElementById("actionSelect").value;
 
-    console.log("batchNo", batchNo);
-    console.log("actionType", actionType);
     if (fromDate === "lid Date") {
       fromDate = new Date("2000/01/01");
     }
@@ -1274,8 +1299,6 @@ const Scan = (props) => {
   };
 
   const resetDefault = (uniqueID) => {
-    console.log(uniqueID);
-
     firebase
       .firestore()
       .collection("batch")
@@ -1332,6 +1355,52 @@ const Scan = (props) => {
     });
   };
 
+  const sortBy = (column) => {
+    let sortData = _.cloneDeep(data);
+
+    if (sortByCol !== column) {
+      setSortCounter(0);
+    }
+    setSortByCol(column);
+    if (sortCounter === 0) {
+      sortData.sort(function (a, b) {
+        var textA = a[column];
+        var textB = b[column];
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
+      });
+      setSortCounter(1);
+    } else {
+      sortData.sort(function (a, b) {
+        var textA = a[column];
+        var textB = b[column];
+        return textA > textB ? -1 : textA < textB ? 1 : 0;
+      });
+      setSortCounter(0);
+    }
+
+    setData(sortData);
+  };
+
+  const columns = [
+    { dataField: "dateAdded", text: "Date", sort: true },
+    { dataField: "prodID", text: "Product ID", sort: true },
+    { dataField: "prodName", text: "Product Name", sort: true },
+    { dataField: "batchNo", text: "Batch No", sort: true },
+    { dataField: "scanType", text: "Action", sort: true },
+    { dataField: "remarks", text: "Remarks", sort: true },
+    { dataField: "addedBy", text: "User", sort: true },
+  ];
+
+  const columns2 = [
+    { dataField: "dateAdded", text: "Date", sort: true },
+    { dataField: "prodID", text: "Product ID", sort: true },
+    { dataField: "prodName", text: "Product Name", sort: true },
+    { dataField: "batchNo", text: "Batch No", sort: true },
+    { dataField: "scanType", text: "Action", sort: true },
+    { dataField: "remarks", text: "Remarks", sort: true },
+    { dataField: "addedBy", text: "User", sort: true },
+  ];
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
@@ -1383,7 +1452,11 @@ const Scan = (props) => {
           <select id="detail" name="charts" onChange={filterInfo}>
             <option value={true}>Summarised</option>
             <option value={false}>Detailed</option>
-          </select>
+          </select>{" "}
+          &nbsp;
+          <label className={classes.resetText}>
+            Total In {scanIn} / Total Out {scanOut} / Total {scanIn + scanOut}
+          </label>
           <label
             className={classes.resetText}
             for="checkbox"
@@ -1405,25 +1478,115 @@ const Scan = (props) => {
             <tbody>
               {filterBy === "false" ? (
                 <tr>
-                  <th>Date</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Batch No</th>
-                  <th>Action</th>
-                  <th>Remarks</th>
-                  <th>User</th>
+                  <th
+                    onClick={() => {
+                      sortBy("dateAdded");
+                    }}
+                  >
+                    Date
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("prodID");
+                    }}
+                  >
+                    Product ID
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("prodName");
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("batchNo");
+                    }}
+                  >
+                    Batch No
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("scanType");
+                    }}
+                  >
+                    Action
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("remarks");
+                    }}
+                  >
+                    Remarks
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("addedBy");
+                    }}
+                  >
+                    User
+                  </th>
                   <th>Reset to default</th>
                 </tr>
               ) : (
                 <tr>
-                  <th>Date</th>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Batch No</th>
-                  <th>Amount</th>
-                  <th>Action</th>
-                  <th>Remarks</th>
-                  <th>User</th>
+                  <th
+                    onClick={() => {
+                      sortBy("dateAdded");
+                    }}
+                  >
+                    Date
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("prodID");
+                    }}
+                  >
+                    Product ID
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("prodName");
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("batchNo");
+                    }}
+                  >
+                    Batch No
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("count");
+                    }}
+                  >
+                    Amount
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("scanType");
+                    }}
+                  >
+                    Action
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("remarks");
+                    }}
+                  >
+                    Remarks
+                  </th>
+                  <th
+                    onClick={() => {
+                      sortBy("addedBy");
+                    }}
+                  >
+                    User
+                  </th>
                 </tr>
               )}
 
@@ -1496,6 +1659,7 @@ const Scan = (props) => {
               )}
             </tbody>
           </table>
+          {/* <BootstrapTable keyField="id" data={data} columns={columns} /> */}
         </div>
       </div>
     </div>

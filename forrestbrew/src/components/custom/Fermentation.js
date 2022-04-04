@@ -10,6 +10,7 @@ const Fermentation = () => {
   const dateCreatedRef = useRef();
   const [redirect, setRedirect] = useState(false);
   const [valid, setValid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const createFermentationHandler = (event) => {
     event.preventDefault();
@@ -20,7 +21,7 @@ const Fermentation = () => {
       const batchNo = batchNoRef.current.value;
       const amount = amountRef.current.value;
       const dateCreated = dateCreatedRef.current.value;
-      createHotel(batchNo, amount, dateCreated);
+      createFermentation(batchNo, amount, dateCreated);
     }
   };
 
@@ -34,34 +35,55 @@ const Fermentation = () => {
     return autoId;
   };
 
-  const createHotel = (batchNo, amount, dateCreated) => {
+  const createFermentation = (batchNo, amount, dateCreated) => {
+    let hotelNo = document.getElementById("hotelDetails").value;
+    setErrorMessage("");
+    console.log("hotelNo", hotelNo);
     console.log(batchNo, amount, dateCreated);
     const key = generateKey();
-    firebase
-      .firestore()
-      .collection("fermentation")
-      .doc(key)
-      .set({
-        type: "fermentation",
-        batchNo: batchNo,
-        amount: amount,
-        dateCreated: dateCreated,
-        createdBy: ctx.currentUser.name,
-        lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
-        status: "",
-        key: key,
-      })
-      .then(function () {
-        console.log("success");
-        setRedirect(true);
-      });
+    ctx.hotel.forEach((d) => {
+      if (d.batchNo === hotelNo) {
+        if (d.amount < amount) {
+          setErrorMessage("not enough amount");
+          document.getElementById("errorMessage").style.color = "red";
+        } else {
+          let exists = false;
+          ctx.fermentation.forEach((d) => {
+            if (d.batchNo === batchNo) {
+              exists = true;
+            }
+          });
+          if (!exists) {
+            firebase
+              .firestore()
+              .collection("fermentation")
+              .doc(key)
+              .set({
+                type: "fermentation",
+                batchNo: batchNo,
+                amount: amount,
+                dateCreated: dateCreated,
+                createdBy: ctx.currentUser.name,
+                lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
+                status: "",
+                key: key,
+              })
+              .then(function () {
+                console.log("success");
+                setRedirect(true);
+              });
+          } else {
+            setErrorMessage("batch already exists");
+            document.getElementById("errorMessage").style.color = "red";
+          }
+        }
+      }
+    });
   };
 
   const HotelDetails = () => {
     console.log(ctx.hotel);
     ctx.hotel.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
       return a.batchNo - b.batchNo;
     });
     return (
@@ -143,6 +165,8 @@ const Fermentation = () => {
             className={classes.input}
             required
           />
+          <br />
+          <span id="errorMessage">{errorMessage}</span>
           <br />
           <br />
           <input
