@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import classes from "./inventory.module.css";
 import firebase from "firebase";
 import { Link } from "react-router-dom";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 import AuthContext from "../../store/auth-context";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -1443,6 +1444,12 @@ const Scan = (props) => {
           <Link to="/ScanOut">
             <button>Scan Out</button>
           </Link>
+          <ReactHTMLTableToExcel
+            table="test"
+            filename={"ForrestBrew_" + new Date().toLocaleDateString()}
+            sheet="Sheet"
+            buttonText="Export to Excel"
+          />
         </div>
       </div>
 
@@ -1457,12 +1464,7 @@ const Scan = (props) => {
           <label className={classes.resetText}>
             Total In {scanIn} / Total Out {scanOut} / Total {scanIn + scanOut}
           </label>
-          <label
-            className={classes.resetText}
-            for="checkbox"
-            id="lblCheckbox"
-            className={classes.checkboxHidden}
-          >
+          <label className={classes.resetText} for="checkbox" id="lblCheckbox">
             Activate Delete/Reset Button?
           </label>
           <input
@@ -1474,7 +1476,7 @@ const Scan = (props) => {
           />
         </h1>
         <div className={classes.content}>
-          <table className={classes.table}>
+          <table className={classes.table} id="test">
             <tbody>
               {filterBy === "false" ? (
                 <tr>
