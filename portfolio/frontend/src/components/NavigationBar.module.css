@@ -1,0 +1,41 @@
+.navigationBar {
+  position: fixed;
+  width: 100%;
+  display: block;
+  transition: top 0.5s;
+  background-color: rgba(10, 25, 47, 0.7);
+  backdrop-filter: blur(6px);
+}
+.navigationBar ul {
+  list-style-type: none;
+  float: right;
+  padding: 10px;
+  width: 100%;
+}
+
+.navigations {
+  float: right;
+}
+
+.navigations li {
+  display: inline-block;
+  margin-right: 70px;
+  cursor: pointer;
+  font-size: 120%;
+  transition: 0.2s ease;
+}
+
+.navigations li::selection {
+  background: transparent;
+}
+
+.logo {
+  font-size: 150%;
+  float: left;
+  margin-left: 100px;
+  color: white;
+}
+
+.navigationBar ul li:hover {
+  color: #98ffd5;
+}
