@@ -1,5 +1,4 @@
-// imports
-const firebase = require("firebase-admin");
+const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -16,19 +15,21 @@ const Educations = require("./configurations/educations");
 const app = express();
 
 // applying middleware
-app.use(cors({ origin: true }));
+app.use(cors({origin: "https://portfolio-v2-b469e.web.app"}));
+// app.use(cors({origin: true}));
 app.use(express.json());
 
 // get mapping
 app.get("/", (req, res) => {
   try {
     updateReaders();
-    res.status(200).send({ message: "loaded successfully" });
+    res.status(200).send({message: "loaded successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
 });
 
+// eslint-disable-next-line no-console
 app.get("/frameworks", async (req, res) => {
   try {
     const initialData = [];
@@ -129,9 +130,9 @@ app.post("/frameworks", async (req, res) => {
     let value = [];
     initialData.forEach((d) => value.push(d));
     data.forEach((d) => (value = [...value, d]));
-    Skills.doc("frameworks").set({ value });
+    Skills.doc("frameworks").set({value});
 
-    res.send({ message: "new frameworks added successfully" });
+    res.send({message: "new frameworks added successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -155,9 +156,9 @@ app.post("/technologies", async (req, res) => {
     let value = [];
     initialData.forEach((d) => value.push(d));
     data.forEach((d) => (value = [...value, d]));
-    Skills.doc("technologies").set({ value });
+    Skills.doc("technologies").set({value});
 
-    res.send({ message: "new technologies added successfully" });
+    res.send({message: "new technologies added successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -181,9 +182,9 @@ app.post("/languages", async (req, res) => {
     let value = [];
     initialData.forEach((d) => value.push(d));
     data.forEach((d) => (value = [...value, d]));
-    Skills.doc("languages").set({ value });
+    Skills.doc("languages").set({value});
 
-    res.send({ message: "new languages added successfully" });
+    res.send({message: "new languages added successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -204,7 +205,7 @@ app.post("/experiences", async (req, res) => {
   //     "Spring Boot"
   //   ],
   //   "descriptions": [
-  //     "Developed features based on user stories using test driven developement",
+  //     "Developed features",
   //     "REST api in java Spring Boot and hibernate",
   //     "Mockito for unit test",
   //     "Implemented CRON to schedule jobs"
@@ -214,7 +215,7 @@ app.post("/experiences", async (req, res) => {
   try {
     Experiences.add(data);
 
-    res.send({ message: "new experiences added successfully" });
+    res.send({message: "new experiences added successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -237,7 +238,7 @@ app.post("/projects", async (req, res) => {
   try {
     Projects.add(data);
 
-    res.send({ message: "new projects added successfully" });
+    res.send({message: "new projects added successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -260,7 +261,7 @@ app.post("/educations", async (req, res) => {
   try {
     Educations.add(data);
 
-    res.send({ message: "new educations added successfully" });
+    res.send({message: "new educations added successfully"});
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -272,5 +273,7 @@ app.listen(port, () => {
 });
 
 const updateReaders = async () => {
-  User.doc("readers").update({ reads: FirebaseValue.increment(1) });
+  User.doc("readers").update({reads: FirebaseValue.increment(1)});
 };
+
+exports.app = functions.https.onRequest(app);
