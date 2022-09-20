@@ -11,19 +11,23 @@ const Experiences = require("./configurations/experience");
 const Projects = require("./configurations/projects");
 const Educations = require("./configurations/educations");
 
+const devMode = false;
 // initialise app
 const app = express();
 
 // applying middleware
-app.use(cors({origin: "https://portfolio-v2-b469e.web.app"}));
-// app.use(cors({origin: true}));
+if (devMode) {
+  app.use(cors({ origin: true }));
+} else {
+  app.use(cors({ origin: "https://portfolio-v2-b469e.web.app" }));
+}
 app.use(express.json());
 
 // get mapping
 app.get("/", (req, res) => {
   try {
     updateReaders();
-    res.status(200).send({message: "loaded successfully"});
+    res.status(200).send({ message: "loaded successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -130,9 +134,9 @@ app.post("/frameworks", async (req, res) => {
     let value = [];
     initialData.forEach((d) => value.push(d));
     data.forEach((d) => (value = [...value, d]));
-    Skills.doc("frameworks").set({value});
+    Skills.doc("frameworks").set({ value });
 
-    res.send({message: "new frameworks added successfully"});
+    res.send({ message: "new frameworks added successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -156,9 +160,9 @@ app.post("/technologies", async (req, res) => {
     let value = [];
     initialData.forEach((d) => value.push(d));
     data.forEach((d) => (value = [...value, d]));
-    Skills.doc("technologies").set({value});
+    Skills.doc("technologies").set({ value });
 
-    res.send({message: "new technologies added successfully"});
+    res.send({ message: "new technologies added successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -182,9 +186,9 @@ app.post("/languages", async (req, res) => {
     let value = [];
     initialData.forEach((d) => value.push(d));
     data.forEach((d) => (value = [...value, d]));
-    Skills.doc("languages").set({value});
+    Skills.doc("languages").set({ value });
 
-    res.send({message: "new languages added successfully"});
+    res.send({ message: "new languages added successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -215,7 +219,7 @@ app.post("/experiences", async (req, res) => {
   try {
     Experiences.add(data);
 
-    res.send({message: "new experiences added successfully"});
+    res.send({ message: "new experiences added successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -238,7 +242,7 @@ app.post("/projects", async (req, res) => {
   try {
     Projects.add(data);
 
-    res.send({message: "new projects added successfully"});
+    res.send({ message: "new projects added successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -261,7 +265,7 @@ app.post("/educations", async (req, res) => {
   try {
     Educations.add(data);
 
-    res.send({message: "new educations added successfully"});
+    res.send({ message: "new educations added successfully" });
   } catch (err) {
     res.status(400).send(err.message);
   }
@@ -269,11 +273,12 @@ app.post("/educations", async (req, res) => {
 
 const port = process.env.SECRET_PORT;
 app.listen(port, () => {
-  console.log(`App running on port ${port}`);
+  if (devMode) console.log(`App running on port ${port} on development server`);
+  else console.log(`App running on port ${port} on production server`);
 });
 
 const updateReaders = async () => {
-  User.doc("readers").update({reads: FirebaseValue.increment(1)});
+  User.doc("readers").update({ reads: FirebaseValue.increment(1) });
 };
 
 exports.app = functions.https.onRequest(app);

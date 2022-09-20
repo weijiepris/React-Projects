@@ -13,9 +13,15 @@ export default function HomePage() {
   const [projects, setProjects] = useState([]);
   const [educations, setEducations] = useState([]);
 
-  // const url = "https://us-central1-portfolio-v2-b469e.cloudfunctions.net/app/";
-  const url = "http://localhost:3001/";
-  
+  const devMode = false;
+  let url = "";
+
+  if (devMode) {
+    //taskkill /F /IM node.exe
+    url = "http://localhost:3001/";
+  } else {
+    url = "https://us-central1-portfolio-v2-b469e.cloudfunctions.net/app/";
+  }
 
   const getFrameworks = async () => {
     const data: Skills = await axios
@@ -171,12 +177,12 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <NavigationBar />
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       Main page
       <Frameworks />
       <Languages />
