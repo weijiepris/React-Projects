@@ -1611,7 +1611,7 @@ const Scan = (props) => {
                         (new Date(new Date().toString().substring(4, 15)) -
                           new Date(getDate2(entry.dateAdded))) /
                           (1000 * 60 * 60 * 24)
-                      ) < 7 ? (
+                      ) < 31 ? (
                         entry.scanType === "out" ? (
                           <div>
                             <button
