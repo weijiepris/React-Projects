@@ -20,6 +20,7 @@ const Scan = (props) => {
   const [scanOut, setScanOut] = useState(0);
   const [sortByCol, setSortByCol] = useState("");
   const [sortCounter, setSortCounter] = useState(0);
+  const [excelData, setExcelData] = useState([]);
 
   const getDate = (date) => {
     if (date === null) {
@@ -155,7 +156,7 @@ const Scan = (props) => {
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateAdded))) /
-              (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
           ) <= filter
         ) {
           inArr.push(JSON.parse(JSON.stringify(d)));
@@ -164,7 +165,7 @@ const Scan = (props) => {
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateRemoved))) /
-              (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
           ) <= filter
         ) {
           outArr.push(JSON.parse(JSON.stringify(d)));
@@ -207,107 +208,107 @@ const Scan = (props) => {
           if (filter === null) {
             if (
               !arr[
-                getDate2(d.dateAdded) +
-                  "//" +
-                  d.prodID +
-                  "//" +
-                  d.prodName +
-                  "//" +
-                  d.batchNo +
-                  "//" +
-                  d.scanType +
-                  "//" +
-                  d.remarks +
-                  "//" +
-                  d.addedBy
+              getDate2(d.dateAdded) +
+              "//" +
+              d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
               ]
             ) {
               arr[
                 getDate2(d.dateAdded) +
-                  "//" +
-                  d.prodID +
-                  "//" +
-                  d.prodName +
-                  "//" +
-                  d.batchNo +
-                  "//" +
-                  d.scanType +
-                  "//" +
-                  d.remarks +
-                  "//" +
-                  d.addedBy
+                "//" +
+                d.prodID +
+                "//" +
+                d.prodName +
+                "//" +
+                d.batchNo +
+                "//" +
+                d.scanType +
+                "//" +
+                d.remarks +
+                "//" +
+                d.addedBy
               ] = 1;
             } else {
               arr[
                 getDate2(d.dateAdded) +
-                  "//" +
-                  d.prodID +
-                  "//" +
-                  d.prodName +
-                  "//" +
-                  d.batchNo +
-                  "//" +
-                  d.scanType +
-                  "//" +
-                  d.remarks +
-                  "//" +
-                  d.addedBy
+                "//" +
+                d.prodID +
+                "//" +
+                d.prodName +
+                "//" +
+                d.batchNo +
+                "//" +
+                d.scanType +
+                "//" +
+                d.remarks +
+                "//" +
+                d.addedBy
               ] += 1;
             }
           } else {
             if (
               Math.floor(
                 (new Date(today) - new Date(getDate2(d.dateAdded))) /
-                  (1000 * 60 * 60 * 24)
+                (1000 * 60 * 60 * 24)
               ) <= filter
             ) {
               if (
                 !arr[
-                  getDate2(d.dateAdded) +
-                    "//" +
-                    d.prodID +
-                    "//" +
-                    d.prodName +
-                    "//" +
-                    d.batchNo +
-                    "//" +
-                    d.scanType +
-                    "//" +
-                    d.remarks +
-                    "//" +
-                    d.addedBy
+                getDate2(d.dateAdded) +
+                "//" +
+                d.prodID +
+                "//" +
+                d.prodName +
+                "//" +
+                d.batchNo +
+                "//" +
+                d.scanType +
+                "//" +
+                d.remarks +
+                "//" +
+                d.addedBy
                 ]
               ) {
                 arr[
                   getDate2(d.dateAdded) +
-                    "//" +
-                    d.prodID +
-                    "//" +
-                    d.prodName +
-                    "//" +
-                    d.batchNo +
-                    "//" +
-                    d.scanType +
-                    "//" +
-                    d.remarks +
-                    "//" +
-                    d.addedBy
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
                 ] = 1;
               } else {
                 arr[
                   getDate2(d.dateAdded) +
-                    "//" +
-                    d.prodID +
-                    "//" +
-                    d.prodName +
-                    "//" +
-                    d.batchNo +
-                    "//" +
-                    d.scanType +
-                    "//" +
-                    d.remarks +
-                    "//" +
-                    d.addedBy
+                  "//" +
+                  d.prodID +
+                  "//" +
+                  d.prodName +
+                  "//" +
+                  d.batchNo +
+                  "//" +
+                  d.scanType +
+                  "//" +
+                  d.remarks +
+                  "//" +
+                  d.addedBy
                 ] += 1;
               }
             }
@@ -341,7 +342,7 @@ const Scan = (props) => {
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateAdded))) /
-              (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
           ) <= filter
         ) {
           inArr.push(JSON.parse(JSON.stringify(d)));
@@ -350,7 +351,7 @@ const Scan = (props) => {
         if (
           Math.floor(
             (new Date(today) - new Date(getDate2(d.dateRemoved))) /
-              (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24)
           ) <= filter
         ) {
           outArr.push(JSON.parse(JSON.stringify(d)));
@@ -369,107 +370,107 @@ const Scan = (props) => {
         if (filter === null) {
           if (
             !arr[
-              getDate2(d.dateAdded) +
-                "//" +
-                d.prodID +
-                "//" +
-                d.prodName +
-                "//" +
-                d.batchNo +
-                "//" +
-                d.scanType +
-                "//" +
-                d.remarks +
-                "//" +
-                d.addedBy
+            getDate2(d.dateAdded) +
+            "//" +
+            d.prodID +
+            "//" +
+            d.prodName +
+            "//" +
+            d.batchNo +
+            "//" +
+            d.scanType +
+            "//" +
+            d.remarks +
+            "//" +
+            d.addedBy
             ]
           ) {
             arr[
               getDate2(d.dateAdded) +
-                "//" +
-                d.prodID +
-                "//" +
-                d.prodName +
-                "//" +
-                d.batchNo +
-                "//" +
-                d.scanType +
-                "//" +
-                d.remarks +
-                "//" +
-                d.addedBy
+              "//" +
+              d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
             ] = 1;
           } else {
             arr[
               getDate2(d.dateAdded) +
-                "//" +
-                d.prodID +
-                "//" +
-                d.prodName +
-                "//" +
-                d.batchNo +
-                "//" +
-                d.scanType +
-                "//" +
-                d.remarks +
-                "//" +
-                d.addedBy
+              "//" +
+              d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
             ] += 1;
           }
         } else {
           if (
             Math.floor(
               (new Date(today) - new Date(getDate2(d.dateAdded))) /
-                (1000 * 60 * 60 * 24)
+              (1000 * 60 * 60 * 24)
             ) <= filter
           ) {
             if (
               !arr[
-                getDate2(d.dateAdded) +
-                  "//" +
-                  d.prodID +
-                  "//" +
-                  d.prodName +
-                  "//" +
-                  d.batchNo +
-                  "//" +
-                  d.scanType +
-                  "//" +
-                  d.remarks +
-                  "//" +
-                  d.addedBy
+              getDate2(d.dateAdded) +
+              "//" +
+              d.prodID +
+              "//" +
+              d.prodName +
+              "//" +
+              d.batchNo +
+              "//" +
+              d.scanType +
+              "//" +
+              d.remarks +
+              "//" +
+              d.addedBy
               ]
             ) {
               arr[
                 getDate2(d.dateAdded) +
-                  "//" +
-                  d.prodID +
-                  "//" +
-                  d.prodName +
-                  "//" +
-                  d.batchNo +
-                  "//" +
-                  d.scanType +
-                  "//" +
-                  d.remarks +
-                  "//" +
-                  d.addedBy
+                "//" +
+                d.prodID +
+                "//" +
+                d.prodName +
+                "//" +
+                d.batchNo +
+                "//" +
+                d.scanType +
+                "//" +
+                d.remarks +
+                "//" +
+                d.addedBy
               ] = 1;
             } else {
               arr[
                 getDate2(d.dateAdded) +
-                  "//" +
-                  d.prodID +
-                  "//" +
-                  d.prodName +
-                  "//" +
-                  d.batchNo +
-                  "//" +
-                  d.scanType +
-                  "//" +
-                  d.remarks +
-                  "//" +
-                  d.addedBy
+                "//" +
+                d.prodID +
+                "//" +
+                d.prodName +
+                "//" +
+                d.batchNo +
+                "//" +
+                d.scanType +
+                "//" +
+                d.remarks +
+                "//" +
+                d.addedBy
               ] += 1;
             }
           }
@@ -1401,6 +1402,18 @@ const Scan = (props) => {
     { dataField: "addedBy", text: "User", sort: true },
   ];
 
+  const printObj = () => {
+    setExcelData(d => d = data);
+
+    excelData.forEach(data => {
+      data.dateRemoved = data.dateRemoved ? new Date(getDate(data.dateRemoved)) : '';
+      data.dateAdded = new Date(getDate(data.dateAdded));
+    })
+
+
+    console.log(excelData);
+  }
+
   return (
     <div className={classes.container} id="container">
       <span className={classes.overview}>
@@ -1443,6 +1456,8 @@ const Scan = (props) => {
           <Link to="/ScanOut">
             <button>Scan Out</button>
           </Link>
+
+          <button onClick={printObj}>Excel</button>
         </div>
       </div>
 
@@ -1608,7 +1623,7 @@ const Scan = (props) => {
                       {Math.floor(
                         (new Date(new Date().toString().substring(4, 15)) -
                           new Date(getDate2(entry.dateAdded))) /
-                          (1000 * 60 * 60 * 24)
+                        (1000 * 60 * 60 * 24)
                       ) < 7 ? (
                         entry.scanType === "out" ? (
                           <div>
