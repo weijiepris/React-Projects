@@ -1,5 +1,4 @@
 .container {
-  height: 999vh;
   position: relative;
   top: 0;
   bottom: 0;
@@ -18,27 +17,65 @@ body {
 
 .ring {
   position: relative;
-  top: 15vh;
-  width: 150px;
+  padding: 10px;
+  top: 20vh;
+  width: 200px;
+  height: 100px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.loading {
-  position: relative;
-  width: 5em;
+.blurDiv {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  backdrop-filter: blur(5px);
+  animation: blurEffect 2s linear infinite;
 }
 
-@keyframes rotation {
+.loading {
+  padding: 10px;
+  position: relative;
+  width: 100%;
+  z-index: 0;
+}
+
+@keyframes blurEffect {
   0% {
-    transform: rotateY(0deg);
+    backdrop-filter: blur(0px);
   }
-
   50% {
-    transform: rotateY(90deg);
+    backdrop-filter: blur(4px);
   }
-
   100% {
-    transform: rotateY(0deg);
+    backdrop-filter: blur(0px);
   }
+}
+
+.contents {
+  height: 100vh;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 6em;
+}
+
+.aboutMe:hover{
+  cursor:default;
+}
+
+.aboutMe span::selection,
+.aboutMe p::selection {
+  background: transparent;
+}
+
+.justify {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.aboutMe {
+  margin-top: 10%;
+  text-align: left;
+  position: relative;
 }

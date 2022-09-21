@@ -4,7 +4,8 @@ import axios from "axios";
 import NavigationBar from "./NavigationBar.tsx";
 import styles from "./Main.module.css";
 import { Skills, Experiences, Educations, Projects } from "../model/model";
-import wjwhite from "../image/specs white.png"
+import wjwhite from "../image/specs whte.svg";
+import aubercot from "../image/aubercot.png";
 
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -14,12 +15,13 @@ export default function HomePage() {
   const [experiences, setExperiences] = useState([]);
   const [projects, setProjects] = useState([]);
   const [educations, setEducations] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const devMode = false;
+  const devMode = true;
   let url = "";
 
   if (devMode) {
-    url = "http://localhost:3001/";
+    url = "http://localhost:3002/";
   } else {
     url = "https://us-central1-portfolio-v2-b469e.cloudfunctions.net/app/";
   }
@@ -67,21 +69,27 @@ export default function HomePage() {
   };
 
   const loadDefault = async () => {
-    await axios.get(url).then((res) => res.data)
+    await axios.get(url).then((res) => res.data);
   };
 
   useEffect(() => {
-    loadDefault()
-      .then(() => getFrameworks())
-      .then(() => getTechnologies())
-      .then(() => getLanguages())
-      .then(() => getExperiences())
-      .then(() => getProjects())
-      .then(() => getEducations())
-      .then(() => {
-        setIsLoaded((isLoaded) => isLoaded = false)
-      });
+    // loadDefault()
+    //   .then(() => getFrameworks())
+    //   .then(() => getTechnologies())
+    //   .then(() => getLanguages())
+    //   .then(() => getExperiences())
+    //   .then(() => getProjects())
+    //   .then(() => getEducations())
+    //   .then(() => {
+    //     setTimeout(() => {
+    //       setIsLoaded((isLoaded) => (isLoaded = true));
+    //     }, 3000);
+    //   })
+    //   .catch((err) => {
+    //     setErrorMessage((errorMessage) => (errorMessage = err.message));
+    //   });
 
+    setIsLoaded((isLoaded) => (isLoaded = true));
 
     return () => {
       setFrameworks([]);
@@ -90,8 +98,8 @@ export default function HomePage() {
       setExperiences([]);
       setProjects([]);
       setEducations([]);
-      setIsLoaded((isLoaded) => isLoaded = false)
-      console.log("clean up in main");
+      setIsLoaded((isLoaded) => (isLoaded = false));
+      setErrorMessage((errorMessage) => (errorMessage = ""));
     };
   }, []);
 
@@ -191,9 +199,14 @@ export default function HomePage() {
         <br />
         <br />
         <div className={styles.ring}>
+          <div className={styles.blurDiv}></div>
           <img src={wjwhite} className={styles.loading} />
+          <br />
+          <br />
+          {errorMessage}
         </div>
-      </div>)
+      </div>
+    );
   }
 
   return (
@@ -205,12 +218,45 @@ export default function HomePage() {
       <br />
       <br />
       <br />
-      Main page
-      <Frameworks />
-      <Languages />
-      <Experiences />
-      <Projects />
-      <Educations />
+      <div className={styles.contents}>
+        <div className={styles.justify}>
+          <div className={styles.aboutMe}>
+            <span style={{ fontSize: "40%" }}>Hey there, my name is</span>
+            <span style={{ display: "block" }}>Chan Wei Jie</span>
+            <p style={{ fontSize: "30%" }}>
+              I am a fresh grad currently working as a software engineer
+              specialized in developing full stack applications. Currently I am
+              working on a government defense project at NCS.
+            </p>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div className={styles.contents}>
+        <div className={styles.justify}>
+          <p style={{ fontSize: "30%", textAlign: "left" }}>
+            One of my most recent project that I have accomplished is an
+            Inventory Management System
+          </p>
+        </div>
+        <img src={aubercot} height={"60%"} />
+      </div>
+      <div className={styles.contents}>
+        <Frameworks />
+      </div>
+      <div className={styles.contents}>
+        <Languages />
+      </div>
+      <div className={styles.contents}>
+        <Experiences />
+      </div>
+      <div className={styles.contents}>
+        <Projects />
+      </div>
+      <div className={styles.contents}>
+        <Educations />
+      </div>
     </div>
   );
 }

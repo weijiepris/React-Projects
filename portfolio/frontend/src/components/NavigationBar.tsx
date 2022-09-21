@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React from "react";
 import styles from "./NavigationBar.module.css";
+import wjwhite from "../image/specs whte.svg";
 
 export default function NavigationBar({ isLoaded }) {
   var prevScrollpos = window.pageYOffset;
@@ -18,18 +19,19 @@ export default function NavigationBar({ isLoaded }) {
       if (currentScrollPos === 0) {
         document.getElementById("navbar").style.boxShadow = "none";
       } else {
-        document.getElementById("navbar").style.boxShadow = "0px 1px 10px black";
+        document.getElementById("navbar").style.boxShadow =
+          "0px 1px 10px black";
       }
     }, 100);
   };
 
   return (
     <div id="navbar" className={styles.navigationBar}>
-      <ul>
-        <div className={styles.logo}>
-          <li>Logo Here</li>
-        </div>
-        {isLoaded ??
+      {isLoaded ?? (
+        <ul>
+          <div className={styles.logoContainer}>
+            <img src={wjwhite} className={styles.logo} />
+          </div>
           <div className={styles.navigations}>
             <li>About</li>
             <li>Experience</li>
@@ -37,9 +39,8 @@ export default function NavigationBar({ isLoaded }) {
             <li>Contact</li>
             <li>Resume</li>
           </div>
-        }
-
-      </ul>
+        </ul>
+      )}
     </div>
   );
 }
