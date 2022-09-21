@@ -4,8 +4,10 @@ import axios from "axios";
 import NavigationBar from "./NavigationBar.tsx";
 import styles from "./Main.module.css";
 import { Skills, Experiences, Educations, Projects } from "../model/model";
+import wjwhite from "../image/specs white.png"
 
 export default function HomePage() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [frameworks, setFrameworks] = useState([]);
   const [technologies, setTechnologies] = useState([]);
   const [languages, setLanguages] = useState([]);
@@ -17,7 +19,6 @@ export default function HomePage() {
   let url = "";
 
   if (devMode) {
-    //taskkill /F /IM node.exe
     url = "http://localhost:3001/";
   } else {
     url = "https://us-central1-portfolio-v2-b469e.cloudfunctions.net/app/";
@@ -65,18 +66,22 @@ export default function HomePage() {
     setEducations(data);
   };
 
-  const loadDefault = () => {
-    axios.get(url).then((res) => res.data);
+  const loadDefault = async () => {
+    await axios.get(url).then((res) => res.data)
   };
 
   useEffect(() => {
-    loadDefault();
-    getFrameworks();
-    getTechnologies();
-    getLanguages();
-    getExperiences();
-    getProjects();
-    getEducations();
+    loadDefault()
+      .then(() => getFrameworks())
+      .then(() => getTechnologies())
+      .then(() => getLanguages())
+      .then(() => getExperiences())
+      .then(() => getProjects())
+      .then(() => getEducations())
+      .then(() => {
+        setIsLoaded((isLoaded) => isLoaded = false)
+      });
+
 
     return () => {
       setFrameworks([]);
@@ -85,6 +90,7 @@ export default function HomePage() {
       setExperiences([]);
       setProjects([]);
       setEducations([]);
+      setIsLoaded((isLoaded) => isLoaded = false)
       console.log("clean up in main");
     };
   }, []);
@@ -173,6 +179,22 @@ export default function HomePage() {
       </div>
     );
   };
+
+  if (!isLoaded) {
+    return (
+      <div className={styles.loadingContainer}>
+        <NavigationBar isLoaded={isLoaded} />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div className={styles.ring}>
+          <img src={wjwhite} className={styles.loading} />
+        </div>
+      </div>)
+  }
 
   return (
     <div className={styles.container}>

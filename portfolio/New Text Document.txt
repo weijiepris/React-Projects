@@ -1,0 +1,6 @@
+to generate google application credentials, install google cloud CLI sdk
+run > gcloud auth application-default login
+
+
+to kill node.exe task
+taskkill /F /IM node.exe

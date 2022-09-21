@@ -10,3 +10,35 @@ body {
   background-color: rgba(10, 25, 47, 0.99);
   color: #f0f0f0;
 }
+
+.loadingContainer {
+  position: relative;
+  text-align: center;
+}
+
+.ring {
+  position: relative;
+  top: 15vh;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loading {
+  position: relative;
+  width: 5em;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  50% {
+    transform: rotateY(90deg);
+  }
+
+  100% {
+    transform: rotateY(0deg);
+  }
+}

@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./NavigationBar.module.css";
 
-export default function NavigationBar() {
+export default function NavigationBar({ isLoaded }) {
   var prevScrollpos = window.pageYOffset;
   window.onscroll = function () {
     var currentScrollPos = window.pageYOffset;
@@ -29,13 +29,16 @@ export default function NavigationBar() {
         <div className={styles.logo}>
           <li>Logo Here</li>
         </div>
-        <div className={styles.navigations}>
-          <li>About</li>
-          <li>Experience</li>
-          <li>Work</li>
-          <li>Contact</li>
-          <li>Resume</li>
-        </div>
+        {isLoaded ??
+          <div className={styles.navigations}>
+            <li>About</li>
+            <li>Experience</li>
+            <li>Work</li>
+            <li>Contact</li>
+            <li>Resume</li>
+          </div>
+        }
+
       </ul>
     </div>
   );

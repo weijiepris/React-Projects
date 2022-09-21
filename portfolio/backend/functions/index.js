@@ -11,7 +11,7 @@ const Experiences = require("./configurations/experience");
 const Projects = require("./configurations/projects");
 const Educations = require("./configurations/educations");
 
-const devMode = false;
+const devMode = true;
 // initialise app
 const app = express();
 
