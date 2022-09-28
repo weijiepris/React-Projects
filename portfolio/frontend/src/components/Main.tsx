@@ -1,11 +1,23 @@
 // @ts-nocheck
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState, useRef } from "react";
 import NavigationBar from "./NavigationBar.tsx";
 import styles from "./Main.module.css";
-import { Skills, Experiences, Educations, Projects } from "../model/model";
 import wjwhite from "../image/specs whte.svg";
 import aubercot from "../image/aubercot.png";
+import me from "../image/me.jpg";
+
+import {
+  loadDefault,
+  getFrameworks,
+  getEducations,
+  getTechnologies,
+  getLanguages,
+  getExperiences,
+  getProjects,
+} from "../actions/service.tsx";
+
+import { useInView } from "react-intersection-observer";
+import Card from "./common/Card.tsx";
 
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,80 +29,41 @@ export default function HomePage() {
   const [educations, setEducations] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const devMode = true;
-  let url = "";
-
-  if (devMode) {
-    url = "http://localhost:3002/";
-  } else {
-    url = "https://us-central1-portfolio-v2-b469e.cloudfunctions.net/app/";
-  }
-
-  const getFrameworks = async () => {
-    const data: Skills = await axios
-      .get(url + "frameworks")
-      .then((res) => res.data);
-    setFrameworks(data);
-  };
-
-  const getTechnologies = async () => {
-    const data: Skills = await axios
-      .get(url + "technologies")
-      .then((res) => res.data);
-    setTechnologies(data);
-  };
-
-  const getLanguages = async () => {
-    const data: Skills = await axios
-      .get(url + "languages")
-      .then((res) => res.data);
-    setLanguages(data);
-  };
-
-  const getExperiences = async () => {
-    const data: Experiences = await axios
-      .get(url + "experiences")
-      .then((res) => res.data);
-    setExperiences(data);
-  };
-
-  const getProjects = async () => {
-    const data: Projects = await axios
-      .get(url + "projects")
-      .then((res) => res.data);
-    setProjects(data);
-  };
-
-  const getEducations = async () => {
-    const data: Educations = await axios
-      .get(url + "educations")
-      .then((res) => res.data);
-    setEducations(data);
-  };
-
-  const loadDefault = async () => {
-    await axios.get(url).then((res) => res.data);
-  };
+  const { ref: introRef, inView: introView, entry: introEntry } = useInView();
+  const {
+    ref: frameworkRef,
+    inView: frameworkView,
+    entry: frameworkEntry,
+  } = useInView();
+  const {
+    ref: languageRef,
+    inView: languageView,
+    entry: languageEntry,
+  } = useInView();
+  const {
+    ref: experienceRef,
+    inView: experienceView,
+    entry: experienceEntry,
+  } = useInView();
+  const {
+    ref: projectRef,
+    inView: projectView,
+    entry: projectEntry,
+  } = useInView();
+  const {
+    ref: educationRef,
+    inView: educationView,
+    entry: educationEntry,
+  } = useInView();
+  const {
+    ref: portfolioRef,
+    inView: portfolioView,
+    entry: portfolioEntry,
+  } = useInView();
 
   useEffect(() => {
-    // loadDefault()
-    //   .then(() => getFrameworks())
-    //   .then(() => getTechnologies())
-    //   .then(() => getLanguages())
-    //   .then(() => getExperiences())
-    //   .then(() => getProjects())
-    //   .then(() => getEducations())
-    //   .then(() => {
-    //     setTimeout(() => {
-    //       setIsLoaded((isLoaded) => (isLoaded = true));
-    //     }, 3000);
-    //   })
-    //   .catch((err) => {
-    //     setErrorMessage((errorMessage) => (errorMessage = err.message));
-    //   });
-
+    // loadData();
     setIsLoaded((isLoaded) => (isLoaded = true));
-
     return () => {
       setFrameworks([]);
       setTechnologies([]);
@@ -103,6 +76,54 @@ export default function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (introView) {
+      introEntry.target.classList.add(styles.appendStyling);
+    }
+    if (frameworkView) {
+      frameworkEntry.target.classList.add(styles.appendStyling);
+    }
+    if (languageView) {
+      languageEntry.target.classList.add(styles.appendStyling);
+    }
+    if (experienceView) {
+      experienceEntry.target.classList.add(styles.appendStyling);
+    }
+    if (projectView) {
+      projectEntry.target.classList.add(styles.appendStyling);
+    }
+    if (educationView) {
+      educationEntry.target.classList.add(styles.appendStyling);
+    }
+    if (portfolioView) {
+      portfolioEntry.target.classList.add(styles.appendStyling);
+    }
+  }, [
+    introView,
+    frameworkView,
+    languageView,
+    experienceView,
+    projectView,
+    educationView,
+    portfolioView,
+  ]);
+
+  const loadData = async () => {
+    try {
+      await loadDefault();
+      setEducations(await getEducations());
+      setFrameworks(await getFrameworks());
+      setTechnologies(await getTechnologies());
+      setLanguages(await getLanguages());
+      setExperiences(await getExperiences());
+      setProjects(await getProjects());
+      setTimeout(() => {
+        setIsLoaded((isLoaded) => (isLoaded = true));
+      }, 3000);
+    } catch (err) {
+      setErrorMessage(err.code + ": " + err.message);
+    }
+  };
   const Frameworks = () => {
     return (
       <div>
@@ -203,6 +224,7 @@ export default function HomePage() {
           <img src={wjwhite} className={styles.loading} />
           <br />
           <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           {errorMessage}
         </div>
       </div>
@@ -212,28 +234,174 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <NavigationBar />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <div className={styles.contents}>
-        <div className={styles.justify}>
+      <Card
+        title={"Hey there, my name is"}
+        bigHeader={"Chan Wei Jie"}
+        smallHeader={"I develop ideas to make one's life easier"}
+        description={
+          "I'm a fresh graduate from University Of Wollongong and currently working as a Software Engineer specialized in developing full stack applications."
+        }
+      />
+      <Card
+        title={""}
+        bigHeader={""}
+        smallHeader={"About me"}
+        description={[
+          <img
+            className={styles.img}
+            src={me}
+            style={{
+              float: "right",
+              position: "inline-block",
+            }}
+          />,
+          "My name is Chan Wei Jie, sometimes my colleagues like to call me Jay for short. " +
+            "My interest for programming started back when I was 17, I was a student at ITE (Simei). " +
+            "In the year of 2021, I chanced upon an opportunity in developing an Inventory Management System (",
+          <a
+            href="https://aubercot.com/"
+            target="_blank"
+            style={{
+              fontFamily: "Mirande",
+              fontSize: "120%",
+              fontWeight: "none",
+              color: "white",
+            }}
+          >
+            Aubercot
+          </a>,
+          ") for a client.",
+          ,
+          <p className={styles.aboutMeDescription}>
+            These are few of the technologies that I have been working on
+            recently.
+          </p>,
+          <ul className={styles.aboutMeDescription}>
+            <li>React</li>
+            <li>Node.js</li>
+            <li>Angular</li>
+            <li>Firebase (Firestore &amp; Hosting)</li>
+          </ul>,
+        ]}
+      />
+      <Card
+        title={""}
+        bigHeader={""}
+        smallHeader={""}
+        description={[
+          "One of my most recent project that I have accomplished is an Inventory Management System",
+          <img src={aubercot} />,
+        ]}
+      />
+      {/* <section className={styles.contents}>
+        <div className={styles.centraliseContent}>
           <div className={styles.aboutMe}>
-            <span style={{ fontSize: "40%" }}>Hey there, my name is</span>
-            <span style={{ display: "block" }}>Chan Wei Jie</span>
-            <p style={{ fontSize: "30%" }}>
-              I am a fresh grad currently working as a software engineer
-              specialized in developing full stack applications. Currently I am
-              working on a government defense project at NCS.
-            </p>
+            <span className={styles.fontSize30}>Hey there, my name is</span>
+            <span
+              className={[
+                styles.appearAnimation,
+                styles.fontSize120,
+                styles.name,
+              ].join(" ")}
+              style={{ display: "block" }}
+            >
+              Chan Wei Jie
+            </span>
+            <span
+              className={[styles.appearAnimation, styles.fontSize80].join(" ")}
+              style={{ color: "#C8C8C8" }}
+            >
+              <p>I develop ideas to make one's life easier</p>
+            </span>
+            <span>
+              <p
+                className={[styles.fontSize30, styles.bio].join(" ")}
+                style={{ color: "#C8C8C8", width: "60%" }}
+              >
+                I&apos;m a fresh graduate from University Of Wollongong and
+                currently working as a Software Engineer specialized in
+                developing full stack applications.
+              </p>
+            </span>
           </div>
         </div>
-      </div>
+      </section> */}
+      {/* <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={introRef}
+      >
+        <div className={styles.justify}>
+          <div className={styles.aboutMe}>
+            <span
+              className={[styles.fontSize80, styles.contentTitle].join(" ")}
+            >
+              About me
+            </span>
+            <span
+              className={[styles.appearAnimation, styles.fontSize30].join(" ")}
+              style={{ color: "#C8C8C8" }}
+            >
+              <p className={styles.p}>
+                <span
+                  className={styles.aboutMeDescription}
+                  style={{
+                    display: "inline-block",
+                    width: "55%",
+                    position: "relative",
+                  }}
+                >
+                  My name is Chan Wei Jie, sometimes my colleagues like to call
+                  me Jay for short. My interest for programming started back
+                  when I was 17, I was a student at ITE (Simei). In the year of
+                  2021, I chanced upon an opportunity in developing an Inventory
+                  Management System (
+                  <a
+                    href="https://aubercot.com/"
+                    target="_blank"
+                    style={{
+                      fontFamily: "Mirande",
+                      fontSize: "120%",
+                      fontWeight: "none",
+                      color: "white",
+                    }}
+                  >
+                    Aubercot
+                  </a>
+                  ) for a client.
+                </span>
+                <div className={styles.overlayContainer}>
+                  <div className={styles.overlay}></div>
+                  <img
+                    className={styles.img}
+                    src={me}
+                    style={{
+                      float: "right",
+                      position: "inline-block",
+                    }}
+                  />
+                </div>
+                <br />
+                <p className={styles.aboutMeDescription}>
+                  These are few of the technologies that I have been working on
+                  recently.
+                </p>
+                <ul className={styles.aboutMeDescription}>
+                  <li>React</li>
+                  <li>Node.js</li>
+                  <li>Angular</li>
+                  <li>Firebase (Firestore &amp; Hosting)</li>
+                </ul>
+              </p>
+            </span>
+          </div>
+        </div>
+      </section> */}
+      {/* <br />
       <br />
-      <br />
-      <div className={styles.contents}>
+      <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={portfolioRef}
+      >
         <div className={styles.justify}>
           <p style={{ fontSize: "30%", textAlign: "left" }}>
             One of my most recent project that I have accomplished is an
@@ -241,22 +409,39 @@ export default function HomePage() {
           </p>
         </div>
         <img src={aubercot} height={"60%"} />
-      </div>
-      <div className={styles.contents}>
+      </section> */}
+      <br />
+      <br />
+      <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={frameworkRef}
+      >
         <Frameworks />
-      </div>
-      <div className={styles.contents}>
+      </section>
+      <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={languageRef}
+      >
         <Languages />
-      </div>
-      <div className={styles.contents}>
+      </section>
+      <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={experienceRef}
+      >
         <Experiences />
-      </div>
-      <div className={styles.contents}>
+      </section>
+      <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={projectRef}
+      >
         <Projects />
-      </div>
-      <div className={styles.contents}>
+      </section>
+      <section
+        className={[styles.contents, styles.hideSection].join(" ")}
+        ref={educationRef}
+      >
         <Educations />
-      </div>
+      </section>
     </div>
   );
 }

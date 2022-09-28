@@ -5,9 +5,35 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+@font-face {
+  font-family: "Heavitas";
+  src: url("./assets/fonts/Heavitas.ttf");
+}
+
+@font-face {
+  font-family: "lottepaperfang";
+  src: url("./assets/fonts/lottepaperfang.ttf");
+}
+
+@font-face {
+  font-family: "SVBasicManual-Bold";
+  src: url("./assets/fonts/SVBasicManual-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Mirande";
+  src: url("./assets/fonts/Mirande.ttf");
+}
+
+@font-face {
+  font-family: "DarkerGrotesque-Regular";
+  src: url("./assets/fonts/DarkerGrotesque-Regular.ttf");
 }

@@ -27,5 +27,6 @@ export interface Educations {
     descriptions: string[];
     skills: string[];
     title: string;
+    school: string[];
   }
   

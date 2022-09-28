@@ -1,0 +1,38 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  font-family: "DarkerGrotesque-Regular";
+  font-size: 3em;
+  position: relative;
+  display:block
+}
+
+.container *::selection {
+  background: transparent;
+}
+
+.content {
+  left: -50px;
+  top: 30%;
+  position: relative;
+  margin: 0 auto;
+  width: 50%;
+  padding: 10px;
+  text-align: left;
+}
+
+.title {
+  font-size: 60%;
+}
+
+.bigHeader {
+  font-size: 200%;
+}
+
+.smallHeader {
+  font-size: 100%;
+}
+
+.description {
+  font-size: 60%;
+}

@@ -29,7 +29,9 @@ export default function NavigationBar({ isLoaded }) {
     <div id="navbar" className={styles.navigationBar}>
       {isLoaded ?? (
         <ul>
-          <div className={styles.logoContainer}>
+          <div
+            className={[styles.logoContainer, styles.appearAnimation].join(" ")}
+          >
             <img src={wjwhite} className={styles.logo} />
           </div>
           <div className={styles.navigations}>
