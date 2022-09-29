@@ -29,41 +29,9 @@ export default function HomePage() {
   const [educations, setEducations] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { ref: introRef, inView: introView, entry: introEntry } = useInView();
-  const {
-    ref: frameworkRef,
-    inView: frameworkView,
-    entry: frameworkEntry,
-  } = useInView();
-  const {
-    ref: languageRef,
-    inView: languageView,
-    entry: languageEntry,
-  } = useInView();
-  const {
-    ref: experienceRef,
-    inView: experienceView,
-    entry: experienceEntry,
-  } = useInView();
-  const {
-    ref: projectRef,
-    inView: projectView,
-    entry: projectEntry,
-  } = useInView();
-  const {
-    ref: educationRef,
-    inView: educationView,
-    entry: educationEntry,
-  } = useInView();
-  const {
-    ref: portfolioRef,
-    inView: portfolioView,
-    entry: portfolioEntry,
-  } = useInView();
-
   useEffect(() => {
-    // loadData();
-    setIsLoaded((isLoaded) => (isLoaded = true));
+    loadData();
+    // setIsLoaded((isLoaded) => (isLoaded = true));
     return () => {
       setFrameworks([]);
       setTechnologies([]);
@@ -75,39 +43,6 @@ export default function HomePage() {
       setErrorMessage((errorMessage) => (errorMessage = ""));
     };
   }, []);
-
-  useEffect(() => {
-    if (introView) {
-      introEntry.target.classList.add(styles.appendStyling);
-    }
-    if (frameworkView) {
-      frameworkEntry.target.classList.add(styles.appendStyling);
-    }
-    if (languageView) {
-      languageEntry.target.classList.add(styles.appendStyling);
-    }
-    if (experienceView) {
-      experienceEntry.target.classList.add(styles.appendStyling);
-    }
-    if (projectView) {
-      projectEntry.target.classList.add(styles.appendStyling);
-    }
-    if (educationView) {
-      educationEntry.target.classList.add(styles.appendStyling);
-    }
-    if (portfolioView) {
-      portfolioEntry.target.classList.add(styles.appendStyling);
-    }
-  }, [
-    introView,
-    frameworkView,
-    languageView,
-    experienceView,
-    projectView,
-    educationView,
-    portfolioView,
-  ]);
-
   const loadData = async () => {
     try {
       await loadDefault();
@@ -238,23 +173,20 @@ export default function HomePage() {
         title={"Hey there, my name is"}
         bigHeader={"Chan Wei Jie"}
         smallHeader={"I develop ideas to make one's life easier"}
-        description={
-          "I'm a fresh graduate from University Of Wollongong and currently working as a Software Engineer specialized in developing full stack applications."
-        }
+        description={[
+          <p>
+            I&apos;m a fresh graduate from University Of Wollongong and
+            currently working as a Software Engineer specialized in developing
+            full stack applications.
+          </p>,
+        ]}
       />
       <Card
         title={""}
         bigHeader={""}
         smallHeader={"About me"}
         description={[
-          <img
-            className={styles.img}
-            src={me}
-            style={{
-              float: "right",
-              position: "inline-block",
-            }}
-          />,
+          ,
           "My name is Chan Wei Jie, sometimes my colleagues like to call me Jay for short. " +
             "My interest for programming started back when I was 17, I was a student at ITE (Simei). " +
             "In the year of 2021, I chanced upon an opportunity in developing an Inventory Management System (",
@@ -287,159 +219,45 @@ export default function HomePage() {
       <Card
         title={""}
         bigHeader={""}
+        smallHeader={"Where I've worked"}
+        description={[
+          experiences.map((experience) => (
+            <div>
+              <p>
+                {experience.company} &nbsp;
+                {experience.dateStart} - {experience.dateEnd}
+              </p>
+              {experience.descriptions.map((desc) => (
+                <p>{desc}</p>
+              ))}
+            </div>
+          )),
+        ]}
+      />
+      <Card
+        title={""}
+        bigHeader={""}
         smallHeader={""}
         description={[
           "One of my most recent project that I have accomplished is an Inventory Management System",
-          <img src={aubercot} />,
+          <img src={aubercot} style={{ maxHeight: "500px" }} />,
         ]}
       />
-      {/* <section className={styles.contents}>
-        <div className={styles.centraliseContent}>
-          <div className={styles.aboutMe}>
-            <span className={styles.fontSize30}>Hey there, my name is</span>
-            <span
-              className={[
-                styles.appearAnimation,
-                styles.fontSize120,
-                styles.name,
-              ].join(" ")}
-              style={{ display: "block" }}
-            >
-              Chan Wei Jie
-            </span>
-            <span
-              className={[styles.appearAnimation, styles.fontSize80].join(" ")}
-              style={{ color: "#C8C8C8" }}
-            >
-              <p>I develop ideas to make one's life easier</p>
-            </span>
-            <span>
-              <p
-                className={[styles.fontSize30, styles.bio].join(" ")}
-                style={{ color: "#C8C8C8", width: "60%" }}
-              >
-                I&apos;m a fresh graduate from University Of Wollongong and
-                currently working as a Software Engineer specialized in
-                developing full stack applications.
-              </p>
-            </span>
-          </div>
-        </div>
-      </section> */}
-      {/* <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={introRef}
-      >
-        <div className={styles.justify}>
-          <div className={styles.aboutMe}>
-            <span
-              className={[styles.fontSize80, styles.contentTitle].join(" ")}
-            >
-              About me
-            </span>
-            <span
-              className={[styles.appearAnimation, styles.fontSize30].join(" ")}
-              style={{ color: "#C8C8C8" }}
-            >
-              <p className={styles.p}>
-                <span
-                  className={styles.aboutMeDescription}
-                  style={{
-                    display: "inline-block",
-                    width: "55%",
-                    position: "relative",
-                  }}
-                >
-                  My name is Chan Wei Jie, sometimes my colleagues like to call
-                  me Jay for short. My interest for programming started back
-                  when I was 17, I was a student at ITE (Simei). In the year of
-                  2021, I chanced upon an opportunity in developing an Inventory
-                  Management System (
-                  <a
-                    href="https://aubercot.com/"
-                    target="_blank"
-                    style={{
-                      fontFamily: "Mirande",
-                      fontSize: "120%",
-                      fontWeight: "none",
-                      color: "white",
-                    }}
-                  >
-                    Aubercot
-                  </a>
-                  ) for a client.
-                </span>
-                <div className={styles.overlayContainer}>
-                  <div className={styles.overlay}></div>
-                  <img
-                    className={styles.img}
-                    src={me}
-                    style={{
-                      float: "right",
-                      position: "inline-block",
-                    }}
-                  />
-                </div>
-                <br />
-                <p className={styles.aboutMeDescription}>
-                  These are few of the technologies that I have been working on
-                  recently.
-                </p>
-                <ul className={styles.aboutMeDescription}>
-                  <li>React</li>
-                  <li>Node.js</li>
-                  <li>Angular</li>
-                  <li>Firebase (Firestore &amp; Hosting)</li>
-                </ul>
-              </p>
-            </span>
-          </div>
-        </div>
-      </section> */}
-      {/* <br />
-      <br />
-      <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={portfolioRef}
-      >
-        <div className={styles.justify}>
-          <p style={{ fontSize: "30%", textAlign: "left" }}>
-            One of my most recent project that I have accomplished is an
-            Inventory Management System
-          </p>
-        </div>
-        <img src={aubercot} height={"60%"} />
-      </section> */}
       <br />
       <br />
-      <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={frameworkRef}
-      >
+      <section className={[styles.contents, styles.hideSection].join(" ")}>
         <Frameworks />
       </section>
-      <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={languageRef}
-      >
+      <section className={[styles.contents, styles.hideSection].join(" ")}>
         <Languages />
       </section>
-      <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={experienceRef}
-      >
+      <section className={[styles.contents, styles.hideSection].join(" ")}>
         <Experiences />
       </section>
-      <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={projectRef}
-      >
+      <section className={[styles.contents, styles.hideSection].join(" ")}>
         <Projects />
       </section>
-      <section
-        className={[styles.contents, styles.hideSection].join(" ")}
-        ref={educationRef}
-      >
+      <section className={[styles.contents, styles.hideSection].join(" ")}>
         <Educations />
       </section>
     </div>

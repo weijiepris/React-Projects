@@ -1,10 +1,10 @@
 .container {
-  height: 100vh;
+  height: 110vh;
   width: 100vw;
   font-family: "DarkerGrotesque-Regular";
   font-size: 3em;
   position: relative;
-  display:block
+  display: block;
 }
 
 .container *::selection {
@@ -35,4 +35,64 @@
 
 .description {
   font-size: 60%;
+}
+
+.titleAnimation {
+  animation: slideUp 1s ease forwards;
+}
+
+.bigHeaderAnimation {
+  transition: 1s ease;
+  animation: appear 3s ease forwards;
+}
+
+.smallHeaderAnimation {
+  animation: slideUp 1.5s ease forwards;
+}
+
+.descriptionAnimation {
+  animation: slideUp 2s ease forwards;
+}
+
+@keyframes reveal {
+  0% {
+    opacity: 0;
+    width: 0px;
+    overflow: hidden;
+  }
+  20% {
+    width: 0px;
+    overflow: hidden;
+  }
+  50% {
+    transform: translateY(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateX(-13rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
