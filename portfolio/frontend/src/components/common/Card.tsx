@@ -21,7 +21,7 @@ const Card = ({ title, bigHeader, smallHeader, description }) => {
   }, [cardView]);
 
   return (
-    <div className={styles.container} ref={cardRef}>
+    <div className={styles.container}>
       <div className={styles.content}>
         <div
           className={[
@@ -42,6 +42,7 @@ const Card = ({ title, bigHeader, smallHeader, description }) => {
           {bigHeader}
         </div>
         <div
+          ref={cardRef}
           className={[
             styles.smallHeader,
             smallHeaderView ? styles.smallHeaderAnimation : "",

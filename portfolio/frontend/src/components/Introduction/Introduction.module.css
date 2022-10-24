@@ -12,8 +12,6 @@
 }
 
 .content {
-  left: -50px;
-  top: 30%;
   position: relative;
   margin: 0 auto;
   width: 50%;
@@ -21,36 +19,20 @@
   text-align: left;
 }
 
-.title {
-  font-size: 60%;
-}
 
-.bigHeader {
-  font-size: 200%;
-}
-
-.smallHeader {
-  font-size: 100%;
-}
-
-.description {
-  font-size: 60%;
-}
-
-.titleAnimation {
-  animation: slideUp 1s ease forwards;
-}
-
-.bigHeaderAnimation {
-  transition: 1s ease;
+.header {
   animation: appear 3s ease forwards;
 }
 
-.smallHeaderAnimation {
+.title {
+  animation: slideUp 1s ease forwards;
+}
+
+.bio {
   animation: slideUp 1.5s ease forwards;
 }
 
-.descriptionAnimation {
+.description {
   animation: slideUp 2s ease forwards;
 }
 
@@ -97,55 +79,51 @@
   }
 }
 
-@media (min-width: 481px) {
-  /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
-}
-
 @media (min-width: 320px) {
   /* smartphones, iPhone, portrait 480x320 phones */
   .content {
-    margin-left: 20%;
-    margin-top: -10%;
     width: 85%;
+    transform: translate(0, 70%);
   }
 
   .title {
     font-size: 0.45em;
   }
 
-  .bigHeader {
-    font-size: 1.2em;
+  .header {
+    font-size: 1.3em;
   }
 
-  .smallHeader {
-    font-size: 0.5em;
+  .bio {
+    font-size: 0.4em;
   }
 
   .description {
-    font-size: 0.45em;
+    margin-top: 10px;
+    font-size: 0.4em;
   }
 }
 
 @media (min-width: 641px) {
   /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
   .content {
-    margin-left: 15%;
-    width: 80%;
+    transform: translate(0, 70%);
   }
 
   .title {
     font-size: 0.7em;
   }
 
-  .bigHeader {
-    font-size: 2em;
+  .header {
+    font-size: 2.5em;
   }
 
-  .smallHeader {
-    font-size: 0.9em;
+  .bio {
+    font-size: 0.7em;
   }
 
   .description {
+    margin-top: 15px;
     font-size: 0.7em;
   }
 }
@@ -153,24 +131,23 @@
 @media (min-width: 961px) {
   /* tablet, landscape iPad, lo-res laptops ands desktops */
   .content {
-    margin-left: 15%;
-    width: 80%;
-    margin-top: -3%;
+    transform: translate(0, 50%);
   }
 
   .title {
     font-size: 0.7em;
   }
 
-  .bigHeader {
-    font-size: 2em;
+  .header {
+    font-size: 2.5em;
   }
 
-  .smallHeader {
-    font-size: 0.9em;
+  .bio {
+    font-size: 0.7em;
   }
 
   .description {
+    margin-top: 15px;
     font-size: 0.7em;
   }
 }
@@ -178,24 +155,23 @@
 @media (min-width: 1025px) {
   /* big landscape tablets, laptops, and desktops */
   .content {
-    margin-left: 15%;
-    width: 80%;
-    margin-top: -3%;
+    transform: translate(0, 60%);
   }
 
   .title {
     font-size: 0.7em;
   }
 
-  .bigHeader {
-    font-size: 2em;
+  .header {
+    font-size: 2.5em;
   }
 
-  .smallHeader {
-    font-size: 0.9em;
+  .bio {
+    font-size: 0.7em;
   }
 
   .description {
+    margin-top: 15px;
     font-size: 0.7em;
   }
 }
@@ -203,24 +179,24 @@
 @media (min-width: 1281px) {
   /* big landscape tablets, laptops, and desktops */
   .content {
-    margin-left: 20%;
-    width: 60%;
-    margin-top: 0%;
+    width: 55%;
+    transform: translate(0, 70%);
   }
 
   .title {
-    font-size: 0.65em;
+    font-size: 0.7em;
   }
 
-  .bigHeader {
-    font-size: 1.7em;
+  .header {
+    font-size: 2.5em;
   }
 
-  .smallHeader {
-    font-size: 0.9em;
+  .bio {
+    font-size: 0.7em;
   }
 
   .description {
-    font-size: 0.65em;
+    margin-top: 15px;
+    font-size: 0.7em;
   }
 }

@@ -1,23 +1,23 @@
 export interface Skills {
-  value: string[];
+    value: string[];
 }
 
 export interface Experiences {
-  category: string;
-  company: string;
-  dateStart: string;
-  dateEnd: string;
-  descriptions: string[];
-  skills: string[];
-  title: string;
+    category: string;
+    company: string;
+    dateStart: string;
+    dateEnd: string;
+    descriptions: string[];
+    skills: string[];
+    title: string;
 }
 
 export interface Projects {
-  dateStart: string;
-  dateEnd: string;
-  descriptions: string[];
-  skills: string[];
-  title: string;
+    dateStart: string;
+    dateEnd: string;
+    descriptions: string[];
+    skills: string[];
+    title: string;
 }
 
 
@@ -28,5 +28,5 @@ export interface Educations {
     skills: string[];
     title: string;
     school: string[];
-  }
+}
   

@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const devMode = true;
 let url = "";
 
@@ -13,16 +12,16 @@ export const getFrameworks = () => {
   return axios.get(url + "frameworks").then((res) => res.data);
 };
 
+export const getExperiences = async () => {
+  return axios.get(url + "experiences").then((res) => res.data);
+};
+
 export const getTechnologies = () => {
   return axios.get(url + "technologies").then((res) => res.data);
 };
 
 export const getLanguages = () => {
   return axios.get(url + "languages").then((res) => res.data);
-};
-
-export const getExperiences = () => {
-  return axios.get(url + "experiences").then((res) => res.data);
 };
 
 export const getProjects = () => {
