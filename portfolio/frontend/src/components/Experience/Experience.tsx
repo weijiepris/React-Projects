@@ -21,25 +21,45 @@ const Experience = ({ title, experiences }) => {
   }, [cardView]);
 
   return (
-    <div className={styles.container}>
+    <section className={styles.container} id="experience">
       <div className={styles.content}>
-        <div className={[styles.title, observer ? styles.animation : ""].join(" ")}>{title}</div>
+        <div
+          className={[styles.title, observer ? styles.animation : ""].join(" ")}
+        >
+          {title}
+        </div>
         <div ref={cardRef}>
           {experiences.map((experience) => (
-            <div className={styles.experienceContainer} key={experience.dateEnd}>
-              <p className={[styles.duration, observer ? styles.animation2 : ""].join(" ")}>
+            <div
+              className={styles.experienceContainer}
+              key={experience.dateEnd}
+            >
+              <p
+                className={[
+                  styles.duration,
+                  observer ? styles.animation2 : "",
+                ].join(" ")}
+              >
                 {experience.company} - ({experience.category.toUpperCase()}){" "}
                 <br /> ({experience.dateStart} - {experience.dateEnd})
               </p>
               {experience.descriptions.map((desc) => (
-                <p className={[styles.description, observer ? styles.animation2 : ""].join(" ")}>{desc}</p>
+                <p
+                  className={[
+                    styles.description,
+                    observer ? styles.animation2 : "",
+                  ].join(" ")}
+                  key={desc}
+                >
+                  {desc}
+                </p>
               ))}
-              <br/>
+              <br />
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

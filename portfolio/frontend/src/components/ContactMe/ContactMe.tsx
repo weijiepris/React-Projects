@@ -19,7 +19,7 @@ const ContactMe = () => {
   }, [cardView]);
 
   return (
-    <div className={styles.container}>
+    <section className={styles.container} id="contact">
       <div className={styles.content}>
         <div
           className={[styles.title, observer ? styles.animation : ""].join(" ")}
@@ -46,7 +46,7 @@ const ContactMe = () => {
           Say Hello
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -14,16 +14,36 @@ const Introduction = ({ data }) => {
     }
   }, [cardView]);
   return (
-    <div className={styles.container}>
+    <section className={styles.container} id="about">
       <div className={styles.content}>
-        <div className={[styles.title, observer ? styles.animation : ""].join(" ")}>{data.title}</div>
-        <div className={[styles.header, observer ? styles.animation1 : ""].join(" ")}>{data.header}</div>
-        <div className={[styles.bio, observer ? styles.animation2 : ""].join(" ")}>{data.bio}</div>
-        <div ref={cardRef} className={[styles.description, observer ? styles.animation3 : ""].join(" ")}>
+        <div
+          className={[styles.title, observer ? styles.animation : ""].join(" ")}
+        >
+          {data.title}
+        </div>
+        <div
+          className={[styles.header, observer ? styles.animation1 : ""].join(
+            " "
+          )}
+        >
+          {data.header}
+        </div>
+        <div
+          className={[styles.bio, observer ? styles.animation2 : ""].join(" ")}
+        >
+          {data.bio}
+        </div>
+        <div
+          ref={cardRef}
+          className={[
+            styles.description,
+            observer ? styles.animation3 : "",
+          ].join(" ")}
+        >
           {data.description}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

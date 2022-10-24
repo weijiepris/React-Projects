@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./NavigationBar.module.css";
 import wjwhite from "../../image/specs whte.svg";
 
-export default function NavigationBar({ isLoaded }) {
+import { Link } from "react-scroll";
+const NavigationBar = ({ isLoaded }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [toggle, setToggle] = useState(false);
 
@@ -58,37 +59,84 @@ export default function NavigationBar({ isLoaded }) {
     else setIsMobile(false);
   }, [isMobile]);
 
+  const test = () => {
+    const anchor = document.querySelector("contact");
+    console.log(anchor);
+    anchor?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   return (
     <>
       {isLoaded ??
         (!isMobile ? (
-          <div id="navbar" className={styles.navigationBar}>
+          <nav id="navbar" className={styles.navigationBar}>
             <ul>
               <div
                 className={[styles.logoContainer, styles.appearAnimation].join(
                   " "
                 )}
               >
-                <img src={wjwhite} className={styles.logo} />
+                <Link activeClass="active" smooth spy to="about">
+                  <img src={wjwhite} className={styles.logo} />
+                </Link>
               </div>
               <div className={styles.navigations}>
-                <li>About</li>
-                <li>Experience</li>
-                <li>Contact</li>
+                <li>
+                  <Link activeClass="active" smooth spy to="about">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link activeClass="active" smooth spy to="experience">
+                    Experience
+                  </Link>
+                </li>
+                <li>
+                  <Link activeClass="active" smooth spy to="contact">
+                    Contact
+                  </Link>
+                </li>
                 <li>Resume</li>
               </div>
             </ul>
-          </div>
+          </nav>
         ) : (
-          <div className={styles.mobileNavigationBar}>
+          <nav className={styles.mobileNavigationBar}>
             <header className={styles.header}>
               <div className={styles.nav} id="nav">
-                <div>About Me</div>
-                <div>Education</div>
-                <div>Experience</div>
-                <div>Projects</div>
-                <div>Skills</div>
-                <div>Documents</div>
+                <div>
+                  <Link
+                    activeClass="active"
+                    smooth
+                    spy
+                    to="about"
+                    onClick={showHide}
+                  >
+                    About
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    activeClass="active"
+                    smooth
+                    spy
+                    to="about"
+                    onClick={showHide}
+                  >
+                    Experience
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    activeClass="active"
+                    smooth
+                    spy
+                    to="contact"
+                    onClick={showHide}
+                  >
+                    Contact
+                  </Link>
+                </div>
               </div>
               <div
                 className={styles.iconHolder}
@@ -106,8 +154,10 @@ export default function NavigationBar({ isLoaded }) {
                 </div>
               </div>
             </header>
-          </div>
+          </nav>
         ))}
     </>
   );
-}
+};
+
+export default NavigationBar;

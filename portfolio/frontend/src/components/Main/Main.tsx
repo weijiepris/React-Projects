@@ -104,7 +104,7 @@ const Main = () => {
       <Introduction data={intro} />
       <AboutMe data={about} />
       <Experience title={"Where I've worked"} experiences={experiences} />
-      <ContactMe />
+      <ContactMe id="contact"/>
       <Footer />
     </div>
   );

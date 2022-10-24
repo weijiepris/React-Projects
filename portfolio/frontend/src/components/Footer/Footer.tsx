@@ -16,7 +16,7 @@ const Footer = () => {
 
   return (
     <footer>
-      <div class={styles.content}>Designed and developed by Chan Wei Jie</div>
+      <div className={styles.content}>Designed and developed by Chan Wei Jie</div>
     </footer>
   );
 };
