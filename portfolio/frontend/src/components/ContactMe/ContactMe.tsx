@@ -21,28 +21,15 @@ const ContactMe = () => {
   return (
     <section className={styles.container} id="contact">
       <div className={styles.content}>
-        <div
-          className={[styles.title, observer ? styles.animation : ""].join(" ")}
-        >
+        <div className={[styles.title, observer ? styles.animation : ""].join(" ")}>
           Get in touch with me!
         </div>
         <div
-          className={[
-            styles.description,
-            observer ? styles.animation : "",
-          ].join(" ")}
-          ref={cardRef}
-        >
+          className={[ styles.description,observer ? styles.animation : "", ].join(" ")} ref={cardRef}>
           My inbox is always open for collaborations, opportunities, questions
           and more!
         </div>
-        <button
-          className={[
-            styles.description,
-            observer ? styles.animation : "",
-          ].join(" ")}
-          onClick={() => sendMail()}
-        >
+        <button className={[ styles.description, observer ? styles.animation : "", ].join(" ")} onClick={() => sendMail()} >
           Say Hello
         </button>
       </div>
