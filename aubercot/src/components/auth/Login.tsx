@@ -1,24 +1,21 @@
-import { useRef, useContext, useState } from "react";
 import "./Login.css";
 
-import AuthContext from "../../store/auth-context";
+import { useRef, useContext } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-import _ from "lodash";
 import { onLogin } from "./actions";
 import { AUTHENTICATION_CONSTANTS } from "../../models/constants";
 
+import AuthenticationContext from "../../store/authentication-content";
+import _ from "lodash";
+
 const Login = ({ alert }: any) => {
-  const [state, setState] = useState(true);
-
-  const ctx = useContext(AuthContext);
-
+  const authenticationContext = useContext(AuthenticationContext);
   const emailRef: any = useRef();
   const passwordRef: any = useRef();
 
-  const onSignin = (event: any) => {
-    event.preventDefault();
+  const onSignin = () => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
@@ -35,9 +32,8 @@ const Login = ({ alert }: any) => {
     }
 
     onLogin(email, password)
-      .then((response) => {
-        console.log("successfully logged in", response);
-        // to set state to logged in
+      .then(() => {
+        authenticationContext.setState(true);
       })
       .catch((error) => {
         switch (error.code) {
@@ -79,12 +75,20 @@ const Login = ({ alert }: any) => {
       });
   };
 
+  const onKeyPress = (event: any) => {
+    if (event.key === "Enter") onSignin();
+  };
+
   return (
     <section className="auth">
       <h1>AUBERCOT</h1>
       <br />
       <div>
-        <InputText placeholder="Username" ref={emailRef} />
+        <InputText
+          placeholder="Username"
+          ref={emailRef}
+          onKeyDown={(e) => onKeyPress(e)}
+        />
       </div>
       <br />
       <div>
@@ -93,6 +97,7 @@ const Login = ({ alert }: any) => {
           toggleMask
           feedback={false}
           inputRef={passwordRef}
+          onKeyDown={(e) => onKeyPress(e)}
         />
       </div>
       <br />

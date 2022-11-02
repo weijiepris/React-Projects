@@ -12,10 +12,6 @@ html,
   background-color: rgba(240, 235, 232);
 }
 
-#root {
-  margin-top: -70px;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

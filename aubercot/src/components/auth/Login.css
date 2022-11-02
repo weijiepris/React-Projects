@@ -7,8 +7,21 @@
   transform: translateY(100%);
 }
 
+.p-inputtext::selection,
+br::selection {
+  background: transparent;
+}
+
 .auth h1 {
   font-family: "Mirande";
+}
+
+.auth h1::selection {
+  background: transparent;
+}
+
+.auth h1:hover {
+  cursor: default;
 }
 
 .p-inputtext {
@@ -28,4 +41,11 @@
 
 .p-button:focus {
   box-shadow: 0 0 0 2px #e7916f, 0 0 0 4px pink, 0 1px 2px 0 #e7916f !important;
+}
+
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+  .auth {
+    margin-top: -100px;
+  }
 }
