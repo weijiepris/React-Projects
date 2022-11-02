@@ -14,16 +14,13 @@ export const onLogin = (email: string, password: string) => {
   });
 };
 
-export const onLogout = (email: string, password: string) => {
-  return new Promise((resolve, reject) => {
+export const onLogout = () => {
+  return new Promise((resolve) => {
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((err) => {
-        reject(err);
+      .signOut()
+      .then(() => {
+        resolve(false);
       });
   });
 };
