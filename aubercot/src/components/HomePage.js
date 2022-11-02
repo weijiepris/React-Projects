@@ -89,7 +89,7 @@ const HomePage = () => {
                 "//" +
                 bdoc.prodName +
                 "//" +
-                getDate(bdoc.dateAdded["seconds"])
+                getDate(bdoc.dateAdded)
             ]
           ) {
             currentArr[
@@ -99,7 +99,7 @@ const HomePage = () => {
                 "//" +
                 bdoc.prodName +
                 "//" +
-                getDate(bdoc.dateAdded["seconds"])
+                getDate(bdoc.dateAdded)
             ] = 1;
           } else {
             currentArr[
@@ -109,7 +109,7 @@ const HomePage = () => {
                 "//" +
                 bdoc.prodName +
                 "//" +
-                getDate(bdoc.dateAdded["seconds"])
+                getDate(bdoc.dateAdded)
             ] += 1;
           }
 
@@ -133,15 +133,17 @@ const HomePage = () => {
     barGraphArr[1] = ["No Data Found", 0, "transparent"];
     let c = 1;
     for (let i in prodArr) {
-      let res = i.split("//");
-      barGraphArr[c] = [
-        res[0],
-        prodArr[i],
-        "stroke-color: black; stroke-width: 2; fill-color:" +
-          res[1] +
-          "; opacity:0.8;",
-      ];
-      c++;
+      if (prodArr[i] > 0) {
+        let res = i.split("//");
+        barGraphArr[c] = [
+          res[0],
+          prodArr[i],
+          "stroke-color: black; stroke-width: 2; fill-color:" +
+            res[1] +
+            "; opacity:0.8;",
+        ];
+        c++;
+      }
     }
     setBargraph(barGraphArr);
 
@@ -156,7 +158,7 @@ const HomePage = () => {
         arr[dt] += 1;
       }
       if (bdoc.scanType === "in") {
-        const dt2 = getDate(bdoc.dateAdded["seconds"]);
+        const dt2 = getDate(bdoc.dateAdded);
         if (!testing[dt2]) {
           testing[dt2] = 1;
         } else {
@@ -182,10 +184,9 @@ const HomePage = () => {
       c++;
     }
     temp2.sort(function (a, b) {
-      var textA = a[0].toUpperCase();
-      var textB = b[0].toUpperCase();
-      return textA < textB ? -1 : textA > textB ? 1 : 0;
+      return new Date(a[0]) - new Date(b[0]);
     });
+
     setLinegraph(temp2);
 
     // console.log("testing => ", arr);
@@ -200,7 +201,7 @@ const HomePage = () => {
             "//" +
             bdoc.prodName +
             "//" +
-            getDate(bdoc.dateAdded["seconds"])
+            getDate(bdoc.dateAdded)
         ]
       ) {
         productSummaryArr[
@@ -210,7 +211,7 @@ const HomePage = () => {
             "//" +
             bdoc.prodName +
             "//" +
-            getDate(bdoc.dateAdded["seconds"])
+            getDate(bdoc.dateAdded)
         ] = 1;
       } else {
         productSummaryArr[
@@ -220,7 +221,7 @@ const HomePage = () => {
             "//" +
             bdoc.prodName +
             "//" +
-            getDate(bdoc.dateAdded["seconds"])
+            getDate(bdoc.dateAdded)
         ] += 1;
       }
     });
@@ -234,15 +235,6 @@ const HomePage = () => {
     let c = 0;
     for (let i in productSummaryArr) {
       let res = i.split("//");
-      // console.log(
-      //   res[0],
-      //   " - ",
-      //   res[1],
-      //   " - ",
-      //   res[2],
-      //   " - ",
-      //   productSummaryArr[i]
-      // );
       arr[c] = {
         prodID: res[0],
         batchNo: res[1],
@@ -254,14 +246,12 @@ const HomePage = () => {
     }
 
     arr.sort(function (a, b) {
-      var textA = a.prodID.toUpperCase();
-      var textB = b.prodID.toUpperCase();
+      var textA = a.batchNo;
+      var textB = b.batchNo;
       return textA < textB ? -1 : textA > textB ? 1 : 0;
     });
     arr.sort(function (a, b) {
-      // Turn your strings into dates, and then subtract them
-      // to get a value that is either negative, positive, or zero.
-      return new Date(a.batchNo) - new Date(b.batchNo);
+      return new Date(b.dateAdded) - new Date(a.dateAdded);
     });
     setProductSummary(arr);
   };
@@ -272,7 +262,6 @@ const HomePage = () => {
     let c = 0;
     for (let i in currentArr) {
       let res = i.split("//");
-      // console.log(res[0], " - ", res[1], " - ", res[2], " - ", currentArr[i]);
       arr[c] = {
         prodID: res[0],
         batchNo: res[1],
@@ -296,6 +285,7 @@ const HomePage = () => {
 
     setCurrentInventory(arr);
   };
+
   const setCollapsedCurrentInv = (collapsedCurrentArr) => {
     // console.log(collapsedCurrentArr);
     let arr = [];
@@ -321,69 +311,18 @@ const HomePage = () => {
   };
 
   const getDate = (date) => {
-    return new Date(date * 1000).toString().substring(4, 15);
+    if (date === null) {
+      return 0;
+    } else {
+      return new Date(date["seconds"] * 1000).toString().substring(4, 15);
+    }
   };
-
-  // const getExpire = (date) => {
-  //   let d = new Date(date * 1000);
-
-  //   d.setDate(d.getDate() + 60);
-
-  //   return d.toString().substring(4, 15);
-  // };
-
-  // const addSummary = (list) => {
-  //   setSummary((prevList) => {
-  //     return [list, ...prevList];
-  //   });
-  // };
-
-  // const getSummary = () => {
-  //   const result = [];
-  //   summary.forEach((d) => {
-  //     // console.log(d);
-  //     let dates = new Set(d.data.map((prod) => prod.date));
-  //     dates.forEach((date) => {
-  //       result.push({
-  //         date: date,
-  //         prodID: d.data[0].prodID,
-  //         count: d.data.filter((prod) => prod.date === date).length,
-  //         prodName: d.data[0].prodName,
-  //         batchNo: d.data[0].batchNo,
-  //       });
-  //     });
-  //   });
-  //   // console.log(result);
-
-  //   // setOverall(result);.
-  //   result.sort(function (a, b) {
-  //     var textA = a.prodID.toUpperCase();
-  //     var textB = b.prodID.toUpperCase();
-  //     return textA < textB ? -1 : textA > textB ? 1 : 0;
-  //   });
-
-  //   result.sort(function (a, b) {
-  //     // Turn your strings into dates, and then subtract them
-  //     // to get a value that is either negative, positive, or zero.
-  //     return new Date(b.date) - new Date(a.date);
-  //   });
-
-  //   return result;
-  // };
 
   const ProdSummary = () => {
     return (
       <React.Fragment>
-        <h1>Production Summary</h1>
         <table className={classes.table}>
           <tbody>
-            <tr>
-              <th>Date produced</th>
-              <th>Batch No</th>
-              <th>Product ID</th>
-              <th>Product Name</th>
-              <th>Total produced</th>
-            </tr>
             {productSummary.map((list) => (
               <tr key={Math.random()}>
                 <td>{list.dateAdded}</td>
@@ -405,35 +344,9 @@ const HomePage = () => {
   const CurrentInventory = () => {
     return (
       <React.Fragment>
-        <h1>
-          Current Inventory{" "}
-          {!cic ? (
-            <RiFilterOffLine
-              value={true}
-              onClick={currInvHandler}
-              size={30}
-              className={classes.hover}
-            />
-          ) : (
-            <RiFilterLine
-              value={true}
-              onClick={currInvHandler}
-              size={30}
-              className={classes.hover}
-            />
-          )}
-        </h1>
         <table className={classes.table}>
-          {!cic ? (
-            <tbody>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Batch Number</th>
-                <th>Quantity</th>
-                <th>Date Bottled</th>
-              </tr>
-              {currentInventory.map((list) => (
+          {!cic
+            ? currentInventory.map((list) => (
                 <tr key={Math.random()}>
                   <td>{list.prodID}</td>
                   <td>{list.prodName}</td>
@@ -441,24 +354,14 @@ const HomePage = () => {
                   <td>{list.quantity}</td>
                   <td>{list.dateAdded}</td>
                 </tr>
-              ))}
-            </tbody>
-          ) : (
-            <tbody>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-              </tr>
-              {collapsedCurrentInventory.map((list) => (
+              ))
+            : collapsedCurrentInventory.map((list) => (
                 <tr key={Math.random()}>
                   <td>{list.prodID}</td>
                   <td>{list.prodName}</td>
                   <td>{list.quantity}</td>
                 </tr>
               ))}
-            </tbody>
-          )}
         </table>
       </React.Fragment>
     );
@@ -492,6 +395,7 @@ const HomePage = () => {
       <div className={classes.wrapper}>
         <div className={classes.flex}>
           <div className={classes.flexContent}>
+            <br />
             <select
               id="leftPanel"
               name="leftPanel"
@@ -503,14 +407,70 @@ const HomePage = () => {
             </select>
 
             {panel === "prodSummary" ? (
-              <ProdSummary />
+              <React.Fragment>
+                <h1>Production Summary</h1>
+                <table className={classes.tableMain}>
+                  <tbody>
+                    <tr>
+                      <th>Date produced</th>
+                      <th>Batch No</th>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Total produced</th>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className={classes.overflowBox}>
+                  <ProdSummary />
+                </div>
+              </React.Fragment>
             ) : panel === "currentInventory" ? (
-              <CurrentInventory />
+              <React.Fragment>
+                <h1>
+                  Current Inventory{" "}
+                  {!cic ? (
+                    <RiFilterOffLine
+                      value={true}
+                      onClick={currInvHandler}
+                      size={30}
+                      className={classes.hover}
+                    />
+                  ) : (
+                    <RiFilterLine
+                      value={true}
+                      onClick={currInvHandler}
+                      size={30}
+                      className={classes.hover}
+                    />
+                  )}
+                </h1>
+                <table className={classes.tableMain}>
+                  {!cic ? (
+                    <tr>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Batch Number</th>
+                      <th>Quantity</th>
+                      <th>Date Bottled</th>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                  )}
+                </table>
+                <div className={classes.overflowBox}>
+                  <CurrentInventory />
+                </div>
+              </React.Fragment>
             ) : (
               <div>test</div>
             )}
           </div>
           <div className={classes.flexContent} ref={flexContent}>
+            <br />
             <select
               id="charts"
               name="charts"

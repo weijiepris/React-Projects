@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 import AuthContext from "../../store/auth-context";
-import BootstrapTable from "react-bootstrap-table-next";
+// import BootstrapTable from "react-bootstrap-table-next";
 const Scan = (props) => {
   const _ = require("lodash");
   const ctx = useContext(AuthContext);

@@ -73,14 +73,26 @@
 }
 
 .table {
-  width: 100%;
+  width: 102%;
 }
 
-.flexContent {
-  overflow-y: auto;
-  min-height: 450px;
+.table td {
+  padding: 5px;
+  width: 150px;
+}
+.tableMain {
+  width: 100%;
+}
+.tableMain th {
+  padding: 5px;
+  width: 300px;
+}
+
+.overflowBox {
   overflow-x: hidden;
-  max-height: 450px;
+  overflow-y: auto;
+  min-height: 280px;
+  max-height: 280px;
 }
 
 .input {
@@ -100,7 +112,7 @@
 @media only screen and (max-width: 1366px) {
   .flex {
     display: grid;
-    grid-template-columns: 99%;
+    overflow-x: hidden;
   }
   .individual {
     padding: 10px;

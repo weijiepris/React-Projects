@@ -55,7 +55,7 @@ const Main = () => {
       setProjects(await getProjects());
       setTimeout(() => {
         setIsLoaded((isLoaded: boolean) => (isLoaded = true));
-      }, 3000);
+      }, 1000);
     } catch (err) {
       setErrorMessage(err.code + ": " + err.message);
     }

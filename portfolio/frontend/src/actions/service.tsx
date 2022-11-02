@@ -1,5 +1,5 @@
 import axios from "axios";
-const devMode = true;
+const devMode = false;
 let url = "";
 
 if (devMode) {

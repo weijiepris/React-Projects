@@ -1,0 +1,31 @@
+.auth {
+  margin: 0 auto;
+  width: 95%;
+  max-width: 30rem;
+  border-radius: 10px;
+  text-align: center;
+  transform: translateY(100%);
+}
+
+.auth h1 {
+  font-family: "Mirande";
+}
+
+.p-inputtext {
+  width: 15em;
+  box-shadow: 4px 4px 7px -5px black;
+}
+
+.p-button {
+  background: rgba(245, 112, 84, 1) !important;
+  border: #e7916f !important;
+  box-shadow: 4px 4px 7px -5px black;
+}
+
+.p-button:hover {
+  background: rgba(245, 112, 84, 0.8) !important;
+}
+
+.p-button:focus {
+  box-shadow: 0 0 0 2px #e7916f, 0 0 0 4px pink, 0 1px 2px 0 #e7916f !important;
+}
