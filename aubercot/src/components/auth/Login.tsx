@@ -1,6 +1,6 @@
 import "./Login.css";
 
-import { useRef, useContext } from "react";
+import { FC, useRef, useContext } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
@@ -10,7 +10,11 @@ import { AUTHENTICATION_CONSTANTS } from "../../models/constants";
 import AuthenticationContext from "../../store/authentication-content";
 import _ from "lodash";
 
-const Login = ({ alert }: any) => {
+interface Props {
+  alert: Function;
+}
+
+const Login: FC<Props> = ({ alert }) => {
   const authenticationContext = useContext(AuthenticationContext);
   const emailRef: any = useRef();
   const passwordRef: any = useRef();

@@ -14,6 +14,7 @@ br::selection {
 
 .auth h1 {
   font-family: "Mirande";
+  font-weight: bold;
 }
 
 .auth h1::selection {
