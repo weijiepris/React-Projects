@@ -1,0 +1,34 @@
+.sidebar-container {
+  float: left;
+  width: 200px;
+  position: fixed;
+  height: 100%;
+  box-shadow: 1px 4px 6px -1px black;
+}
+
+.sidebar-container ul {
+  list-style-type: none;
+  font-size: 1.3em;
+}
+
+.sidebar-container ul i {
+  font-size: 1em;
+  margin: 52px 10px 11px -2px;
+}
+
+.sidebar-container ul li span {
+  cursor: pointer;
+  transition: 0.1s ease all;
+}
+
+.sidebar-container ul li span:active {
+  color: slategrey !important;
+}
+
+.sidebar-container ul li span::selection {
+  background: transparent;
+}
+
+.sidebar-container ul li span:hover {
+  color: cornflowerblue;
+}

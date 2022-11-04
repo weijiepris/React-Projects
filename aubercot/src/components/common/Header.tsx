@@ -91,33 +91,31 @@ const Header: FC<Props> = ({}) => {
     },
   ];
 
+  if (!authenticationContext.isLoggedIn) {
+    return <></>;
+  }
+
   return (
-    <>
-      {authenticationContext.isLoggedIn ? (
-        <header className="header-container">
-          <div className="logo">
-            <span>AUBERCOT</span>
-          </div>
-          <nav className="nav">
-            <SlideMenu
-              ref={menu}
-              model={items}
-              popup
-              viewportHeight={190}
-              menuWidth={170}
-            ></SlideMenu>
-            <div className="menu-icon">
-              <i
-                className="pi pi-bars"
-                onClick={(event) => menu.current.toggle(event)}
-              ></i>
-            </div>
-          </nav>
-        </header>
-      ) : (
-        <></>
-      )}
-    </>
+    <header className="header-container">
+      <div className="logo">
+        <span>AUBERCOT</span>
+      </div>
+      <nav className="nav">
+        <SlideMenu
+          ref={menu}
+          model={items}
+          popup
+          viewportHeight={190}
+          menuWidth={170}
+        ></SlideMenu>
+        <div className="menu-icon">
+          <i
+            className="pi pi-bars"
+            onClick={(event) => menu.current.toggle(event)}
+          ></i>
+        </div>
+      </nav>
+    </header>
   );
 };
 

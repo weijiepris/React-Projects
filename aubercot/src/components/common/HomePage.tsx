@@ -5,13 +5,7 @@ import { onLogout } from "../auth/actions";
 import AuthenticationContext from "../../store/authentication-content";
 
 const HomePage: FC = () => {
-
-
-  return (
-    <div>
-      home page
-    </div>
-  );
+  return <div></div>;
 };
 
 export default HomePage;

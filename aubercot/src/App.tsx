@@ -10,6 +10,7 @@ import Login from "./components/auth/Login";
 import AuthenticationContext from "./store/authentication-content";
 import HomePage from "./components/common/HomePage";
 import Header from "./components/common/Header";
+import Sidebar from "./components/common/Sidebar";
 
 const App: FC = () => {
   const notify = (response: { message: string; type: string }) => {
@@ -33,6 +34,7 @@ const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Header />
+      <Sidebar />
       <Routes>
         {authenticationContext.isLoggedIn ? (
           <Route path="/" element={<HomePage />} />

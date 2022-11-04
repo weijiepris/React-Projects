@@ -1,0 +1,11 @@
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 20px;
+}
+
+.footer-container span {
+  font-size: 0.9em;
+  display: inline-block;
+  transform: translateX(50%);
+}

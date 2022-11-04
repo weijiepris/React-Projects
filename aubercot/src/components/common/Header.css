@@ -15,6 +15,7 @@
   transform: translate(0, 30%);
   font-family: "Mirande";
   font-weight: bold;
+  cursor: default;
 }
 
 .nav {
@@ -34,15 +35,6 @@
   background: transparent;
 }
 
-/* .p-menubar {
-  background: transparent !important;
-  border: none !important;
-}
-
-.p-menubar ul {
-  transform: translate(0px, -50%) !important;
-}
-*/
 .p-slidemenu {
   width: 10.5em !important;
 }
@@ -51,6 +43,16 @@
   width: 300px;
   text-align: center;
 }
+
+.menu-icon i:hover {
+  cursor: pointer;
+  font-size: 2.05em;
+}
+
+.menu-icon i:active {
+  font-size: 1.97em;
+}
+
 .menu-icon i {
   display: inline-block;
   transform: translateY(100%);
