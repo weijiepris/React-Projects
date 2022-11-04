@@ -1,0 +1,36 @@
+.default-container {
+  float: left;
+  width: 100vw;
+  position: fixed;
+  margin-left: 200px;
+  height: 100vh;
+  background-color: white;
+  z-index: -1;
+}
+
+.default-container h1 {
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+.section-summary {
+  display: grid;
+  margin: 0 auto;
+  grid-gap: 8em;
+  text-align: center;
+  grid-template-columns: 10% 10% 10% 10% 10%;
+  background-color: rgba(240, 235, 232);
+  height: 150px;
+  border-radius: 5px;
+  margin-top: 50px;
+}
+
+.section-summary-grid {
+  font-size: 1.1em;
+  text-align: center;
+  background-color: #E1EBE7;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px 0px;
+  height: 70px;
+  transform: translate(35%, 60%);
+}
