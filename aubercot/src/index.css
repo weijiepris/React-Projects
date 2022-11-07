@@ -9,7 +9,9 @@ body {
 
 html,
 #root {
-  background-color: rgba(240, 235, 232);
+  background-color: #f6f6f6;
+  font-family: "Titillium Web", sans-serif;
+  overflow: hidden;
 }
 
 code {
@@ -20,4 +22,14 @@ code {
 @font-face {
   font-family: "Mirande";
   src: url("./assets/Mirande.ttf");
+}
+
+@font-face {
+  font-family: "Darker Grotesque";
+  src: url("./assets/DarkerGrotesque-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Titillium Web";
+  src: url("./assets/TitilliumWeb-Regular.ttf");
 }
