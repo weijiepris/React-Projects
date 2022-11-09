@@ -9,3 +9,8 @@
   display: inline-block;
   transform: translateX(50%);
 }
+
+.footer-container span::selection {
+  background-color: slategray;
+  color: white;
+}
