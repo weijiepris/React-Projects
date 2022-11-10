@@ -9,6 +9,8 @@ const Scan: FC<Props> = () => {
       <section className="header">
         <h1>Scan</h1>
       </section>
+      <section className="section"></section>
+      <section className="section"></section>
     </main>
   );
 };

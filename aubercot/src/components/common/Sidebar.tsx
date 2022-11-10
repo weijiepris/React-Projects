@@ -1,8 +1,9 @@
-import { FC, useContext, useRef } from "react";
+import { FC, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import AuthenticationContext from "../../store/authentication-content";
 import { ScrollToTop } from "./actions/ScrollToTop";
+
 import Footer from "./Footer";
 import "./Sidebar.css";
 
@@ -10,6 +11,13 @@ interface Props {}
 
 const Sidebar: FC<Props> = ({}) => {
   const authenticationContext = useContext(AuthenticationContext);
+  const reset = () => {
+    ScrollToTop();
+  };
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   if (!authenticationContext.isLoggedIn) {
     return <></>;
@@ -21,36 +29,41 @@ const Sidebar: FC<Props> = ({}) => {
         <ul>
           <li>
             <Link to="/">
-              <span onClick={ScrollToTop}>
-                <i className="pi pi-chart-bar"></i>Dashboard
+              <span onClick={reset}>
+                <i className="pi pi-chart-bar"></i>
+                <span>Dashboard</span>
               </span>
             </Link>
           </li>
           <li>
             <Link to="/inventory">
-              <span onClick={ScrollToTop}>
-                <i className="pi pi-box"></i>Inventory
+              <span onClick={reset}>
+                <i className="pi pi-box"></i>
+                <span>Inventory</span>
               </span>
             </Link>
           </li>
           <li>
             <Link to="/scan">
-              <span onClick={ScrollToTop}>
-                <i className="pi pi-cloud-upload"></i>Scan
+              <span onClick={reset}>
+                <i className="pi pi-cloud-upload"></i>
+                <span>Scan</span>
               </span>
             </Link>
           </li>
           <li>
             <Link to="/sales">
-              <span onClick={ScrollToTop}>
-                <i className="pi pi-database"></i>Sales
+              <span onClick={reset}>
+                <i className="pi pi-database"></i>
+                <span>Sales</span>
               </span>
             </Link>
           </li>
           <li>
             <Link to="/settings">
-              <span onClick={ScrollToTop}>
-                <i className="pi pi-cog"></i>Settings
+              <span onClick={reset}>
+                <i className="pi pi-cog"></i>
+                <span>Settings</span>
               </span>
             </Link>
           </li>

@@ -7,10 +7,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import AuthenticationContext from "./store/authentication-content";
+import Sidebar from "./components/common/Sidebar";
 
 const Login = lazy(() => import("./components/auth/Login"));
 const Header = lazy(() => import("./components/common/Header"));
-const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const HomePage = lazy(() => import("./components/common/HomePage"));
 const Bottombar = lazy(() => import("./components/common/Bottombar"));
 const Settings = lazy(() => import("./components/common/Settings"));

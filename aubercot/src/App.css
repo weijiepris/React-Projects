@@ -57,7 +57,7 @@
 @media (min-width: 961px) {
   /* tablet, landscape iPad, lo-res laptops ands desktops */
   .section-container {
-    margin-left: 200px;
+    margin-left: 170px;
     background-color: #ebebeb;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     padding: 2rem;
@@ -67,6 +67,7 @@
     min-height: 850px;
     grid-gap: 30px;
     margin-bottom: 0px;
+    transition: 0.3s ease;
   }
 
   .header {
