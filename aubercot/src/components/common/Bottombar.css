@@ -1,0 +1,78 @@
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+
+  .bottom-container ul li a {
+    font-weight: none;
+    text-decoration: none;
+    color: black;
+  }
+
+  .bottom-container {
+    background-color: #f6f6f6;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    box-shadow: 0 0 20px -5px;
+    visibility: visible;
+    text-align: center;
+  }
+
+  .bottom-container ul {
+    margin: 0 auto;
+    list-style-type: none;
+    text-align: center;
+    margin-left: -30px;
+  }
+
+  .bottom-container ul li {
+    display: inline-block;
+    width: 40px;
+    height: 50px;
+    margin: 0 15px 0 15px;
+  }
+
+  .bottom-container ul li span i {
+    font-size: 1.5em;
+    margin-top: 15px;
+  }
+
+  .bottom-container ul li span {
+    cursor: pointer;
+    transition: 0.1s ease all;
+  }
+
+  .bottom-container ul li span:active {
+    color: slategrey !important;
+  }
+
+  .bottom-container ul li span::selection {
+    background: transparent;
+  }
+
+  .bottom-container ul li span:hover {
+    color: cornflowerblue;
+  }
+}
+
+@media (min-width: 641px) {
+  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  .bottom-container ul li {
+    display: inline-block;
+    width: 80px;
+    height: 50px;
+    margin: 0 20px 0 20px;
+  }
+
+  .bottom-container ul li span i {
+    font-size: 2em;
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 961px) {
+  /* tablet, landscape iPad, lo-res laptops ands desktops */
+  .bottom-container {
+    visibility: hidden;
+  }
+}

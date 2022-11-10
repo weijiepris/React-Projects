@@ -5,15 +5,26 @@ import AuthenticationContext from "../../store/authentication-content";
 import { onLogout } from "../auth/actions";
 import "./Header.css";
 
-interface Props {}
+interface Props {
+  alert: Function;
+}
 
-const Header: FC<Props> = ({}) => {
+const Header: FC<Props> = ({ alert }) => {
   const authenticationContext = useContext(AuthenticationContext);
 
+  const initials = "Developer";
+
   const logoutHandler = () => {
-    onLogout().then((res: boolean) => {
-      authenticationContext.setState(res);
-    });
+    onLogout()
+      .then((res: boolean) => {
+        authenticationContext.setState(res);
+      })
+      .then(() => {
+        alert({
+          message: "You have been logged out",
+          type: "",
+        });
+      });
   };
 
   const menu = useRef(null);
@@ -98,7 +109,9 @@ const Header: FC<Props> = ({}) => {
   return (
     <header className="header-container">
       <div className="logo">
-        <span>AUBERCOT</span>
+        <span>
+          AUBERCOT <span className="logo-initials">{initials}</span>
+        </span>
       </div>
       <nav className="nav">
         <SlideMenu

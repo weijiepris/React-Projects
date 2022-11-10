@@ -1,0 +1,105 @@
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+  section h1::selection {
+    background: transparent;
+  }
+
+  .section-container {
+    background-color: #ebebeb;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    padding: 1em;
+    color: black;
+    position: relative;
+    min-height: 850px;
+    margin-top: -80px;
+  }
+
+  .section-container .section {
+    box-shadow: 0 3px 8px rgb(0 0 0 / 40%);
+    background-color: #f6f6f6;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    width: 100%;
+  }
+
+  .summary-items {
+    padding: 5px;
+    height: 70px;
+    border-radius: 10px;
+    background-color: #e1eaec;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
+    width: 200px;
+    margin: 10px;
+  }
+
+  .charts-grid {
+    display: inline-block;
+    width: 95%;
+  }
+
+  .charts {
+    border: 1px solid;
+  }
+}
+
+@media (min-width: 641px) {
+  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  .container {
+    margin-bottom: 0px;
+  }
+}
+
+@media (min-width: 961px) {
+  /* tablet, landscape iPad, lo-res laptops ands desktops */
+  .section-container {
+    margin-left: 200px;
+    background-color: #ebebeb;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    color: black;
+    top: 60px;
+    position: relative;
+    min-height: 850px;
+    grid-gap: 30px;
+    margin-bottom: 0px;
+  }
+
+  .header {
+    margin-top: 70px;
+  }
+
+  .section-container .section {
+    box-shadow: 0 3px 8px rgb(0 0 0 / 40%);
+    background-color: #f6f6f6;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    min-width: 510px;
+  }
+
+  .charts-grid {
+    display: inline-block;
+    margin: 20px;
+    width: 95%;
+  }
+}
+
+@media (min-width: 1120px) {
+  /* big landscape tablets, laptops, and desktops */
+  .charts-grid {
+    display: inline-block;
+    margin: 20px;
+    width: 45%;
+  }
+}
+
+@media (min-width: 1281px) {
+  /* big landscape tablets, laptops, and desktops */
+}

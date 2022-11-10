@@ -1,63 +1,97 @@
-.header-container {
-  height: 60px;
-  width: 100%;
-  box-shadow: 0 3px 8px rgb(0 0 0 / 40%);
-  position: fixed;
-  background-color: #f6f6f6;
-  z-index: 10;
-}
-.logo {
-  float: left;
-  height: 100%;
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+  .header-container {
+    height: 50px;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 40%);
+    position: fixed;
+    top: 0;
+    background-color: #f6f6f6;
+    z-index: 10;
+    width: 100%;
+  }
+
+  .logo span::selection {
+    background: transparent;
+  }
+
+  .logo span {
+    font-size: 1.5em;
+    text-align: center;
+    font-family: "Mirande";
+    font-weight: bold;
+    cursor: default;
+    position: relative;
+    top: 10px;
+    left: 10px;
+  }
+
+  .logo span span {
+    font-size: 0.6em;
+    position: relative;
+    top: 0px;
+    left: -3px;
+  }
+
+  .logo {
+    float: left;
+    height: 100%;
+  }
+
+  .nav {
+    visibility: hidden;
+  }
 }
 
-.logo span {
-  display: inline-block;
-  width: 300px;
-  font-size: 2.5em;
-  text-align: center;
-  font-family: "Mirande";
-  font-weight: bold;
-  cursor: default;
+@media (min-width: 641px) {
+  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  .logo span {
+    left: 30px;
+  }
 }
 
-.nav {
-  float: right;
-  height: 100%;
-}
-.nav ul li {
-  display: inline-block;
-  padding: 10px;
-  width: 200px;
-  text-align: center;
+@media (min-width: 961px) {
+  /* tablet, landscape iPad, lo-res laptops ands desktops */
+  .nav {
+    visibility: visible;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 100px;
+  }
+
+  .p-slidemenu {
+    width: 10.5em !important;
+    float: right !important;
+    margin-right: 10px;
+  }
+
+  .menu-icon {
+    width: 300px;
+    text-align: center;
+    margin-top: -23px;
+    margin-right: 5%;
+  }
+
+  .menu-icon i:hover {
+    cursor: pointer;
+    font-size: 2.05em;
+  }
+
+  .menu-icon i:active {
+    font-size: 1.97em;
+  }
+
+  .menu-icon i {
+    display: inline-block;
+    transform: translateY(100%);
+    font-size: 2em;
+  }
 }
 
-.logo span::selection,
-.nav ul li::selection {
-  background: transparent;
+@media (min-width: 1025px) {
+  /* big landscape tablets, laptops, and desktops */
 }
 
-.p-slidemenu {
-  width: 10.5em !important;
-}
-
-.menu-icon {
-  width: 300px;
-  text-align: center;
-  margin-top: -17px;
-}
-
-.menu-icon i:hover {
-  cursor: pointer;
-  font-size: 2.05em;
-}
-
-.menu-icon i:active {
-  font-size: 1.97em;
-}
-
-.menu-icon i {
-  display: inline-block;
-  transform: translateY(100%);
-  font-size: 2em;
+@media (min-width: 1281px) {
+  /* big landscape tablets, laptops, and desktops  */
 }

@@ -7,7 +7,10 @@ import { Chart } from "primereact/chart";
 import "./HomePage.css";
 import AuthenticationContext from "../../store/authentication-content";
 
-const HomePage: FC = () => {
+interface Props {
+  alert: Function;
+}
+const HomePage: FC<Props> = () => {
   const data = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
@@ -27,7 +30,7 @@ const HomePage: FC = () => {
   };
 
   return (
-    <main className="default-container">
+    <main className="section-container">
       <section className="header">
         <h1>Dashboard</h1>
       </section>

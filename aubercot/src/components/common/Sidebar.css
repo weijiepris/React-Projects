@@ -1,40 +1,70 @@
-.sidebar-container {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  z-index: 1;
-  box-shadow: 0 3px 8px rgb(0 0 0 / 40%);
-  transition: 0.4s ease;
-  background-color: #f6f6f6;
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+  .sidebar-container {
+    visibility: hidden;
+  }
+
+  .sidebar-container .sidebar-content ul li a {
+    font-weight: none;
+    text-decoration: none;
+    color: black;
+  }
 }
 
-.sidebar-content {
-  margin-top: 70px;
+@media (min-width: 641px) {
+  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 }
 
-.sidebar-container ul {
-  list-style-type: none;
-  font-size: 1.3em;
+@media (min-width: 961px) {
+  /* tablet, landscape iPad, lo-res laptops ands desktops */
+  .sidebar-container {
+    height: 105%;
+    width: 200px;
+    margin-top: 55px;
+    position: fixed;
+    z-index: 1;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 40%);
+    transition: 0.4s ease;
+    background-color: #f6f6f6;
+    visibility: visible;
+  }
+
+  .sidebar-content {
+    margin-top: 70px;
+  }
+
+  .sidebar-container ul {
+    list-style-type: none;
+    font-size: 1.3em;
+  }
+
+  .sidebar-container ul i {
+    font-size: 1em;
+    margin: 52px 10px 11px -2px;
+  }
+
+  .sidebar-container ul li span {
+    cursor: pointer;
+    transition: 0.1s ease all;
+  }
+
+  .sidebar-container ul li span:active {
+    color: slategrey !important;
+  }
+
+  .sidebar-container ul li span::selection {
+    background: transparent;
+  }
+
+  .sidebar-container ul li span:hover {
+    color: cornflowerblue;
+  }
 }
 
-.sidebar-container ul i {
-  font-size: 1em;
-  margin: 52px 10px 11px -2px;
+@media (min-width: 1025px) {
+  /* big landscape tablets, laptops, and desktops */
 }
 
-.sidebar-container ul li span {
-  cursor: pointer;
-  transition: 0.1s ease all;
-}
-
-.sidebar-container ul li span:active {
-  color: slategrey !important;
-}
-
-.sidebar-container ul li span::selection {
-  background: transparent;
-}
-
-.sidebar-container ul li span:hover {
-  color: cornflowerblue;
+@media (min-width: 1281px) {
+  /* big landscape tablets, laptops, and desktops */
 }
