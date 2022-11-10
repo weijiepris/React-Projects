@@ -27,7 +27,10 @@ const Settings: FC<Props> = ({ alert }) => {
       <section className="header">
         <h1>Settings</h1>
       </section>
-      <section className="section-summary section">
+      <section className="section">
+        <Button>Profile</Button>
+      </section>
+      <section className="section">
         <Button onClick={logoutHandler}>Logout</Button>
       </section>
     </main>
