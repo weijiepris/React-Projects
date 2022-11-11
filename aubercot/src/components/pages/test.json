@@ -1,0 +1,26 @@
+[
+  {
+    "productName": "Apple",
+    "id": 1,
+    "date": "10/01/2022",
+    "status": "available"
+  },
+  {
+    "productName": "Apple",
+    "id": 2,
+    "date": "10/01/2022",
+    "status": "available"
+  },
+  {
+    "productName": "Apple",
+    "id": 3,
+    "date": "10/01/2022",
+    "status": "available"
+  },
+  {
+    "productName": "Apple",
+    "id": 14,
+    "date": "10/01/2022",
+    "status": "not available"
+  }
+]
