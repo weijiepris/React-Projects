@@ -16,7 +16,7 @@ const Bottombar = lazy(() => import("./components/common/Bottombar"));
 const Settings = lazy(() => import("./components/common/Settings"));
 const Inventory = lazy(() => import("./components/pages/Inventory"));
 const Sales = lazy(() => import("./components/pages/Sales"));
-const Scan = lazy(() => import("./components/pages/Scan"));
+const Scan = lazy(() => import("./components/pages/Scan/Scan"));
 
 const App: FC = () => {
   const notify = (response: { message: string; type: string }) => {

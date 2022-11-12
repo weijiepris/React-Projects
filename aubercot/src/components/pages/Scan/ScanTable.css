@@ -1,0 +1,28 @@
+@media (min-width: 320px) {
+  /* smartphones, iPhone, portrait 480x320 phones */
+  .export-container {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) {
+  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  .export-container {
+    display: block;
+  }
+  .button-margin {
+    margin: 10px;
+  }
+
+  .search-container {
+    float: right;
+  }
+
+  .export-buttons {
+    float: left;
+  }
+
+  .export-container {
+    height: 70px;
+  }
+}
