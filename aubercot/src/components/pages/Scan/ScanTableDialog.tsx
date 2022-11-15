@@ -3,6 +3,7 @@ import { FC, useState, useRef, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 
 import "./ScanTable.css";
+import { Button } from "primereact/button";
 
 interface Props {
   visible: boolean;
@@ -22,8 +23,35 @@ const ScanTableDialog: FC<Props> = ({
   }, [visible]);
 
   return (
-    <Dialog visible={visible} onHide={onCloseDialog} dismissableMask={true}>
-      {selectedRow.id} {selectedRow.title} {selectedRow.body}
+    <Dialog
+      visible={visible}
+      onHide={onCloseDialog}
+      dismissableMask={true}
+      closable={false}
+      className="scan-dialog"
+    >
+      <div className="scan-dialog-div">Product Name: </div>
+      <div className="scan-dialog-div">Status: </div>
+      <div className="scan-dialog-div">Date: </div>
+      <div className="scan-dialog-div">Modified by: </div>
+      <div className="scan-dialog-div">Modified date: </div>
+      <div className="scan-dialog-div">Created by: </div>
+      <div className="scan-dialog-div">Created date: </div>
+      <div className="scan-dialog-div">
+        <div>
+          <Button
+            label="Plain"
+            className="p-button-raised p-button-text p-button-plain"
+          />
+        </div>
+        <div>
+          <Button
+            icon="pi pi-share-alt"
+            className="p-button-rounded p-button-text p-button-plain"
+            aria-label="Filter"
+          />
+        </div>
+      </div>
     </Dialog>
   );
 };

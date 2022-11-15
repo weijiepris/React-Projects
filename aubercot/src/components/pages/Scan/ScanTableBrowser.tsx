@@ -134,6 +134,7 @@ const ScanTableBrowser: FC<Props> = ({ posts }) => {
         dataKey="id"
         responsiveLayout="scroll"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        rowsPerPageOptions={[10, 25, 50]}
         paginator
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
         rows={5}

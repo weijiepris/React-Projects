@@ -3,6 +3,27 @@
   .export-container {
     display: none;
   }
+
+  .scan-dialog {
+    width: 80%;
+  }
+
+  .scan-dialog .scan-dialog-div {
+    padding: 10px;
+    box-shadow: 0px 0px 6px -3px;
+  }
+
+  .scan-dialog-div div {
+    text-align: center;
+  }
+
+  .scan-dialog-div div button {
+    margin: 5px;
+  }
+
+  .scan-dialog .scan-dialog-div:nth-child(odd) {
+    background-color: #f6f6f6;
+  }
 }
 
 @media (min-width: 641px) {
@@ -10,6 +31,7 @@
   .export-container {
     display: block;
   }
+
   .button-margin {
     margin: 10px;
   }

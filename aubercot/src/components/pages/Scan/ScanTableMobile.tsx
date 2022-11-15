@@ -22,8 +22,8 @@ const ScanTableMobile: FC<Props> = ({ posts }) => {
   useEffect(() => {}, [posts]);
 
   const cols = [
-    { field: "userId", header: "Product Name" },
-    { field: "title", header: "Date" },
+    { field: "name", header: "Product Name" },
+    { field: "username", header: "Date" },
   ];
 
   const onSelectRow = (e: any) => {
@@ -43,6 +43,7 @@ const ScanTableMobile: FC<Props> = ({ posts }) => {
         dataKey="id"
         responsiveLayout="scroll"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        rowsPerPageOptions={[3, 5, 10, 25, 50]}
         paginator
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
         rows={5}

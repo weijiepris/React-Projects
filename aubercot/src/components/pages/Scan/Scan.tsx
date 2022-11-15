@@ -16,7 +16,7 @@ const Scan: FC<Props> = () => {
 
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/posts")
+      .get("https://jsonplaceholder.typicode.com/users")
       .then((res) => setPosts(res.data));
   }, []);
 
