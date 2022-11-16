@@ -1,9 +1,14 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import ScanTableBrowser from "./ScanTableBrowser";
-import ScanTableMobile from "./ScanTableMobile";
+import ScanTableBrowser from "./Browser/ScanTableBrowser";
 import { TabView, TabPanel } from "primereact/tabview";
 import useCheckMobileScreen from "../../common/actions/UseCheckMobileScreen";
+import ScanTableMobileSummarised from "./Mobile/ScanTableMobileSummarised";
+import { SummarisedModel } from "./model/ScanModel";
+import { mapSummariseObject } from "./Mobile/actions";
+import ScanTableBrowserSummarised from "./Browser/ScanTableBrowserSummarised";
+import { Button } from "primereact/button";
+import ScanTableMobileViewAll from "./Mobile/ScanTableMobileViewAll";
 
 interface Props {
   alert: Function;
@@ -16,9 +21,13 @@ const Scan: FC<Props> = () => {
 
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/users")
+      .get("https://jsonplaceholder.typicode.com/posts")
       .then((res) => setPosts(res.data));
   }, []);
+
+  const summarisedData: SummarisedModel[] = useMemo(() => {
+    return mapSummariseObject(posts);
+  }, [posts]);
 
   return (
     <div className="section-container">
@@ -26,12 +35,21 @@ const Scan: FC<Props> = () => {
         <h1>Scan</h1>
       </section>
       <section className="section">
-        <div className="summary-items">
-          <div>Scan In</div>
+        <div className="scan-buttons">
+          <Button
+            label="Scan In"
+            className="p-button-outlined p-button-secondary"
+          />
         </div>
-        <div className="summary-items" data-pr-tooltip={"test"}>
-          <div className="profits">Scan Out</div>
+        <div className="scan-buttons">
+          <Button
+            label="Scan Out"
+            className="p-button-outlined p-button-secondary"
+          />
         </div>
+      </section>
+      <section className="header">
+        <h1>Transactions</h1>
       </section>
       <section className="section">
         <TabView
@@ -40,13 +58,17 @@ const Scan: FC<Props> = () => {
         >
           <TabPanel header="View All">
             {isMobile ? (
-              <ScanTableMobile posts={posts} />
+              <ScanTableMobileViewAll posts={posts} />
             ) : (
               <ScanTableBrowser posts={posts} />
             )}
           </TabPanel>
           <TabPanel header="Summarised view">
-            <TabPanel header="Header III">Content III</TabPanel>
+            {isMobile ? (
+              <ScanTableMobileSummarised data={summarisedData} />
+            ) : (
+              <ScanTableBrowserSummarised data={summarisedData} />
+            )}
           </TabPanel>
         </TabView>
       </section>

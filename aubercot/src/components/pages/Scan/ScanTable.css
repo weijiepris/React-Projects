@@ -10,7 +10,7 @@
 
   .scan-dialog .scan-dialog-div {
     padding: 10px;
-    box-shadow: 0px 0px 6px -3px;
+    box-shadow: 0px 0px 4px -3px;
   }
 
   .scan-dialog-div div {
@@ -23,6 +23,20 @@
 
   .scan-dialog .scan-dialog-div:nth-child(odd) {
     background-color: #f6f6f6;
+  }
+
+  .scan-dialog-summarised-content {
+    padding: 10px;
+    box-shadow: 0px 0px 4px -1px;
+  }
+
+  .scan-buttons {
+    display: inline-block;
+  }
+
+  .scan-buttons button {
+    text-align: center;
+    margin: 10px;
   }
 }
 

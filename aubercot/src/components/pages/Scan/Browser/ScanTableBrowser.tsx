@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { FC, useState, useRef, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -6,14 +5,14 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Tooltip } from "primereact/tooltip";
 
-import "./ScanTable.css";
+import "../ScanTable.css";
 
 interface Props {
   posts: any[];
 }
 
 const ScanTableBrowser: FC<Props> = ({ posts }) => {
-  const dt = useRef(null);
+  const dts = useRef(null);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [globalFilter, setGlobalFilter] = useState(null);
 
@@ -31,7 +30,7 @@ const ScanTableBrowser: FC<Props> = ({ posts }) => {
   }));
 
   const exportCSV = (selectionOnly: any) => {
-    dt.current.exportCSV({ selectionOnly });
+    dts.current.exportCSV({ selectionOnly });
   };
 
   const exportPdf = () => {
@@ -115,7 +114,7 @@ const ScanTableBrowser: FC<Props> = ({ posts }) => {
           <i className="pi pi-search" />
           <InputText
             type="search"
-            onInput={(e) => setGlobalFilter(e.target.value)}
+            onInput={(e: any) => setGlobalFilter(e.target.value)}
             placeholder="Search..."
           />
         </span>
@@ -127,7 +126,7 @@ const ScanTableBrowser: FC<Props> = ({ posts }) => {
   return (
     <>
       <DataTable
-        ref={dt}
+        ref={dts}
         globalFilter={globalFilter}
         value={posts}
         header={header}
@@ -139,7 +138,6 @@ const ScanTableBrowser: FC<Props> = ({ posts }) => {
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
         rows={5}
         className="datatable-normal-view"
-        responsiveLayout="scroll"
         selectionMode="multiple"
         emptyMessage="No data found."
         selection={selectedProducts}

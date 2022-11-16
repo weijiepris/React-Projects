@@ -1,24 +1,24 @@
-//@ts-nocheck
 import { FC, useState, useRef, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 
-import "./ScanTable.css";
+import "../ScanTable.css";
 import { Button } from "primereact/button";
+import { SummarisedModel } from "../model/ScanModel";
 
 interface Props {
   visible: boolean;
-  onCloseDialog: Function;
-  selectedRow: {};
+  onCloseDialog: () => void;
+  selectedRow: SummarisedModel;
 }
 
-const ScanTableDialog: FC<Props> = ({
+const ScanTableMobileSummarisedDialog: FC<Props> = ({
   visible,
   onCloseDialog,
   selectedRow,
 }) => {
   useEffect(() => {
     return () => {
-      selectedRow = {};
+      selectedRow = { body: [], count: 0, userId: 0 };
     };
   }, [visible]);
 
@@ -35,13 +35,19 @@ const ScanTableDialog: FC<Props> = ({
       <div className="scan-dialog-div">Date: </div>
       <div className="scan-dialog-div">Modified by: </div>
       <div className="scan-dialog-div">Modified date: </div>
-      <div className="scan-dialog-div">Created by: </div>
-      <div className="scan-dialog-div">Created date: </div>
+      <div className="scan-dialog-div">Count: {selectedRow?.count}</div>
+      <div className="scan-dialog-div">
+        {selectedRow?.body.map((data) => (
+          <div className="scan-dialog-summarised-content" key={data.id}>
+            {data.id}
+          </div>
+        ))}
+      </div>
       <div className="scan-dialog-div">
         <div>
           <Button
-            label="Plain"
-            className="p-button-raised p-button-text p-button-plain"
+            label="Reset"
+            className="p-button-outlined p-button-secondary"
           />
         </div>
         <div>
@@ -56,4 +62,4 @@ const ScanTableDialog: FC<Props> = ({
   );
 };
 
-export default ScanTableDialog;
+export default ScanTableMobileSummarisedDialog;

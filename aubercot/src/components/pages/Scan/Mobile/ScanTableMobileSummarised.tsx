@@ -1,46 +1,51 @@
-//@ts-nocheck
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useMemo, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Button } from "primereact/button";
+import "../ScanTable.css";
+import { mapSummariseObject } from "./actions";
+import ScanTableMobileSummarisedDialog from "./ScanTableMobileSummarisedDialog";
+import { SummarisedModel } from "../model/ScanModel";
 import { InputText } from "primereact/inputtext";
-import { Tooltip } from "primereact/tooltip";
-import { Dialog } from "primereact/dialog";
-
-import "./ScanTable.css";
-import ScanTableDialog from "./ScanTableDialog";
 
 interface Props {
-  posts: any[];
+  data: SummarisedModel[];
 }
 
-const ScanTableMobile: FC<Props> = ({ posts }) => {
-  const dt = useRef(null);
+const ScanTableMobileSummarised: FC<Props> = ({ data }) => {
   const [visible, setVisible] = useState(false);
-  const [selectedRow, setSelectedRow] = useState({});
-
-  useEffect(() => {}, [posts]);
+  const [selectedRow, setSelectedRow] = useState<SummarisedModel>();
+  const [globalFilter, setGlobalFilter] = useState(null);
 
   const cols = [
-    { field: "name", header: "Product Name" },
-    { field: "username", header: "Date" },
+    { field: "userId", header: "Product Name" },
+    { field: "count", header: "Count" },
   ];
 
-  const onSelectRow = (e: any) => {
+  useEffect(() => {}, [data]);
+
+  const onSelectRow = (e: any): void => {
     setSelectedRow(e.data);
     setVisible(true);
   };
 
-  const onCloseDialog = () => {
-    setSelectedRow({});
+  const onCloseDialog = (): void => {
+    setSelectedRow({ body: [], count: 0, userId: 0 });
     setVisible(false);
   };
 
   return (
     <>
+      <div style={{ marginBottom: "25px" }}>
+        <InputText
+          type="search"
+          onInput={(e: any) => setGlobalFilter(e.target.value)}
+          placeholder="Search..."
+        />
+      </div>
       <DataTable
-        value={posts}
+        value={data}
         dataKey="id"
+        globalFilter={globalFilter}
         responsiveLayout="scroll"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         rowsPerPageOptions={[3, 5, 10, 25, 50]}
@@ -48,7 +53,6 @@ const ScanTableMobile: FC<Props> = ({ posts }) => {
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
         rows={5}
         className="datatable-mobile-view"
-        responsiveLayout="scroll"
         selectionMode="multiple"
         emptyMessage="No data found."
         onRowClick={(row) => onSelectRow(row)}
@@ -57,7 +61,7 @@ const ScanTableMobile: FC<Props> = ({ posts }) => {
           <Column key={index} field={col.field} header={col.header} sortable />
         ))}
       </DataTable>
-      <ScanTableDialog
+      <ScanTableMobileSummarisedDialog
         visible={visible}
         onCloseDialog={onCloseDialog}
         selectedRow={selectedRow}
@@ -66,4 +70,4 @@ const ScanTableMobile: FC<Props> = ({ posts }) => {
   );
 };
 
-export default ScanTableMobile;
+export default ScanTableMobileSummarised;
