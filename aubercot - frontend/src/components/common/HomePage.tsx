@@ -11,6 +11,7 @@ interface Props {
   alert: Function;
 }
 const HomePage: FC<Props> = () => {
+  const authenticationContext = useContext(AuthenticationContext);
   const data = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
@@ -31,7 +32,11 @@ const HomePage: FC<Props> = () => {
 
   const test = () => {
     axios
-      .get("http://localhost:3002/")
+      .get(`http://localhost:3002/`, {
+        headers: {
+          Authorization: "Bearer " + authenticationContext.userToken,
+        },
+      })
       .then((res) => res.data)
       .then((data) => console.log(data))
       .catch((err) => {

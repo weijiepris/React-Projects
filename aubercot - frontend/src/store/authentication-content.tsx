@@ -5,12 +5,14 @@ import firebase from "firebase";
 const AuthenticationContext = React.createContext({
   isLoaded: false,
   isLoggedIn: false,
+  userToken: "",
   setState: (state: boolean) => {},
 });
 
 export const AuthContextProvider = (props: any) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [userToken, setUserToken] = useState("");
 
   useEffect(() => {
     verifyLoginMemo
@@ -20,15 +22,21 @@ export const AuthContextProvider = (props: any) => {
       .then(() => {
         setIsLoaded(true);
       });
+
+    return () => {
+      setUserToken("");
+      setIsLoggedIn(false);
+    };
   }, []);
 
   const verifyLoginStatus = () => {
     return new Promise((resolve) => {
       firebase.auth().onAuthStateChanged((user) => {
-        if (!user) {
-          resolve(false);
-        } else {
+        if (user) {
+          user.getIdToken().then((token) => setUserToken(token));
           resolve(true);
+        } else {
+          resolve(false);
         }
       });
     });
@@ -42,7 +50,12 @@ export const AuthContextProvider = (props: any) => {
 
   return (
     <AuthenticationContext.Provider
-      value={{ isLoaded: isLoaded, isLoggedIn: isLoggedIn, setState: setState }}
+      value={{
+        isLoaded: isLoaded,
+        isLoggedIn: isLoggedIn,
+        userToken: userToken,
+        setState: setState,
+      }}
     >
       {props.children}
     </AuthenticationContext.Provider>
