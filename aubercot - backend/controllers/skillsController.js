@@ -1,6 +1,6 @@
 const skillsModel = require("../models/skillsModel");
 
-exports.getSkills = (req, res, next) => {
+exports.getSkills = (req, res) => {
   skillsModel
     .getSkills()
     .then((response) => {

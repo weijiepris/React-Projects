@@ -22,9 +22,12 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/:token", (req, res) => {
-  console.log(req.params.token);
-  res.send("success");
+app.get("/skills", (req, res) => {
+  if (!req.user.email_verified) {
+    skillsController.getSkills(req, res);
+  } else {
+    res.send({ message: "please verify email" });
+  }
 });
 
 app.listen(port, () => {

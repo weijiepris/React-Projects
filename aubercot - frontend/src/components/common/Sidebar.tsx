@@ -10,6 +10,7 @@ import { UpcScan, Boxes, Truck } from "react-bootstrap-icons";
 import Footer from "./Footer";
 import "./Sidebar.css";
 import { SlideMenu } from "primereact/slidemenu";
+import { PanelMenu } from "primereact/panelmenu";
 
 interface Props {}
 
@@ -34,25 +35,67 @@ const Sidebar: FC<Props> = ({}) => {
     return <></>;
   }
 
-  const inventoryMenuItems = [
+  const items = [
     {
-      label: "Products",
-      icon: "pi pi-fw bi-box-seam",
-      command: () => {},
+      label: "Dashboard",
+      icon: "pi pi-chart-bar",
+      command: () => {
+        navigate("/");
+      },
     },
     {
-      label: "Scan",
-      icon: "pi pi-fw bi-upc-scan",
+      label: "Inventory",
+      icon: "pi bi-boxes",
+      items: [
+        {
+          label: "Products",
+          icon: "pi pi-fw bi-box-seam",
+          command: () => {
+            navigate("/products");
+          },
+        },
+        {
+          label: "Scan",
+          icon: "pi pi-fw bi-upc-scan",
+          command: () => {
+            navigate("/scan");
+          },
+        },
+      ],
+    },
+    {
+      label: "Sales",
+      icon: "pi pi-fw pi-database",
       command: () => {
-        navigate("/scan");
+        navigate("/sales");
+      },
+    },
+    {
+      label: "Customers",
+      icon: "pi pi-fw pi-users",
+      command: () => {
+        navigate("/customers");
+      },
+    },
+    {
+      label: "Suppliers",
+      icon: "pi pi-fw bi-truck",
+      command: () => {
+        navigate("/suppliers");
+      },
+    },
+    {
+      label: "Settings",
+      icon: "pi pi-fw pi-cog",
+      command: () => {
+        navigate("/settings");
       },
     },
   ];
-
   return (
     <section className="sidebar-container">
       <div className="sidebar-content">
-        <ul>
+        {/*  <ul>
           <li>
             <Link to="/">
               <span onClick={reset}>
@@ -115,9 +158,12 @@ const Sidebar: FC<Props> = ({}) => {
               </span>
             </Link>
           </li>
-        </ul>
+        </ul>*/}
+
+        <PanelMenu model={items} />
+
+        <Footer />
       </div>
-      <Footer />
     </section>
   );
 };

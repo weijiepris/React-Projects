@@ -11,7 +11,8 @@ import Sidebar from "./components/common/Sidebar";
 
 const Login = lazy(() => import("./components/auth/Login"));
 const Header = lazy(() => import("./components/common/Header"));
-const HomePage = lazy(() => import("./components/common/HomePage"));
+const Products = lazy(() => import("./components/pages/Products/Products"));
+const HomePage = lazy(() => import("./components/pages/HomePage/HomePage"));
 const Bottombar = lazy(() => import("./components/common/Bottombar"));
 const Settings = lazy(() => import("./components/common/Settings"));
 const Inventory = lazy(() => import("./components/pages/Inventory/Inventory"));
@@ -59,6 +60,7 @@ const App: FC = () => {
             <>
               <Route path="/" element={<HomePage alert={notify} />} />
               <Route path="/inventory" element={<Inventory alert={notify} />} />
+              <Route path="/products" element={<Products alert={notify} />} />
               <Route path="/scan" element={<Scan alert={notify} />} />
               <Route path="/sales" element={<Sales alert={notify} />} />
               <Route path="/customers" element={<Customers alert={notify} />} />

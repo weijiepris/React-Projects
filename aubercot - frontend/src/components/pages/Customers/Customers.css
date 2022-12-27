@@ -1,0 +1,8 @@
+.customer-buttons {
+  display: inline-block;
+}
+
+.customer-buttons button {
+  text-align: center;
+  margin: 10px;
+}

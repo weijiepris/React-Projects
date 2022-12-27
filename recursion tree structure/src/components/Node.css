@@ -1,0 +1,8 @@
+.node button {
+  font-size: 50%;
+  left: 20px;
+  position: relative;
+}
+.node {
+  width: 50vw;
+}

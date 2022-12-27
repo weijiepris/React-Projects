@@ -20,39 +20,6 @@
     margin-top: 70px;
   }
 
-  .sidebar-container .sidebar-content ul li a {
-    font-weight: none;
-    text-decoration: none;
-    color: black;
-  }
-
-  .sidebar-container ul {
-    list-style-type: none;
-    font-size: 1.3em;
-  }
-
-  .sidebar-container ul i {
-    font-size: 1em;
-    margin: 52px 10px 11px -10px;
-  }
-
-  .sidebar-container ul li span {
-    cursor: pointer;
-    transition: 0.1s ease all;
-  }
-
-  .sidebar-container ul li span:active {
-    color: slategrey !important;
-  }
-
-  .sidebar-container ul li span::selection {
-    background: transparent;
-  }
-
-  .sidebar-container ul li span:hover {
-    color: cornflowerblue;
-  }
-
   .sidebar-container {
     height: 105%;
     width: 170px;
@@ -65,9 +32,32 @@
     visibility: visible;
   }
 
-  .p-slidemenu {
-    margin-left: 130px;
-    margin-top: -30px;
+  .sidebar-content .p-panelmenu .p-panelmenu-header .p-panelmenu-header-link {
+    background: none !important;
+    border-radius: 0px !important;
+    border: none !important;
+  }
+
+  .sidebar-content
+    .p-panelmenu
+    .p-panelmenu-header
+    .p-panelmenu-header-link:hover {
+    color: cornflowerblue !important;
+  }
+
+  .sidebar-content
+    .p-panelmenu
+    .p-panelmenu-header
+    .p-panelmenu-header-link:active {
+    color: slategrey !important;
+  }
+
+  .sidebar-content .p-panelmenu {
+    margin-top: 100px;
+  }
+
+  .sidebar-content .p-panelmenu .p-panelmenu-panel {
+    margin-top: 10px;
   }
 }
 

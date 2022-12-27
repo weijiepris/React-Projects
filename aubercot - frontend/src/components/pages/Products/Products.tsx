@@ -1,13 +1,14 @@
+import { BreadCrumb } from "primereact/breadcrumb";
 import { FC } from "react";
-import "./Suppliers.css";
+
 interface Props {
   alert: Function;
 }
-const Suppliers: FC<Props> = () => {
+const Products: FC<Props> = () => {
   return (
     <main className="section-container">
       <section className="header">
-        <h1>Suppliers</h1>
+        <h1>Products</h1>
       </section>
       <section className="section"></section>
       <section className="section"></section>
@@ -15,4 +16,4 @@ const Suppliers: FC<Props> = () => {
   );
 };
 
-export default Suppliers;
+export default Products;

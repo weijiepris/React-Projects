@@ -1,12 +1,13 @@
-import { Button } from "primereact/button";
-import { FC, useEffect, useState, useRef, useMemo, useContext } from "react";
-import { onLogout } from "../auth/actions";
-import { Tooltip } from "primereact/tooltip";
-import { Card } from "primereact/card";
-import { Chart } from "primereact/chart";
 import "./HomePage.css";
-import AuthenticationContext from "../../store/authentication-content";
+
 import axios from "axios";
+import AuthenticationContext from "../../../store/authentication-content";
+
+import { FC, useContext } from "react";
+import { Tooltip } from "primereact/tooltip";
+import { Chart } from "primereact/chart";
+import { BreadCrumb } from "primereact/breadcrumb";
+
 interface Props {
   alert: Function;
 }
@@ -32,7 +33,7 @@ const HomePage: FC<Props> = () => {
 
   const test = () => {
     axios
-      .get(`http://localhost:3002/`, {
+      .get(`http://localhost:3002/skills`, {
         headers: {
           Authorization: "Bearer " + authenticationContext.userToken,
         },
