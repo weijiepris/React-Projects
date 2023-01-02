@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useState } from 'react';
-import { TreeNode } from '../components/models/todo.model';
+import { TreeNode } from '../components/models/Node.model';
 
 const TreeContext = React.createContext({
     tree: { id: "", label: "", depth: 0 },
@@ -91,6 +91,7 @@ export const TreeContextProvider = (props: any) => {
 
         return count;
     }
+    
     const findParent = (node: TreeNode, id: string) => {
         let found: TreeNode = null;
         if (node.id === id) {

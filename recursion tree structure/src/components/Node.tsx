@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import TreeContext from "../store/treeContext";
-import { TreeNode } from "./models/todo.model";
+import { TreeNode } from "./models/Node.model";
 import "./Node.css";
 
 interface Props {
