@@ -19,7 +19,7 @@ const app = express();
 if (devMode) {
   app.use(cors({ origin: true }));
 } else {
-  app.use(cors({ origin: "https://portfolio-v2-b469e.web.app" }));
+  app.use(cors({ origin: "https://www.wjchan.com" }));
 }
 app.use(express.json());
 

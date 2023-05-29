@@ -19,6 +19,7 @@ import Introduction from "../Introduction/Introduction.tsx";
 import AboutMe from "../AboutMe/AboutMe.tsx";
 import ContactMe from "../ContactMe/ContactMe.tsx";
 import Footer from "../Footer/Footer.tsx";
+import Projects from "../Projects/Projects.tsx";
 
 const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -98,13 +99,19 @@ const Main = () => {
     ],
   };
 
+  const project = {
+    title: "Projects",
+    description: "These are some of the projects that I have developed"
+  }
+
   return (
     <div className={styles.container}>
       <NavigationBar />
       <Introduction data={intro} />
       <AboutMe data={about} />
+      {/* <Projects data={project} /> */}
       <Experience title={"Where I've worked"} experiences={experiences} />
-      <ContactMe id="contact"/>
+      <ContactMe id="contact" />
       <Footer />
     </div>
   );

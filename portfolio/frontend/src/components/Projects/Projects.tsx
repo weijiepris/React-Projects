@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React, { useEffect, useState } from "react";
+import styles from "./Projects.module.css";
 import { useInView } from "react-intersection-observer";
-import styles from "./Introduction.module.css";
 
-const Introduction = ({ data }) => {
+const Projects = ({ data }) => {
   const { ref: cardRef, inView: cardView, entry: cardEntry } = useInView();
 
   const [observer, setObserver] = useState(false);
@@ -13,8 +13,9 @@ const Introduction = ({ data }) => {
       setObserver(true);
     }
   }, [cardView]);
+
   return (
-    <section className={styles.container} id="about">
+    <section className={styles.container} id="project">
       <div className={styles.content}>
         <div
           className={[styles.title, observer ? styles.animation : ""].join(" ")}
@@ -22,29 +23,18 @@ const Introduction = ({ data }) => {
           {data.title}
         </div>
         <div
-          className={[styles.header, observer ? styles.animation1 : ""].join(
-            " "
-          )}
-        >
-          {data.header}
-        </div>
-        <div
-          className={[styles.bio, observer ? styles.animation2 : ""].join(" ")}
-        >
-          {data.bio}
-        </div>
-        <div
-          ref={cardRef}
           className={[
             styles.description,
-            observer ? styles.animation3 : "",
+            observer ? styles.animation : "",
           ].join(" ")}
+          ref={cardRef}
         >
-          {data.description}
+          My inbox is always open for collaborations, opportunities, questions
+          and more!
         </div>
       </div>
     </section>
   );
 };
 
-export default Introduction;
+export default Projects;

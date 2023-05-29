@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./NavigationBar.module.css";
 import wjwhite from "../../image/specs whte.svg";
-
+import resume from "./resume2.pdf";
 import { Link } from "react-scroll";
 const NavigationBar = ({ isLoaded }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -71,7 +71,11 @@ const NavigationBar = ({ isLoaded }) => {
         (!isMobile ? (
           <nav id="navbar" className={styles.navigationBar}>
             <ul>
-              <div className={[styles.logoContainer, styles.appearAnimation].join(" ")}>
+              <div
+                className={[styles.logoContainer, styles.appearAnimation].join(
+                  " "
+                )}
+              >
                 <Link activeClass="active" smooth spy to="about">
                   <img src={wjwhite} className={styles.logo} />
                 </Link>
@@ -92,7 +96,15 @@ const NavigationBar = ({ isLoaded }) => {
                     Contact
                   </Link>
                 </li>
-                <li>Resume</li>
+                <li>
+                  <a
+                    style={{ textDecoration: "none", color: "white" }}
+                    href={resume}
+                    target="_blank"
+                  >
+                    Resume
+                  </a>
+                </li>
               </div>
             </ul>
           </nav>
@@ -101,29 +113,35 @@ const NavigationBar = ({ isLoaded }) => {
             <header className={styles.header}>
               <div className={styles.nav} id="nav">
                 <div>
-                  <Link activeClass="active"
+                  <Link
+                    activeClass="active"
                     smooth
                     spy
                     to="about"
-                    onClick={showHide}>
+                    onClick={showHide}
+                  >
                     About
                   </Link>
                 </div>
                 <div>
-                  <Link activeClass="active"
+                  <Link
+                    activeClass="active"
                     smooth
                     spy
                     to="about"
-                    onClick={showHide}>
+                    onClick={showHide}
+                  >
                     Experience
                   </Link>
                 </div>
                 <div>
-                  <Link activeClass="active"
+                  <Link
+                    activeClass="active"
                     smooth
                     spy
                     to="contact"
-                    onClick={showHide}>
+                    onClick={showHide}
+                  >
                     Contact
                   </Link>
                 </div>
@@ -131,8 +149,13 @@ const NavigationBar = ({ isLoaded }) => {
               <div
                 className={styles.iconHolder}
                 onClick={showHide}
-                id="iconHolder">
-                <div className={[styles.icon, toggle ? styles.change : ""].join(" ")}>
+                id="iconHolder"
+              >
+                <div
+                  className={[styles.icon, toggle ? styles.change : ""].join(
+                    " "
+                  )}
+                >
                   <div className={styles.bar1}></div>
                   <div className={styles.bar2}></div>
                   <div className={styles.bar3}></div>
